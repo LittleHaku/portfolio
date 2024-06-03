@@ -1,26 +1,57 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
+import LinkedInIcon from "../icons/LinkedInIcon.astro";
+import GitHubIcon from "../icons/GitHubIcon.astro";
+import CVIcon from "../icons/CVIcon.astro";
+import SocialPill from "../components/SocialPill.astro";
+import Education from "../components/Education.astro";
+import SectionContainer from "../components/SectionContainer.astro";
 ---
 
-<Layout title="Welcome to Astro.">
-	<section class="w-full lg:w-[853px] mx-auto py-36">
-		<h1 class="secondary-100">
+<Layout
+	title="Iván's Portfolio - Computer Science Engineer, Software Developer and Programmer"
+	,
+	description="Computer Science Engineer and Software Developer with a Master's in Data Science. Proficient in Python, C, Kotlin, SQL and Java amongst others. Able to develop software solutions and solve complex problems."
+>
+<main class="px-4 ">
+	<SectionContainer class="py-16 lg:py-32 xl:py-36 pb-20">
+		<h1 class="secondary-100 text-4xl lg:text-6xl pb-1">
 			Hi!
 			<br />
 			My name is <span class="text-highlight">Iván Sotillo</span>
 		</h1>
-		
-		<h2 class="text-secondary-200">computer science engineer</h2>
 
-		<p class="text-wrap text-secondary-300">
-			Currently pursuing a <span class="text-red-300">Master’s in Data Science</span> with a Bachelor's in
-			Computer Science Engineering. 
+		<h2 class="text-secondary-200 text-3xl lg:text-5xl pb-5">computer science engineer</h2>
+
+		<p class="text-pretty text-secondary-300 max-w-[800px]">
+			Currently pursuing a <span class="text-red-300"
+				>Master’s in Data Science</span
+			> with a Bachelor's in Computer Science Engineering.
 			<br />
-			Proficient in Python, C, Kotlin, SQL
-			and Java amongst others. Focused on leveraging data structures,
-			algorithms, and advanced data science techniques to drive innovative
-			solutions and solve complex problems.
+			Proficient in Python, C, Kotlin, SQL and Java amongst others. Focused
+			on leveraging data structures, algorithms, and advanced data science
+			techniques to drive innovative solutions and solve complex problems.
 		</p>
-	</section>
+
+		<nav class="flex-wrap sm:flex gap-4 mt-8">
+			<SocialPill href="https://www.linkedin.com/in/ivandhs">
+				<LinkedInIcon class="size-6" />
+				LinkedIn
+			</SocialPill>
+			<SocialPill href="https://github.com/LittleHaku">
+				<GitHubIcon class="size-6" />
+				GitHub
+			</SocialPill>
+			<SocialPill href="/cv.pdf">
+				<CVIcon class="size-6" />
+				Resume
+			</SocialPill>
+		</nav>
+	</SectionContainer>
+
+	<SectionContainer id="education">
+		<Education />
+	</SectionContainer>
+</main>
 </Layout>
