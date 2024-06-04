@@ -8,15 +8,15 @@ const LINKS = [
 ---
 
 
-<header class="flex justify-between text-right items-center w-full 2xl:w-[1300px] mx-auto py-12 px-4 2xl:px-0">
+<header class="flex sticky top-0 justify-between text-right items-center w-full 2xl:w-11/12 max-w-screen-2xl mx-auto py-4 sm:py-6 md:py-8 lg:py-12 px-4 2xl:px-0">
     <a href="#top">
-    <img class="w-40 h-auto lg:w-48 xl:w-52" src="/public/images/Logo_Dark.webp" alt="Ivan Logo" />
+    <img class="w-36 h-auto md:40 lg:w-48 xl:w-52" src="/public/images/Logo_Dark.webp" alt="Ivan Logo" />
     </a>
-    <nav class="flex flex-col gap-y-1">
+    <nav class="flex flex-row 2xl:flex-col gap-1">
     
         {
             LINKS.map(({ href, text }) => (
-                <a href={href} class="hover:text-highlight transition">{text}</a>
+                <a href={href} class="hover:text-highlight transition text-sm sm:text-sm md:text-base">{text}</a>
             ))
         }
 
