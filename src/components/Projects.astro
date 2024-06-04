@@ -17,6 +17,7 @@ import Metasploit from "../icons/Metasploit.astro";
 import PostgreSQL from "../icons/PostgreSQL.astro";
 import SQL from "../icons/SQL.astro";
 import Latex from "../icons/Latex.astro";
+import AstroIcon from "../icons/AstroIcon.astro";
 
 const TAGS = {
     TAILWIND: {
@@ -53,6 +54,11 @@ const TAGS = {
         name: "Vue.js",
         class: "bg-[#007d45] text-white",
         icon: Vue,
+    },
+    ASTRO: {
+        name: "Astro",
+        class: "bg-[#3e0163] text-white",
+        icon: AstroIcon,
     },
     JAVA: {
         name: "Java",
@@ -119,6 +125,14 @@ const PROJECTS = [
         image: "/images/breast_latex.png",
         tags: [TAGS.PYTHON, TAGS.LATEX],
     },
+    {
+        title: "This Portfolio",
+        description: "2024 - At first I didn't want to add this as a project but honestly I am proud of it. I also learned how to use Astro and Tailwind CSS (I wish I knew it before since making things responsive is so easy here). Now I can do websites faster and better that have better performance and are responsive, not like the Breast Cancer Web that I made.",
+        github: "https://github.com/LittleHaku/portfolio",
+        link: "#top",
+        image: "/images/portfolio.webp",
+        tags: [TAGS.ASTRO,TAGS.TAILWIND, TAGS.HTML, TAGS.CSS, TAGS.JS],
+    },
 
     {
         title: "Kahoot Student View",
@@ -172,6 +186,7 @@ const PROJECTS = [
         image: "/images/discordbot.png",
         tags: [TAGS.JS],
     },
+    
 ];
 ---
 
