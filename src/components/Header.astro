@@ -1,11 +1,24 @@
+---
+const LINKS = [
+    { href: '#education', text: 'education' },
+    { href: '#projects', text: 'projects' },
+    { href: '#about', text: 'about' },
+    { href: '#contact', text: 'contact' },
+]
+---
+
+
 <header class="flex justify-between text-right items-center w-full 2xl:w-[1300px] mx-auto py-12 px-4 2xl:px-0">
     <a href="#top">
     <img class="w-40 h-auto lg:w-48 xl:w-52" src="/public/images/Logo_Dark.webp" alt="Ivan Logo" />
     </a>
     <nav class="flex flex-col gap-y-1">
-        <a href="#education">education</a>
-        <a href="#projects">projects</a>
-        <a href="#about">about</a>
-        <a href="#contact">contact</a>
+    
+        {
+            LINKS.map(({ href, text }) => (
+                <a href={href} class="hover:text-highlight transition">{text}</a>
+            ))
+        }
+
     </nav>
 </header>
