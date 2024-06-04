@@ -1,24 +1,32 @@
 ---
 const LINKS = [
-    { href: '#education', text: 'education' },
-    { href: '#projects', text: 'projects' },
-    { href: '#about', text: 'about' },
-    { href: '#contact', text: 'contact' },
-]
+    { href: "#education", text: "education" },
+    { href: "#projects", text: "projects" },
+    { href: "#about", text: "about" },
+    { href: "#contact", text: "contact" },
+];
 ---
 
-
-<header class="flex sticky top-0 justify-between text-right items-center w-full 2xl:w-11/12 max-w-screen-2xl mx-auto py-4 sm:py-6 md:py-8 lg:py-12 px-4 2xl:px-0">
+<header
+    class="bg-primary-400 2xl:bg-transparent flex sticky top-0 start-0 justify-between text-right items-center w-full 2xl:w-11/12 max-w-screen-2xl mx-auto py-4 2xl:py-8 px-4 2xl:px-0"
+>
     <a href="#top">
-    <img class="w-36 h-auto md:40 lg:w-48 xl:w-52" src="/public/images/Logo_Dark.webp" alt="Ivan Logo" />
+        <img
+            class="w-28 h-full md:40 2xl:w-52"
+            src="/public/images/Logo_Dark.webp"
+            alt="Ivan Logo"
+        />
     </a>
     <nav class="flex flex-row 2xl:flex-col gap-1">
-    
         {
             LINKS.map(({ href, text }) => (
-                <a href={href} class="hover:text-highlight transition text-sm sm:text-sm md:text-base">{text}</a>
+                <a
+                    href={href}
+                    class="hover:text-highlight transition text-sm sm:text-sm md:text-base"
+                >
+                    {text}
+                </a>
             ))
         }
-
     </nav>
 </header>
