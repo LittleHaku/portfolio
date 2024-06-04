@@ -54,7 +54,7 @@ import MailIcon from "../icons/MailIcon.astro";
 </div>
 
 <script>
-    const emailInput = document.getElementById("email");
+    //const emailInput = document.getElementById("email");
     const copyButton = document.getElementById("copy-button");
 
     if (copyButton) {
@@ -66,20 +66,23 @@ import MailIcon from "../icons/MailIcon.astro";
 
             await navigator.clipboard.writeText(email);
 
-            copyButton
-                .querySelector("#default-message")
-                .classList.add("hidden");
-            copyButton
-                .querySelector("#success-message")
-                .classList.remove("hidden");
+            const defaultMessage = copyButton.querySelector("#default-message");
+            const successMessage = copyButton.querySelector("#success-message");
+
+            if (defaultMessage) {
+                defaultMessage.classList.add("hidden");
+            }
+            if (successMessage) {
+                successMessage.classList.remove("hidden");
+            }
 
             setTimeout(() => {
-                copyButton
-                    .querySelector("#default-message")
-                    .classList.remove("hidden");
-                copyButton
-                    .querySelector("#success-message")
-                    .classList.add("hidden");
+                if (defaultMessage) {
+                    defaultMessage.classList.remove("hidden");
+                }
+                if (successMessage) {
+                    successMessage.classList.add("hidden");
+                }
             }, 2000);
         });
     }
