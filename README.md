@@ -1,9 +1,3 @@
 # My own portfolio
 
-Still under construction...
-
-## TODO
-
-- [ ] Language
-- [ ] Darkmode
-- [ ] Add CV
+Here I will show some of my projects. Maybe in the future I add a blog section.
