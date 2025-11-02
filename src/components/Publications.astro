@@ -1,0 +1,25 @@
+---
+import PublicationItem from "./PublicationItem.astro";
+
+const PUBLICATIONS = [
+  {
+    title: "Automated Exploration and Profiling of Conversational Agents",
+    venue: "ICTSS 2025 (Cyprus)",
+    date: "Sept 2025",
+    description:
+      "We present TRACER, a tool that models chatbot functionalities using LLMs and generates user profiles to test chatbot behavior effectively.",
+    link: "https://conf.researchr.org/details/ictss-2025/ictss-2025-general-track/9/Automated-Exploration-of-Conversational-Agents-for-the-Synthesis-of-Testing-Profiles",
+    tags: ["LangGraph", "Chatbots", "LLMs"],
+  },
+];
+---
+
+<ol class="relative">
+  {
+    PUBLICATIONS.map((pub) => (
+      <li>
+        <PublicationItem {...pub} />
+      </li>
+    ))
+  }
+</ol>
