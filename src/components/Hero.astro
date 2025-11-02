@@ -2,6 +2,7 @@
 import Badge from '../components/Badge.astro';
 import Button from '../components/Button.astro';
 import SocialPill from '../components/SocialPill.astro';
+import LinkInline from '../components/LinkInline.astro';
 ---
 
 <div class="flex gap-4 mb-4">
@@ -10,17 +11,21 @@ import SocialPill from '../components/SocialPill.astro';
 
 <h2 class="font-serif text-4xl md:text-5xl w-full">Software Engineer & AI Researcher</h2>
 
+<p class="w-full text-black/80 text-lg md:text-2xl mt-4 max-w-3xl">
+    Currently researching at the <LinkInline href="https://www.miso.es/">MISO Lab</LinkInline>.
+</p>
+
 <nav class="flex flex-wrap gap-2 mt-8">
     <a
         href="mailto:ivandelhorno@gmail.com"
         target="_blank"
         rel="noopener"
-        class="inline-flex items-left transition md:hover:scale-105">
+        class="inline-flex items-left transition hover:scale-105">
         <Badge>Open to Work</Badge>
     </a>
-    <SocialPill href="mailto:ivandelhorno@gmail.com">
+    <!-- <SocialPill href="mailto:ivandelhorno@gmail.com">
         Email Me
-    </SocialPill>
+    </SocialPill> -->
     <SocialPill href="https://www.github.com/LittleHaku">
         GitHub
     </SocialPill>
