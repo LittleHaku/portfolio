@@ -3,6 +3,10 @@ import Badge from '../components/Badge.astro';
 import Button from '../components/Button.astro';
 import SocialPill from '../components/SocialPill.astro';
 import LinkInline from '../components/LinkInline.astro';
+import GitHubIcon from './icons/GitHubIcon.astro';
+import MailIcon from './icons/MailIcon.astro';
+import LinkedInIcon from './icons/LinkedInIcon.astro';
+import PDFIcon from './icons/PDFIcon.astro';
 ---
 
 <div class="flex gap-4 mb-4">
@@ -17,11 +21,23 @@ import LinkInline from '../components/LinkInline.astro';
 
 <nav class="flex flex-wrap gap-2 mt-8">
     <a href="mailto:ivandelhorno@gmail.com" target="_blank" rel="noopener">
-        <Badge>Open to Work</Badge>
+        <Badge>
+            <MailIcon />
+            Open to Work
+        </Badge>
     </a>
 
-    <SocialPill href="https://www.github.com/LittleHaku">GitHub</SocialPill>
-    <SocialPill href="https://www.linkedin.com/in/ivansotillo/">LinkedIn</SocialPill>
-    <SocialPill href="/Iván_Sotillo_CV.pdf">Download CV</SocialPill>
+    <SocialPill href="https://www.github.com/LittleHaku">
+        <GitHubIcon />
+        GitHub
+    </SocialPill>
+    <SocialPill href="https://www.linkedin.com/in/ivansotillo/">
+        <LinkedInIcon />
+        LinkedIn
+    </SocialPill>
+    <SocialPill href="/Iván_Sotillo_CV.pdf">
+        <PDFIcon />
+        Download CV
+    </SocialPill>
 
 </nav>
