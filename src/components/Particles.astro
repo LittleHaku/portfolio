@@ -1,4 +1,5 @@
-<canvas id="particles-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+<canvas id="particles-canvas" class="fixed top-0 left-0 w-full h-full -z-10"
+></canvas>
 
 <style>
   canvas {
@@ -12,24 +13,37 @@
 <script>
   if (typeof window !== "undefined") {
     window.addEventListener("DOMContentLoaded", () => {
-      const canvasEl = document.getElementById("particles-canvas") as HTMLCanvasElement | null;
+      const canvasEl = document.getElementById(
+        "particles-canvas"
+      ) as HTMLCanvasElement | null;
       if (!canvasEl) return;
 
       const ctx = canvasEl.getContext("2d");
       if (!ctx) return;
 
+      const PARTICLE_COUNT = 100;
+      const PARTICLE_MIN_RADIUS = 0.5;
+      const PARTICLE_MAX_RADIUS = 2.0;
+      const BASE_DRIFT_SPEED = 0.5;
+      const MOUSE_RADIUS = 120;
+      const MOUSE_REPULSION = 1.5;
+      const SCROLL_INFLUENCE = 0.5;
+      const SCROLL_DECAY = 0.9;
+      const MAX_SCROLL_VELOCITY = 40;
+
       const canvas = canvasEl;
       const context = ctx;
 
-      const numParticles = 100;
       const particles: Particle[] = [];
 
       const mouse = {
         x: 0,
         y: 0,
         active: false,
-        radius: 120,
       };
+
+      let scrollVelocity = 0;
+      let lastScrollY = window.scrollY;
 
       function resizeCanvas(): void {
         canvas.width = window.innerWidth;
@@ -38,14 +52,30 @@
       window.addEventListener("resize", resizeCanvas);
       resizeCanvas();
 
+      // mouse tracking
       window.addEventListener("mousemove", (e) => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
         mouse.active = true;
       });
-
       window.addEventListener("mouseleave", () => {
         mouse.active = false;
+      });
+
+      // scroll tracking
+      window.addEventListener("scroll", () => {
+        const currentY = window.scrollY;
+        const delta = currentY - lastScrollY;
+        lastScrollY = currentY;
+
+        let impulse = -delta;
+
+        // clamp
+        if (impulse > MAX_SCROLL_VELOCITY) impulse = MAX_SCROLL_VELOCITY;
+        if (impulse < -MAX_SCROLL_VELOCITY) impulse = -MAX_SCROLL_VELOCITY;
+
+        // add to scroll velocity (not replace it)
+        scrollVelocity += impulse;
       });
 
       class Particle {
@@ -59,36 +89,42 @@
         constructor() {
           this.x = Math.random() * canvas.width;
           this.y = Math.random() * canvas.height;
-          this.radius = Math.random() * 1.5 + 0.5;
-          this.speedX = (Math.random() - 0.5) * 0.5;
-          this.speedY = (Math.random() - 0.5) * 0.5;
+          this.radius =
+            Math.random() * (PARTICLE_MAX_RADIUS - PARTICLE_MIN_RADIUS) +
+            PARTICLE_MIN_RADIUS;
+          // base drift
+          this.speedX = (Math.random() - 0.5) * BASE_DRIFT_SPEED;
+          this.speedY = (Math.random() - 0.5) * BASE_DRIFT_SPEED;
           this.alpha = Math.random() * 0.4 + 0.2;
         }
 
-        update() {
-          // 1) normal movement
+        update(scrollPush: number) {
+          // 1) base movement
           this.x += this.speedX;
           this.y += this.speedY;
 
-          // 2) mouse interaction (repulsion)
+          // 2) scroll effect
+          // smaller particles (radius small) should move MORE
+          const sizeFactor = PARTICLE_MAX_RADIUS / this.radius; // small radius => large factor
+          this.y += scrollPush * sizeFactor;
+
+          // 3) mouse repulsion
           if (mouse.active) {
             const dx = this.x - mouse.x;
             const dy = this.y - mouse.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            if (dist > 0 && dist < mouse.radius) {
+            if (dist > 0 && dist < MOUSE_RADIUS) {
               const forceDirX = dx / dist;
               const forceDirY = dy / dist;
-              const force = (mouse.radius - dist) / mouse.radius;
-              const repulsion = 1.5;
+              const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
 
-              this.x += forceDirX * force * repulsion;
-              this.y += forceDirY * force * repulsion;
+              this.x += forceDirX * force * MOUSE_REPULSION;
+              this.y += forceDirY * force * MOUSE_REPULSION;
             }
           }
 
-          // 3) bounds + rebound (AFTER mouse push)
-          // we also take radius into account so dots don't get half outside
+          // 4) bounds + rebound (after all pushes)
           if (this.x - this.radius < 0) {
             this.x = this.radius;
             this.speedX *= -1;
@@ -114,16 +150,25 @@
         }
       }
 
-      for (let i = 0; i < numParticles; i++) {
+      // create particles
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
         particles.push(new Particle());
       }
 
       function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // smooth scroll velocity (parallax-like)
+        scrollVelocity *= SCROLL_DECAY;
+
+        // amount each particle gets this frame (small base)
+        const scrollPushPerFrame = (scrollVelocity / 100) * SCROLL_INFLUENCE;
+
         for (const p of particles) {
-          p.update();
+          p.update(scrollPushPerFrame);
           p.draw();
         }
+
         requestAnimationFrame(animate);
       }
 
