@@ -1,7 +1,7 @@
 ---
 import Badge from '../components/Badge.astro';
 import Button from '../components/Button.astro';
-import SocialPill from '../components/SocialPill.astro';
+import Button from '../components/Button.astro';
 import LinkInline from '../components/LinkInline.astro';
 import GitHubIcon from './icons/GitHubIcon.astro';
 import MailIcon from './icons/MailIcon.astro';
@@ -27,17 +27,17 @@ import PDFIcon from './icons/PDFIcon.astro';
         </Badge>
     </a>
 
-    <SocialPill href="https://www.github.com/LittleHaku">
+    <Button href="https://www.github.com/LittleHaku">
         <GitHubIcon />
         GitHub
-    </SocialPill>
-    <SocialPill href="https://www.linkedin.com/in/ivansotillo/">
+    </Button>
+    <Button href="https://www.linkedin.com/in/ivansotillo/">
         <LinkedInIcon />
         LinkedIn
-    </SocialPill>
-    <SocialPill href="/Iván_Sotillo_CV.pdf">
+    </Button>
+    <Button href="/Iván_Sotillo_CV.pdf">
         <PDFIcon />
         Download CV
-    </SocialPill>
+    </Button>
 
 </nav>
