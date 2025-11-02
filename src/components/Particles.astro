@@ -21,7 +21,7 @@
       const ctx = canvasEl.getContext("2d");
       if (!ctx) return;
 
-      const PARTICLE_COUNT = 100;
+      // ---- CONFIG ----
       const PARTICLE_MIN_RADIUS = 0.5;
       const PARTICLE_MAX_RADIUS = 2.0;
       const BASE_DRIFT_SPEED = 0.5;
@@ -31,9 +31,18 @@
       const SCROLL_DECAY = 0.9;
       const MAX_SCROLL_VELOCITY = 40;
 
+      function getParticleCount(): number {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const area = w * h;
+
+        if (w < 600) return 35; // móvil
+        if (w < 1024) return 70; // tablet
+        return Math.min(140, Math.floor(area / 15000)); // desktop
+      }
+
       const canvas = canvasEl;
       const context = ctx;
-
       const particles: Particle[] = [];
 
       const mouse = {
@@ -45,39 +54,7 @@
       let scrollVelocity = 0;
       let lastScrollY = window.scrollY;
 
-      function resizeCanvas(): void {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      window.addEventListener("resize", resizeCanvas);
-      resizeCanvas();
-
-      // mouse tracking
-      window.addEventListener("mousemove", (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-        mouse.active = true;
-      });
-      window.addEventListener("mouseleave", () => {
-        mouse.active = false;
-      });
-
-      // scroll tracking
-      window.addEventListener("scroll", () => {
-        const currentY = window.scrollY;
-        const delta = currentY - lastScrollY;
-        lastScrollY = currentY;
-
-        let impulse = -delta;
-
-        // clamp
-        if (impulse > MAX_SCROLL_VELOCITY) impulse = MAX_SCROLL_VELOCITY;
-        if (impulse < -MAX_SCROLL_VELOCITY) impulse = -MAX_SCROLL_VELOCITY;
-
-        // add to scroll velocity (not replace it)
-        scrollVelocity += impulse;
-      });
-
+      // 1) PRIMERO la clase
       class Particle {
         x: number;
         y: number;
@@ -92,23 +69,21 @@
           this.radius =
             Math.random() * (PARTICLE_MAX_RADIUS - PARTICLE_MIN_RADIUS) +
             PARTICLE_MIN_RADIUS;
-          // base drift
           this.speedX = (Math.random() - 0.5) * BASE_DRIFT_SPEED;
           this.speedY = (Math.random() - 0.5) * BASE_DRIFT_SPEED;
           this.alpha = Math.random() * 0.4 + 0.2;
         }
 
         update(scrollPush: number) {
-          // 1) base movement
+          // base
           this.x += this.speedX;
           this.y += this.speedY;
 
-          // 2) scroll effect
-          // smaller particles (radius small) should move MORE
-          const sizeFactor = PARTICLE_MAX_RADIUS / this.radius; // small radius => large factor
+          // efecto scroll (pequeñas se mueven más)
+          const sizeFactor = PARTICLE_MAX_RADIUS / this.radius;
           this.y += scrollPush * sizeFactor;
 
-          // 3) mouse repulsion
+          // mouse
           if (mouse.active) {
             const dx = this.x - mouse.x;
             const dy = this.y - mouse.y;
@@ -124,7 +99,7 @@
             }
           }
 
-          // 4) bounds + rebound (after all pushes)
+          // rebote
           if (this.x - this.radius < 0) {
             this.x = this.radius;
             this.speedX *= -1;
@@ -150,18 +125,64 @@
         }
       }
 
-      // create particles
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
-        particles.push(new Particle());
+      // 2) resize solo redimensiona
+      function resizeCanvas(): void {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        syncParticlesWithTarget();
+      });
+      resizeCanvas();
+
+      // mouse tracking
+      window.addEventListener("mousemove", (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+        mouse.active = true;
+      });
+      window.addEventListener("mouseleave", () => {
+        mouse.active = false;
+      });
+
+      // scroll tracking
+      window.addEventListener("scroll", () => {
+        const currentY = window.scrollY;
+        const delta = currentY - lastScrollY;
+        lastScrollY = currentY;
+
+        let impulse = -delta;
+
+        if (impulse > MAX_SCROLL_VELOCITY) impulse = MAX_SCROLL_VELOCITY;
+        if (impulse < -MAX_SCROLL_VELOCITY) impulse = -MAX_SCROLL_VELOCITY;
+
+        scrollVelocity += impulse;
+      });
+
+      // 3) función para ajustar el número de partículas
+      function syncParticlesWithTarget() {
+        const target = getParticleCount();
+        console.log("Target particles:", target);
+        const current = particles.length;
+
+        if (current < target) {
+          for (let i = current; i < target; i++) {
+            particles.push(new Particle());
+          }
+        } else if (current > target) {
+          particles.splice(target, current - target);
+        }
       }
 
+      // crear iniciales
+      syncParticlesWithTarget();
+
+      // 4) animación
       function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        // smooth scroll velocity (parallax-like)
         scrollVelocity *= SCROLL_DECAY;
-
-        // amount each particle gets this frame (small base)
         const scrollPushPerFrame = (scrollVelocity / 100) * SCROLL_INFLUENCE;
 
         for (const p of particles) {
