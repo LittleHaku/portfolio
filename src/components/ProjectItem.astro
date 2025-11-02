@@ -81,21 +81,21 @@ const typeClasses =
 
     <div class="mt-auto flex items-center space-x-4">
       {
-        githubLink && (
-          <Button href={githubLink}>
-            <GitHubIcon class="w-4 h-4" />
-            GitHub
-          </Button>
-        )
-      }
-      {
-        liveLink && (
-          <Button href={liveLink}>
+          liveLink && (
+              <Button href={liveLink}>
             <LinkIcon class="w-4 h-4" />
             Live
           </Button>
         )
-      }
+    }
+    {
+      githubLink && (
+        <Button href={githubLink}>
+          <GitHubIcon class="w-4 h-4" />
+          GitHub
+        </Button>
+      )
+    }
       {
         videoLink && (
           <Button href={videoLink}>
