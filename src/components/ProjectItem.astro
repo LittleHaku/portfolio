@@ -1,19 +1,20 @@
 ---
-import TechPill from "./TechPill.astro"
-import Button from "./Button.astro"
-import GitHubIcon from "./icons/GitHubIcon.astro"
-import LinkIcon from "./icons/LinkIcon.astro"
-import VideoIcon from "./icons/VideoIcon.astro"
+import TechPill from "./TechPill.astro";
+import Button from "./Button.astro";
+import GitHubIcon from "./icons/GitHubIcon.astro";
+import LinkIcon from "./icons/LinkIcon.astro";
+import VideoIcon from "./icons/VideoIcon.astro";
 
 interface Props {
-  title: string
-  description: string
-  techs?: string[]
-  screenshotSrc?: string        // screenshot image path
-  screenshotAlt?: string
-  githubLink?: string
-  liveLink?: string
-  videoLink?: string
+  title: string;
+  description: string;
+  techs?: string[];
+  screenshotSrc?: string;
+  screenshotAlt?: string;
+  githubLink?: string;
+  liveLink?: string;
+  videoLink?: string;
+  type?: "Professional" | "Personal";
 }
 
 const {
@@ -24,54 +25,77 @@ const {
   screenshotAlt = `${title} screenshot`,
   githubLink,
   liveLink,
-  videoLink
-} = Astro.props
+  videoLink,
+  type = "Personal",
+} = Astro.props;
 ---
 
-<article class="group relative flex flex-col bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-700/40 rounded-xl overflow-hidden
+<article
+  class="group relative flex flex-col bg-white dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-700/40 rounded-xl overflow-hidden
                transform transition-all duration-200 ease-in-out
-               hover:scale-105 hover:shadow-lg">
+               hover:scale-105 hover:shadow-lg"
+>
+  {
+    screenshotSrc && (
+      <img
+        src={screenshotSrc}
+        alt={screenshotAlt}
+        class="w-full object-cover aspect-video group-hover:scale-105 transition-transform"
+      />
+    )
+  }
 
-  {screenshotSrc && (
-    <img
-      src={screenshotSrc}
-      alt={screenshotAlt}
-      class="w-full object-cover aspect-video group-hover:scale-105 transition-transform"
-    />
-  )}
   <div class="p-6 flex flex-col flex-grow">
-    <h3 class="font-serif text-xl text-zinc-900 dark:text-zinc-50 mb-2">
-      {title}
-    </h3>
+    <div class="flex items-center mb-2 space-x-2">
+      <h3 class="font-serif text-xl text-zinc-900 dark:text-zinc-50">
+        {title}
+      </h3>
+      <span
+        class="px-2 py-0.5 text-xs font-medium rounded-full
+           bg-zinc-100 text-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-200
+           uppercase tracking-wide"
+      >
+        {type}
+      </span>
+    </div>
+
     <p class="text-zinc-600 dark:text-zinc-300 flex-grow mb-4">
       {description}
     </p>
-    {techs.length > 0 && (
-      <div class="flex flex-wrap gap-2 mb-4">
-        {techs.map(tech => (
-          <TechPill label={tech} />
-        ))}
-      </div>
-    )}
+    {
+      techs.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-4">
+          {techs.map((tech) => (
+            <TechPill label={tech} />
+          ))}
+        </div>
+      )
+    }
     <div class="mt-auto flex items-center space-x-4">
-      {githubLink && (
-        <Button href={githubLink}>
+      {
+        githubLink && (
+          <Button href={githubLink}>
             <GitHubIcon class="w-4 h-4" />
             GitHub
-        </Button>
-      )}
-      {liveLink && (
-        <Button href={liveLink}>
+          </Button>
+        )
+      }
+      {
+        liveLink && (
+          <Button href={liveLink}>
             <LinkIcon class="w-4 h-4" />
             Live
-        </Button>
-      )}
-      {videoLink && (
-        <Button href={videoLink}>
+          </Button>
+        )
+      }
+      {
+        videoLink && (
+          <Button href={videoLink}>
             <VideoIcon class="w-4 h-4" />
             Video
-        </Button>
-      )}
+          </Button>
+        )
+      }
     </div>
   </div>
 </article>

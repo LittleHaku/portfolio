@@ -1,28 +1,31 @@
 ---
-import ProjectItem from "./ProjectItem.astro"
+import ProjectItem from "./ProjectItem.astro";
 
-const PROJECTS = [
+const PROJECTS: any[] = [
   {
     title: "TRACER",
-    description: "Built a tool that using LLMs, holds a conversation with a chatbot to model its behaviour. From these conversations it generates a model of the chatbot's functionalities, finally, it builds different DSL user profiles that can be used to test the chatbot's behavior under various scenarios.",
+    description:
+      "Built a tool that using LLMs, holds a conversation with a chatbot to model its behaviour. From these conversations it generates a model of the chatbot's functionalities, finally, it builds different DSL user profiles that can be used to test the chatbot's behavior under various scenarios.",
     techs: ["LangGraph", "NLP", "Python"],
     screenshotSrc: "/screenshots/tracer.png",
     liveLink: "https://pypi.org/project/chatbot-tracer/",
-    githubLink: "https://github.com/Chatbot-TRACER/TRACER"
+    githubLink: "https://github.com/Chatbot-TRACER/TRACER",
+    type: "Professional",
   },
   {
     title: "Chatbot Dojo",
-    description: "Developed a web app that integrates TRACER and SENSEI tools. TRACER models a chatbot and generates user profiles, while SENSEI runs these profiles against the chatbot to evaluate its behavior. The frontend was done with React, while the backend was built with Django. ",
-    techs: ["Django", "React", "LangGraph", "Docker", "Celery", "PostgreSQL"],
+    description:
+      "Developed a web app that integrates TRACER and SENSEI tools. TRACER models a chatbot and generates user profiles, while SENSEI runs these profiles against the chatbot to evaluate its behavior. The frontend was done with React, while the backend was built with Django. ",
+    techs: ["Django", "React", "Docker", "Celery", "PostgreSQL"],
     screenshotSrc: "/screenshots/chatbot-dojo.png",
     liveLink: "http://miso.ii.uam.es:8081/",
     videoLink: "https://www.youtube.com/watch?v=dFsbN1FKGVg",
-    githubLink: "https://github.com/satori-chatbots/chatbot-dojo"
-  }
-]
+    githubLink: "https://github.com/satori-chatbots/chatbot-dojo",
+    type: "Professional",
+  },
+];
 ---
+
 <div class="grid gap-8 md:grid-cols-2">
-  {PROJECTS.map(project => (
-    <ProjectItem {...project} />
-  ))}
+  {PROJECTS.map((project) => <ProjectItem {...project} />)}
 </div>
