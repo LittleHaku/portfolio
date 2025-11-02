@@ -1,7 +1,19 @@
-<canvas id="particles-canvas" class="fixed top-0 left-0 w-full h-full -z-10"
+<canvas
+  id="particles-canvas"
+  class="fixed top-0 left-0 w-full h-full -z-10"
 ></canvas>
 
 <style>
+  :root {
+    /* light mode */
+    --particle-color: 0, 0, 0; /* black dots */
+  }
+
+  :root.dark {
+    /* dark mode */
+    --particle-color: 255, 255, 255; /* white dots */
+  }
+
   canvas {
     position: fixed;
     top: 0;
@@ -13,13 +25,29 @@
 <script>
   if (typeof window !== "undefined") {
     window.addEventListener("DOMContentLoaded", () => {
-      const canvasEl = document.getElementById(
-        "particles-canvas"
-      ) as HTMLCanvasElement | null;
+      const canvasEl = document.getElementById("particles-canvas");
       if (!canvasEl) return;
 
       const ctx = canvasEl.getContext("2d");
       if (!ctx) return;
+
+      // ---- THEME-AWARE COLOR ----
+      function getParticleColor() {
+        const root = document.documentElement;
+        const styles = getComputedStyle(root);
+        // returns "0, 0, 0" or "255, 255, 255"
+        return styles.getPropertyValue("--particle-color").trim();
+      }
+      let currentParticleColor = getParticleColor();
+
+      // watch for changes in <html class="dark">
+      const observer = new MutationObserver(() => {
+        currentParticleColor = getParticleColor();
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
 
       // ---- CONFIG ----
       const PARTICLE_MIN_RADIUS = 0.5;
@@ -31,19 +59,19 @@
       const SCROLL_DECAY = 0.9;
       const MAX_SCROLL_VELOCITY = 40;
 
-      function getParticleCount(): number {
+      function getParticleCount() {
         const w = window.innerWidth;
         const h = window.innerHeight;
         const area = w * h;
 
-        if (w < 600) return 35; // móvil
-        if (w < 1024) return 70; // tablet
-        return Math.min(140, Math.floor(area / 15000)); // desktop
+        if (w < 600) return 35;
+        if (w < 1024) return 70;
+        return Math.min(140, Math.floor(area / 15000));
       }
 
       const canvas = canvasEl;
       const context = ctx;
-      const particles: Particle[] = [];
+      const particles = [];
 
       const mouse = {
         x: 0,
@@ -54,15 +82,7 @@
       let scrollVelocity = 0;
       let lastScrollY = window.scrollY;
 
-      // 1) PRIMERO la clase
       class Particle {
-        x: number;
-        y: number;
-        radius: number;
-        speedX: number;
-        speedY: number;
-        alpha: number;
-
         constructor() {
           this.x = Math.random() * canvas.width;
           this.y = Math.random() * canvas.height;
@@ -74,16 +94,13 @@
           this.alpha = Math.random() * 0.4 + 0.2;
         }
 
-        update(scrollPush: number) {
-          // base
+        update(scrollPush) {
           this.x += this.speedX;
           this.y += this.speedY;
 
-          // efecto scroll (pequeñas se mueven más)
           const sizeFactor = PARTICLE_MAX_RADIUS / this.radius;
           this.y += scrollPush * sizeFactor;
 
-          // mouse
           if (mouse.active) {
             const dx = this.x - mouse.x;
             const dy = this.y - mouse.y;
@@ -99,7 +116,7 @@
             }
           }
 
-          // rebote
+          // bounce
           if (this.x - this.radius < 0) {
             this.x = this.radius;
             this.speedX *= -1;
@@ -120,13 +137,13 @@
         draw() {
           context.beginPath();
           context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          context.fillStyle = `rgba(0, 0, 0, ${this.alpha})`;
+          // use the theme color here 👇
+          context.fillStyle = `rgba(${currentParticleColor}, ${this.alpha})`;
           context.fill();
         }
       }
 
-      // 2) resize solo redimensiona
-      function resizeCanvas(): void {
+      function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
@@ -136,7 +153,7 @@
       });
       resizeCanvas();
 
-      // mouse tracking
+      // mouse
       window.addEventListener("mousemove", (e) => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
@@ -146,7 +163,7 @@
         mouse.active = false;
       });
 
-      // scroll tracking
+      // scroll
       window.addEventListener("scroll", () => {
         const currentY = window.scrollY;
         const delta = currentY - lastScrollY;
@@ -160,10 +177,8 @@
         scrollVelocity += impulse;
       });
 
-      // 3) función para ajustar el número de partículas
       function syncParticlesWithTarget() {
         const target = getParticleCount();
-        console.log("Target particles:", target);
         const current = particles.length;
 
         if (current < target) {
@@ -175,10 +190,8 @@
         }
       }
 
-      // crear iniciales
       syncParticlesWithTarget();
 
-      // 4) animación
       function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
 
