@@ -1,5 +1,6 @@
 ---
 import LinkInline from "./LinkInline.astro"
+import TechPill from "./TechPill.astro"
 
 interface Props {
   title: string
@@ -7,9 +8,10 @@ interface Props {
   description: string
   link?: string
   date: string
+  techs?: string[]
 }
 
-const { title, company, description, link, date } = Astro.props
+const { title, company, description, link, date, techs = [] } = Astro.props
 ---
 
 <div
@@ -21,7 +23,6 @@ const { title, company, description, link, date } = Astro.props
 >
   <div class="relative pb-12 md:col-span-2">
     <div class="sticky top-0">
-      {/* timeline node */}
       <span
         class="absolute -left-[42px] top-1/2 -translate-y-1/2
                inline-flex h-3.5 w-3.5 rounded-full
@@ -44,25 +45,31 @@ const { title, company, description, link, date } = Astro.props
   <div class="relative flex flex-col gap-3 pb-4 text-zinc-600 dark:text-zinc-200 md:col-span-3 leading-relaxed">
     {description}
 
-    {
-      link && (
-        <LinkInline href={link}>
-          Know more
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" />
-            <path d="M9 6l6 6l-6 6" />
-          </svg>
-        </LinkInline>
-      )
-    }
+    {techs.length > 0 && (
+      <div class="flex flex-wrap gap-2 mt-2">
+        {techs.map((tech) => (
+          <TechPill label={tech} />
+        ))}
+      </div>
+    )}
+
+    {link && (
+      <LinkInline href={link}>
+        Know more
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" />
+          <path d="M9 6l6 6l-6 6" />
+        </svg>
+      </LinkInline>
+    )}
   </div>
 </div>
