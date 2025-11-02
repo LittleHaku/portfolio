@@ -3,12 +3,20 @@ import Badge from '../components/Badge.astro';
 import Button from '../components/Button.astro';
 ---
 
-<h1 class="font-serif text-6xl md:text-7xl w-full">IVÁN SOTILLO.</h1>
+<div class="flex gap-4 mb-4">
+    <h1 class="font-serif text-6xl md:text-7xl">IVÁN SOTILLO.</h1>
+    <a
+        href="mailto:ivandelhorno@gmail.com"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-left transition md:hover:scale-105">
+        <Badge>Open to Work</Badge>
+    </a>
+</div>
+
 <h2 class="font-serif text-4xl md:text-5xl w-full">Software Engineer & AI Researcher</h2>
-<a
-    href="mailto:ivandelhorno@gmail.com"
-    target="_blank"
-    rel="noopener"
-    class="inline-flex items-center transition md:hover:scale-105">
-    <Badge>Open to Work</Badge>
-</a>
+
+<Button href="mailto:ivandelhorno@gmail.com">Email Me</Button>
+<Button href="https://www.github.com/LittleHaku">GitHub</Button>
+<Button href="https://www.linkedin.com/in/ivansotillo/">LinkedIn</Button>
+<Button href="/Iván_Sotillo_CV.pdf" >Download CV</Button>
