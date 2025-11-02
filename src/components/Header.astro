@@ -1,6 +1,4 @@
 ---
-import LinkInline from "./LinkInline.astro";
-
 const navItems = [
   { name: "experience", href: "#experience" },
   { name: "education", href: "#education" },
@@ -12,30 +10,112 @@ const navItems = [
 ---
 
 <header class="fixed top-0 z-10 w-full mt-2">
-  <nav
-    id="navbar"
-    class="mx-auto max-w-xl flex items-center justify-center
-           px-4 py-2 rounded-full
-           bg-white/30 dark:bg-zinc-900/30
-           backdrop-filter backdrop-blur-xs
-           border border-zinc-200/50 dark:border-zinc-700/50
-           text-zinc-800 dark:text-zinc-200 text-sm font-normal
-           gap-4 shadow-sm"
-  >
-    {navItems.map((item) => (
-      <a
-        href={item.href}
-        class="nav-link transition-colors duration-200 hover:font-semibold"
-      >
-        {item.name}
-      </a>
-    ))}
-  </nav>
+  <div id="navbar" class="mx-auto w-full max-w-xl px-4">
+    <div
+      class="relative overflow-hidden rounded-full
+             bg-white/40 dark:bg-zinc-900/30
+             backdrop-filter backdrop-blur-xs
+             border border-white/50 dark:border-zinc-700/50
+             text-zinc-900 dark:text-zinc-100 text-sm font-normal
+             shadow-[inset_0_1px_6px_rgba(255,255,255,0.6),inset_0_-1px_8px_rgba(0,0,0,0.2),0_4px_20px_rgba(0,0,0,0.05)]
+             before:content-[''] before:absolute before:inset-0 before:rounded-full
+             before:bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.35)_0%,transparent_60%)]
+             dark:before:bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.12)_0%,transparent_70%)]
+             before:pointer-events-none
+             px-4 md:py-2 transition-all duration-200"
+    >
+      <!-- top row on mobile -->
+      <div class="flex items-center justify-between md:hidden">
+        <a
+          href="#"
+          class="uppercase tracking-wide text-sm font-medium text-zinc-900 dark:text-zinc-100"
+        >
+          home
+        </a>
+
+        <button
+          type="button"
+          class="inline-flex items-center justify-center p-2 rounded-full hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          data-mobile-menu-button
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <svg
+            data-icon="open"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="h-5 w-5"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <svg
+            data-icon="close"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="hidden h-5 w-5"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- desktop nav -->
+      <nav class="hidden md:flex items-center justify-center gap-4">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="nav-link relative transition-colors duration-200 hover:font-semibold text-zinc-900 dark:text-zinc-100"
+          >
+            {item.name}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <!-- mobile dropdown -->
+    <nav
+      id="mobile-menu"
+      class="mobile-menu hidden md:hidden flex flex-col gap-2 mt-2
+             relative overflow-hidden rounded-3xl
+             bg-white/75 dark:bg-zinc-900/70
+             backdrop-filter backdrop-blur-xs
+             border border-white/60 dark:border-zinc-700/70
+             text-zinc-900 dark:text-zinc-100 text-sm font-normal
+             shadow-[inset_0_1px_6px_rgba(255,255,255,0.6),inset_0_-1px_8px_rgba(0,0,0,0.25),0_4px_20px_rgba(0,0,0,0.05)]
+             before:content-[''] before:absolute before:inset-0 before:rounded-3xl
+             before:bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.35)_0%,transparent_70%)]
+             dark:before:bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.1)_0%,transparent_70%)]
+             before:pointer-events-none
+             px-4 py-3 transition-all duration-300"
+      data-mobile-menu
+    >
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="nav-link relative transition-colors duration-200 hover:font-semibold text-zinc-900 dark:text-zinc-100 py-1.5"
+        >
+          {item.name}
+        </a>
+      ))}
+    </nav>
+  </div>
 </header>
 
 <script>
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-link");
+
+  const mobileMenuButton = document.querySelector("[data-mobile-menu-button]");
+  const mobileMenu = document.querySelector("[data-mobile-menu]");
+  const openIcon = mobileMenuButton?.querySelector('[data-icon="open"]');
+  const closeIcon = mobileMenuButton?.querySelector('[data-icon="close"]');
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -48,10 +128,39 @@ const navItems = [
         }
       });
     },
-    {
-      threshold: 0.5,
-    }
+    { threshold: 0.5 }
   );
 
   sections.forEach((section) => observer.observe(section));
+
+  const setMobileMenuState = (shouldOpen) => {
+    if (!mobileMenu || !mobileMenuButton) return;
+
+    if (shouldOpen) {
+      mobileMenu.classList.remove("hidden");
+      mobileMenuButton.setAttribute("aria-expanded", "true");
+      openIcon?.classList.add("hidden");
+      closeIcon?.classList.remove("hidden");
+    } else {
+      mobileMenu.classList.add("hidden");
+      mobileMenuButton.setAttribute("aria-expanded", "false");
+      openIcon?.classList.remove("hidden");
+      closeIcon?.classList.add("hidden");
+    }
+  };
+
+  mobileMenuButton?.addEventListener("click", () => {
+    const shouldOpen = mobileMenu?.classList.contains("hidden") ?? false;
+    setMobileMenuState(shouldOpen);
+  });
+
+  mobileMenu?.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", () => setMobileMenuState(false));
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= 768) {
+      setMobileMenuState(false);
+    }
+  });
 </script>
