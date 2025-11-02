@@ -1,16 +1,15 @@
 ---
-import LinkInline from './LinkInline.astro';
+import LinkInline from "./LinkInline.astro";
 
 const navItems = [
-  { name: 'experience',   href: '#experience' },
-  { name: 'education',    href: '#' },
-  { name: 'projects',     href: '#' },
-  { name: 'publications', href: '#' },
-  { name: 'achievements', href: '#' },
-  { name: 'contact me',   href: '#' },
+  { name: "experience", href: "#experience" },
+  { name: "education", href: "#education" },
+  { name: "projects", href: "#projects" },
+  { name: "publications", href: "#publications" },
+  { name: "achievements", href: "#achievements" },
+  { name: "contact me", href: "#contact-me" },
 ];
 ---
-
 
 <header class="fixed top-0 z-10 w-full mt-2">
   <nav
@@ -22,10 +21,10 @@ const navItems = [
            text-zinc-800 dark:text-zinc-200 text-sm font-normal
            gap-4 shadow-sm"
   >
-    {navItems.map(item => (
-      <LinkInline href={item.href}>
-        {item.name}
-      </LinkInline>
-    ))}
+    {
+      navItems.map((item) => (
+        <LinkInline href={item.href}>{item.name}</LinkInline>
+      ))
+    }
   </nav>
 </header>
