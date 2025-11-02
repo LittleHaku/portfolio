@@ -1,43 +1,46 @@
 ---
-import Badge from '../components/Badge.astro';
-import Button from '../components/Button.astro';
-import Button from '../components/Button.astro';
-import LinkInline from '../components/LinkInline.astro';
-import GitHubIcon from './icons/GitHubIcon.astro';
-import MailIcon from './icons/MailIcon.astro';
-import LinkedInIcon from './icons/LinkedInIcon.astro';
-import PDFIcon from './icons/PDFIcon.astro';
+import Badge from "../components/Badge.astro";
+import Button from "../components/Button.astro";
+import Button from "../components/Button.astro";
+import LinkInline from "../components/LinkInline.astro";
+import GitHubIcon from "./icons/GitHubIcon.astro";
+import MailIcon from "./icons/MailIcon.astro";
+import LinkedInIcon from "./icons/LinkedInIcon.astro";
+import PDFIcon from "./icons/PDFIcon.astro";
 ---
 
 <div class="flex gap-4 mb-4">
-    <h1 class="font-serif text-4xl md:text-7xl">IVÁN SOTILLO.</h1>
+  <h1 class="font-serif text-4xl md:text-7xl">IVÁN SOTILLO.</h1>
 </div>
 
-<h2 class="font-serif text-4xl md:text-5xl w-full italic">Software Engineer & AI Researcher</h2>
+<h2 class="font-serif text-4xl md:text-5xl w-full italic">
+  Software Engineer & AI Researcher
+</h2>
 
 <p class="w-full text-gray-600 font-light text-lg md:text-2xl mt-4 max-w-3xl">
-    Currently researching at the <LinkInline href="https://www.miso.es/">MISO Lab</LinkInline>.
+  Currently researching at the <LinkInline href="https://www.miso.es/"
+    >MISO Lab</LinkInline
+  >.
 </p>
 
 <nav class="flex flex-wrap gap-2 mt-8">
-    <a href="mailto:ivandelhorno@gmail.com" target="_blank" rel="noopener">
-        <Badge>
-            <MailIcon />
-            Open to Work
-        </Badge>
-    </a>
+  <a href="mailto:ivandelhorno@gmail.com" target="_blank" rel="noopener">
+    <Badge>
+      <MailIcon />
+      Open to Work
+    </Badge>
+  </a>
 
-    <Button href="https://www.github.com/LittleHaku">
-        <GitHubIcon />
-        GitHub
-    </Button>
-    <Button href="https://www.linkedin.com/in/ivansotillo/">
-        <LinkedInIcon />
-        LinkedIn
-    </Button>
-    <Button href="/Iván_Sotillo_CV.pdf">
-        <PDFIcon />
-        Download CV
-    </Button>
-
+  <Button href="https://www.github.com/LittleHaku">
+    <GitHubIcon />
+    GitHub
+  </Button>
+  <Button href="https://www.linkedin.com/in/ivansotillo/">
+    <LinkedInIcon />
+    LinkedIn
+  </Button>
+  <Button href="/Iván_Sotillo_CV.pdf">
+    <PDFIcon />
+    Download CV
+  </Button>
 </nav>
