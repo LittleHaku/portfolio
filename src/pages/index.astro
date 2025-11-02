@@ -10,19 +10,40 @@ import Experience from '../components/Experience.astro';
   title="Iván Sotillo - Software Engineer & AI Researcher"
 >
   <main class="px-4">
-    <SectionContainer>
+    <div class="flex flex-col space-y-8">
+      <SectionContainer class="mt-48">
         <Hero />
-    </SectionContainer>
+      </SectionContainer>
 
-    <div class="my-12">
-    <SectionContainer id="experience">
-        <TitleSection>
-            Experience
-        </TitleSection>
+      <SectionContainer id="experience">
+        <TitleSection>Experience</TitleSection>
         <Experience />
-    </SectionContainer>
+      </SectionContainer>
+
+      <SectionContainer id="education">
+        <TitleSection>Education</TitleSection>
+        <!-- Education content -->
+      </SectionContainer>
+
+      <SectionContainer id="projects">
+        <TitleSection>Projects</TitleSection>
+        <!-- Projects content -->
+      </SectionContainer>
+
+      <SectionContainer id="publications">
+        <TitleSection>Publications</TitleSection>
+        <!-- Publications content -->
+      </SectionContainer>
+
+      <SectionContainer id="achievements">
+        <TitleSection>Achievements</TitleSection>
+        <!-- Achievements content -->
+      </SectionContainer>
+
+      <SectionContainer id="contact-me">
+        <TitleSection>Contact Me</TitleSection>
+        <!-- Contact content -->
+      </SectionContainer>
     </div>
-
-
   </main>
 </Layout>
