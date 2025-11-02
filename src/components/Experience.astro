@@ -1,0 +1,23 @@
+---
+import ExperienceItem from "./ExperienceItem.astro"
+const EXPERIENCE = [
+  {
+    date: "Dec 2024 - Present",
+    title: "Researcher",
+    company: "MISO - UAM",
+    description:
+      "Researching chatbot testing techniques.",
+    link: "https://www.miso.es/",
+  },
+]
+---
+
+<ol class="relative mt-16">
+  {
+    EXPERIENCE.map((experience) => (
+      <li class="">
+        <ExperienceItem {...experience} />
+      </li>
+    ))
+  }
+</ol>

@@ -3,9 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import SectionContainer from '../components/SectionContainer.astro';
 import TitleSection from '../components/TitleSection.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Experience from '../components/Experience.astro';
 ---
 
 <Layout
@@ -16,11 +14,12 @@ import TitleSection from '../components/TitleSection.astro';
         <Hero />
     </SectionContainer>
 
-    <div class="my-5">
-    <SectionContainer>
+    <div class="my-12">
+    <SectionContainer id="experience">
         <TitleSection>
             Experience
         </TitleSection>
+        <Experience />
     </SectionContainer>
     </div>
 
