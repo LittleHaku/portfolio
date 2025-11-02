@@ -1,0 +1,36 @@
+---
+import AchievementItem from "./AchievementItem.astro";
+
+const ACHIEVEMENTS = [
+  {
+    title: "Excellence Scholarship",
+    subtitle: "Comunidad de Madrid",
+    description:
+      "Scholarship awarded by the Community of Madrid. Obtained in the 2021/22 and 2023/24 academic years for ranking among the top students in the Community of Madrid.",
+    date: "2021/22, 2023/24",
+  },
+  {
+    title: "2 honorable mentions in Computer Science",
+    subtitle: "Universidad Autónoma de Madrid",
+    description:
+      "Awarded to the top ~2% of students enrolled in each course. Obtained in Data Structures and Mobile App Development.",
+  },
+  {
+    title: "Excellence Scholarship",
+    subtitle: "Universidad Autónoma de Madrid",
+    description:
+      "Awarded to the master students that achieved the highest grades in the previous degree.",
+    date: "2024/25",
+  },
+];
+---
+
+<ol class="relative">
+  {
+    ACHIEVEMENTS.map((ach) => (
+      <li>
+        <AchievementItem {...ach} />
+      </li>
+    ))
+  }
+</ol>
