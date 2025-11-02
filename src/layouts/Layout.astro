@@ -10,7 +10,6 @@ import '../styles/global.css'
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
 	</head>
 	<body class="relative text-black dark:text-white">
 		<slot />
@@ -32,5 +31,8 @@ import '../styles/global.css'
         background: #fff;
         display: flex;
         justify-content: center;
+        flex-direction: column;
+        min-height: 100vh;
+        overscroll-behavior: none;
 	}
 </style>
