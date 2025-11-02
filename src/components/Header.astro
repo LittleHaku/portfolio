@@ -66,7 +66,7 @@ const navItems = [
         </button>
       </div>
 
-      <!-- desktop nav -->
+      <!-- desktop nav (unchanged) -->
       <nav class="hidden md:flex items-center justify-center gap-4">
         {navItems.map((item) => (
           <a
@@ -82,7 +82,7 @@ const navItems = [
     <!-- mobile dropdown -->
     <nav
       id="mobile-menu"
-      class="mobile-menu hidden md:hidden flex flex-col gap-2 mt-2
+      class="mobile-menu md:hidden flex flex-col gap-2 mt-2
              relative overflow-hidden rounded-3xl
              bg-white/75 dark:bg-zinc-900/70
              backdrop-filter backdrop-blur-xs
@@ -93,8 +93,11 @@ const navItems = [
              before:bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.35)_0%,transparent_70%)]
              dark:before:bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.1)_0%,transparent_70%)]
              before:pointer-events-none
-             px-4 py-3 transition-all duration-300"
+             px-4 py-3
+             transition-all duration-300 ease-out
+             translate-y-[-12px] opacity-0 pointer-events-none"
       data-mobile-menu
+      data-state="closed"
     >
       {navItems.map((item) => (
         <a
@@ -117,6 +120,7 @@ const navItems = [
   const openIcon = mobileMenuButton?.querySelector('[data-icon="open"]');
   const closeIcon = mobileMenuButton?.querySelector('[data-icon="close"]');
 
+  // active section highlight
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -133,34 +137,44 @@ const navItems = [
 
   sections.forEach((section) => observer.observe(section));
 
-  const setMobileMenuState = (shouldOpen) => {
-    if (!mobileMenu || !mobileMenuButton) return;
+  const openMobileMenu = () => {
+    if (!mobileMenu) return;
+    mobileMenu.dataset.state = "open";
+    mobileMenu.classList.remove("translate-y-[-12px]", "opacity-0", "pointer-events-none");
+    mobileMenu.classList.add("translate-y-0", "opacity-100");
+    mobileMenuButton?.setAttribute("aria-expanded", "true");
+    openIcon?.classList.add("hidden");
+    closeIcon?.classList.remove("hidden");
+  };
 
-    if (shouldOpen) {
-      mobileMenu.classList.remove("hidden");
-      mobileMenuButton.setAttribute("aria-expanded", "true");
-      openIcon?.classList.add("hidden");
-      closeIcon?.classList.remove("hidden");
-    } else {
-      mobileMenu.classList.add("hidden");
-      mobileMenuButton.setAttribute("aria-expanded", "false");
-      openIcon?.classList.remove("hidden");
-      closeIcon?.classList.add("hidden");
-    }
+  const closeMobileMenu = () => {
+    if (!mobileMenu) return;
+    mobileMenu.dataset.state = "closed";
+    mobileMenu.classList.add("translate-y-[-12px]", "opacity-0", "pointer-events-none");
+    mobileMenu.classList.remove("translate-y-0", "opacity-100");
+    mobileMenuButton?.setAttribute("aria-expanded", "false");
+    openIcon?.classList.remove("hidden");
+    closeIcon?.classList.add("hidden");
   };
 
   mobileMenuButton?.addEventListener("click", () => {
-    const shouldOpen = mobileMenu?.classList.contains("hidden") ?? false;
-    setMobileMenuState(shouldOpen);
+    const isClosed = mobileMenu?.dataset.state === "closed";
+    if (isClosed) {
+      openMobileMenu();
+    } else {
+      closeMobileMenu();
+    }
   });
 
+  // close when clicking an item
   mobileMenu?.querySelectorAll(".nav-link").forEach((link) => {
-    link.addEventListener("click", () => setMobileMenuState(false));
+    link.addEventListener("click", () => closeMobileMenu());
   });
 
+  // close on resize to desktop
   window.addEventListener("resize", () => {
     if (window.innerWidth >= 768) {
-      setMobileMenuState(false);
+      closeMobileMenu();
     }
   });
 </script>
