@@ -1,5 +1,6 @@
 ---
 import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
 import '../styles/global.css'
 // Supports weights 400-900
 import '@fontsource-variable/playfair-display';
@@ -28,6 +29,7 @@ const { description, title } = Astro.props
 	<body class="relative text-black dark:text-white">
 		<slot />
         <Header />
+        <Footer />
 	</body>
 </html>
 
