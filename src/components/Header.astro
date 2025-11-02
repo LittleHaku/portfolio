@@ -13,6 +13,7 @@ const navItems = [
 
 <header class="fixed top-0 z-10 w-full mt-2">
   <nav
+    id="navbar"
     class="mx-auto max-w-xl flex items-center justify-center
            px-4 py-2 rounded-full
            bg-white/30 dark:bg-zinc-900/30
@@ -21,10 +22,36 @@ const navItems = [
            text-zinc-800 dark:text-zinc-200 text-sm font-normal
            gap-4 shadow-sm"
   >
-    {
-      navItems.map((item) => (
-        <LinkInline href={item.href}>{item.name}</LinkInline>
-      ))
-    }
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        class="nav-link transition-colors duration-200 hover:font-semibold"
+      >
+        {item.name}
+      </a>
+    ))}
   </nav>
 </header>
+
+<script>
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.getAttribute("id");
+        const link = document.querySelector(`a[href="#${id}"]`);
+        if (entry.isIntersecting) {
+          navLinks.forEach((l) => l.classList.remove("font-bold"));
+          link?.classList.add("font-bold");
+        }
+      });
+    },
+    {
+      threshold: 0.5,
+    }
+  );
+
+  sections.forEach((section) => observer.observe(section));
+</script>
