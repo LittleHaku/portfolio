@@ -1,6 +1,10 @@
 ---
 import Header from '../components/Header.astro'
 import '../styles/global.css'
+// Supports weights 400-900
+import '@fontsource-variable/playfair-display';
+// Supports weights 100-900
+import '@fontsource-variable/roboto';
 ---
 
 <!doctype html>
@@ -20,10 +24,13 @@ import '../styles/global.css'
 <style is:global>
     :root {
         color-scheme: light;
+        --font-serif: "Playfair Display Variable", ui-serif, Georgia, serif;
+        --font-sans: "Roboto Variable", ui-sans-serif, Helvetica, Arial, sans-serif;
     }
 
     html {
-        font-family: "Onest Variable", system-ui, sans-serif;
+        font-family: "Roboto Variable", ui-sans-serif, Helvetica, Arial, sans-serif;
+        font-weight: 400;
         scroll-behavior: smooth;
     }
 
