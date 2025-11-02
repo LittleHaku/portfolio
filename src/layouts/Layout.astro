@@ -2,56 +2,106 @@
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
 import '../styles/global.css'
-// Supports weights 400-900
-import '@fontsource-variable/playfair-display';
-// Supports weights 100-900
-import '@fontsource-variable/roboto';
-
+import '@fontsource-variable/playfair-display'
+import '@fontsource-variable/roboto'
 
 interface Props {
-    title: string
-    description: string
+  title: string
+  description: string
 }
 
 const { description, title } = Astro.props
 ---
-
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<meta name="description" content={description} />
-	</head>
-	<body class="relative text-black dark:text-white">
-		<slot />
-        <Header />
-        <Footer />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
 
-<style is:global>
-    :root {
-        color-scheme: light;
+  <body class="relative text-black dark:text-white min-h-screen">
+    <!-- background layer (this is what actually changes) -->
+    <div
+      class="pointer-events-none fixed inset-0 -z-10
+             bg-white
+             dark:bg-black
+             bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,216,255,0.4),rgba(255,255,255,0.95))]
+             dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(26,26,26,0.4),rgba(0,0,0,1))]"
+    ></div>
+
+    <Header />
+    <slot />
+    <Footer />
+
+    <style is:global>
+      :root {
+        /* we say we support both; avoids ugly scrollbars switching */
+        color-scheme: light dark;
         --font-serif: "Playfair Display Variable", ui-serif, Georgia, serif;
         --font-sans: "Roboto Variable", ui-sans-serif, Helvetica, Arial, sans-serif;
-    }
+      }
 
-    html {
-        font-family: "Roboto Variable", ui-sans-serif, Helvetica, Arial, sans-serif;
+      html {
+        font-family: var(--font-sans);
         font-weight: 400;
         scroll-behavior: smooth;
-    }
+      }
 
-	body {
-        background: #fff;
+      body {
+        /* no hard background here — the layer above owns it */
         display: flex;
-        justify-content: center;
         flex-direction: column;
         min-height: 100vh;
         overscroll-behavior: none;
-	}
-</style>
+      }
+    </style>
+
+    <script is:inline>
+      // 3-state theme: light | dark | system
+      const THEME_KEY = 'theme';
+      const mql = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function applyTheme(theme) {
+        const root = document.documentElement;
+
+        if (theme === 'light') {
+          root.classList.remove('dark');
+          root.dataset.theme = 'light';
+        } else if (theme === 'dark') {
+          root.classList.add('dark');
+          root.dataset.theme = 'dark';
+        } else {
+          // system
+          root.dataset.theme = 'system';
+          if (mql.matches) {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+        }
+      }
+
+      // init
+      const stored = localStorage.getItem(THEME_KEY);
+      applyTheme(stored || 'system');
+
+      // if user changes system theme and we are in "system", update
+      mql.addEventListener('change', () => {
+        if (document.documentElement.dataset.theme === 'system') {
+          applyTheme('system');
+        }
+      });
+
+      // expose for your header toggle:
+      // window.__setTheme('light' | 'dark' | 'system')
+      window.__setTheme = (t) => {
+        localStorage.setItem(THEME_KEY, t);
+        applyTheme(t);
+      };
+    </script>
+  </body>
+</html>
