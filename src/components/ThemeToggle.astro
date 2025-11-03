@@ -1,41 +1,198 @@
 ---
-import SunIcon from "./icons/SunIcon.astro"
-import MoonIcon from "./icons/MoonIcon.astro"
-import MonitorIcon from "./icons/MonitorIcon.astro"
+import SunIcon from "./icons/SunIcon.astro";
+import MoonIcon from "./icons/MoonIcon.astro";
+import MonitorIcon from "./icons/MonitorIcon.astro";
 
-const THEMES = ["Light", "Dark", "System"]
+const LABELS = ["Light", "Dark", "System"] as const;
+type Theme = typeof LABELS[number];
 ---
 
 <div class="relative ml-1 mr-1">
   <button
-    transition:persist
     id="theme-toggle-btn"
-    class="appearance-none border-none flex hover:scale-125 transition"
+    class="appearance-none border-none flex items-center justify-center
+           hover:scale-125 transition focus:outline-none"
+    aria-haspopup="menu"
+    aria-expanded="false"
+    aria-controls="themes-menu"
   >
     <span class="sr-only">Toggle theme</span>
-    <SunIcon id="light" class="theme-toggle-icon size-5 transition-all" />
-    <MoonIcon
-      id="dark"
-      class="theme-toggle-icon absolute size-5 transition-all"
-    />
-    <MonitorIcon
-      id="system"
-      class="theme-toggle-icon absolute size-5 transition-all"
-    />
+
+    <!-- We animate visibility by toggling opacity/scale -->
+    <SunIcon id="icon-light" class="theme-toggle-icon size-5 transition-all opacity-0 scale-75" />
+    <MoonIcon id="icon-dark" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
+    <MonitorIcon id="icon-system" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
   </button>
+
   <div
-    transition:persist
     id="themes-menu"
-    class="absolute hidden scale-80 top-8 right-0 text-sm p-1 min-w-32 rounded-md border border-zinc-100 bg-white/90 dark:bg-zinc-900/90 dark:border-zinc-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)] backdrop-blur-md"
+    class="absolute hidden origin-top-right top-8 right-0 text-sm p-1 min-w-32
+           rounded-md border border-zinc-100 bg-white/90 dark:bg-zinc-900/90
+           dark:border-zinc-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)]
+           backdrop-blur-md transition transform"
+    role="menu"
+    aria-labelledby="theme-toggle-btn"
   >
-    <ul>
-      {
-        THEMES.map((theme) => (
-          <li class="themes-menu-option px-2 py-1.5 cursor-default hover:bg-neutral-400/40 dark:hover:bg-zinc-500/50 rounded-sm">
-            {theme}
-          </li>
-        ))
-      }
+    <ul class="outline-none">
+      {LABELS.map((label) => (
+        <li
+          class="themes-menu-option px-2 py-1.5 rounded-sm cursor-default select-none
+                 hover:bg-neutral-400/40 dark:hover:bg-zinc-500/50 focus:bg-neutral-300/50
+                 focus:dark:bg-zinc-600/50 outline-none"
+          role="menuitem"
+          tabindex="0"
+          data-theme={label.toLowerCase()}
+        >
+          {label}
+        </li>
+      ))}
     </ul>
   </div>
 </div>
+
+<style is:global>
+  /* tiny helpers for the icon swap */
+  .theme-icon--active { opacity: 1 !important; transform: none !important; }
+  .theme-icon--inactive { opacity: 0; transform: scale(0.75); pointer-events: none; }
+
+  /* menu show / hide animations */
+  #themes-menu[data-open="true"] {
+    display: block !important;
+    animation: tm-enter 140ms ease-out forwards;
+  }
+  #themes-menu[data-open="false"] {
+    animation: tm-exit 120ms ease-in forwards;
+  }
+  @keyframes tm-enter { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
+  @keyframes tm-exit  { from { opacity: 1; translate: 0 0; } to { opacity: 0; translate: 0 -6px; } }
+</style>
+
+<script is:inline>
+  // Keep in sync with your layout script
+  const THEME_KEY = 'theme';
+  const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
+
+  const btn = document.getElementById('theme-toggle-btn');
+  const menu = document.getElementById('themes-menu');
+
+  const icons = {
+    light: document.getElementById('icon-light'),
+    dark: document.getElementById('icon-dark'),
+    system: document.getElementById('icon-system'),
+  };
+
+  function currentTheme() {
+    const stored = localStorage.getItem(THEME_KEY);
+    return (stored || 'system');
+  }
+
+  function setIcon(theme) {
+    Object.entries(icons).forEach(([key, el]) => {
+      if (!el) return;
+      if (key === theme) {
+        el.classList.add('theme-icon--active');
+        el.classList.remove('theme-icon--inactive');
+      } else {
+        el.classList.add('theme-icon--inactive');
+        el.classList.remove('theme-icon--active');
+      }
+    });
+  }
+
+  function apply(theme) {
+    // Use the page’s global setter (already updates localStorage + classList)
+    if (typeof window.__setTheme === 'function') {
+      window.__setTheme(theme);
+    } else {
+      // Fallback: mirror what your layout script does
+      localStorage.setItem(THEME_KEY, theme);
+      const root = document.documentElement;
+      if (theme === 'light') {
+        root.classList.remove('dark'); root.dataset.theme = 'light';
+      } else if (theme === 'dark') {
+        root.classList.add('dark'); root.dataset.theme = 'dark';
+      } else {
+        root.dataset.theme = 'system';
+        if (mql?.matches) root.classList.add('dark'); else root.classList.remove('dark');
+      }
+    }
+    setIcon(theme);
+  }
+
+  function openMenu() {
+    if (!menu || !btn) return;
+    menu.dataset.open = 'true';
+    menu.classList.remove('hidden');
+    btn.setAttribute('aria-expanded', 'true');
+    // focus the active option for keyboard users
+    const active = menu.querySelector(`[data-theme="${currentTheme()}"]`);
+    (active ?? menu.querySelector('[role="menuitem"]'))?.focus();
+    document.addEventListener('click', onOutsideClick, true);
+    document.addEventListener('keydown', onKeydown, true);
+  }
+
+  function closeMenu() {
+    if (!menu || !btn) return;
+    menu.dataset.open = 'false';
+    // hide after exit animation
+    setTimeout(() => { if (menu.dataset.open === 'false') menu.classList.add('hidden'); }, 140);
+    btn.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('click', onOutsideClick, true);
+    document.removeEventListener('keydown', onKeydown, true);
+  }
+
+  function toggleMenu() {
+    const isOpen = menu?.dataset.open === 'true';
+    (isOpen ? closeMenu : openMenu)();
+  }
+
+  function onOutsideClick(e) {
+    if (!menu || !btn) return;
+    const target = e.target;
+    if (!menu.contains(target) && !btn.contains(target)) closeMenu();
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') { closeMenu(); }
+    // basic arrow key navigation
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const items = Array.from(menu.querySelectorAll('[role="menuitem"]'));
+      const idx = items.indexOf(document.activeElement);
+      const next = e.key === 'ArrowDown'
+        ? items[(idx + 1) % items.length]
+        : items[(idx - 1 + items.length) % items.length];
+      next?.focus();
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      const el = document.activeElement;
+      if (el && el instanceof HTMLElement && el.dataset.theme) {
+        e.preventDefault();
+        apply(el.dataset.theme);
+        closeMenu();
+      }
+    }
+  }
+
+  // Initial icon state
+  setIcon(currentTheme());
+
+  // Wire handlers
+  btn?.addEventListener('click', toggleMenu);
+
+  // Click on an option
+  menu?.querySelectorAll('.themes-menu-option').forEach((li) => {
+    li.addEventListener('click', () => {
+      const theme = li.dataset.theme;
+      if (!theme) return;
+      apply(theme);
+      closeMenu();
+    });
+  });
+
+  // Keep icon in sync if system theme changes while on "system"
+  mql?.addEventListener?.('change', () => {
+    const t = localStorage.getItem(THEME_KEY) || 'system';
+    if (t === 'system') setIcon('system'); // visual state stays "system"
+  });
+</script>
