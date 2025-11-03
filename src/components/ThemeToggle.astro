@@ -68,56 +68,52 @@ type Theme = typeof LABELS[number];
 </style>
 
 <script is:inline>
-  // Keep in sync with your layout script
-  const THEME_KEY = 'theme';
-  const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
+  (function () {
+    const btn = document.getElementById('theme-toggle-btn');
+    const menu = document.getElementById('themes-menu');
 
-  const btn = document.getElementById('theme-toggle-btn');
-  const menu = document.getElementById('themes-menu');
+    const icons = {
+      light: document.getElementById('icon-light'),
+      dark: document.getElementById('icon-dark'),
+      system: document.getElementById('icon-system'),
+    };
 
-  const icons = {
-    light: document.getElementById('icon-light'),
-    dark: document.getElementById('icon-dark'),
-    system: document.getElementById('icon-system'),
-  };
+    if (!btn || !menu) return;
 
-  function currentTheme() {
-    const stored = localStorage.getItem(THEME_KEY);
-    return (stored || 'system');
-  }
-
-  function setIcon(theme) {
-    Object.entries(icons).forEach(([key, el]) => {
-      if (!el) return;
-      if (key === theme) {
-        el.classList.add('theme-icon--active');
-        el.classList.remove('theme-icon--inactive');
-      } else {
-        el.classList.add('theme-icon--inactive');
-        el.classList.remove('theme-icon--active');
-      }
-    });
-  }
-
-  function apply(theme) {
-    // Use the page’s global setter (already updates localStorage + classList)
-    if (typeof window.__setTheme === 'function') {
-      window.__setTheme(theme);
-    } else {
-      // Fallback: mirror what your layout script does
-      localStorage.setItem(THEME_KEY, theme);
-      const root = document.documentElement;
-      if (theme === 'light') {
-        root.classList.remove('dark'); root.dataset.theme = 'light';
-      } else if (theme === 'dark') {
-        root.classList.add('dark'); root.dataset.theme = 'dark';
-      } else {
-        root.dataset.theme = 'system';
-        if (mql?.matches) root.classList.add('dark'); else root.classList.remove('dark');
-      }
+    if (btn.dataset.themeToggleBound === 'true') {
+      return;
     }
-    setIcon(theme);
-  }
+    btn.dataset.themeToggleBound = 'true';
+
+
+    function currentTheme() {
+      const fromDataset = document.documentElement.dataset.theme;
+      if (fromDataset === 'light' || fromDataset === 'dark' || fromDataset === 'system') {
+        return fromDataset;
+      }
+      const stored = localStorage.getItem('theme');
+      return stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+    }
+
+    function setIcon(theme) {
+      Object.entries(icons).forEach(([key, el]) => {
+        if (!el) return;
+        if (key === theme) {
+          el.classList.add('theme-icon--active');
+          el.classList.remove('theme-icon--inactive');
+        } else {
+          el.classList.add('theme-icon--inactive');
+          el.classList.remove('theme-icon--active');
+        }
+      });
+    }
+
+    function apply(theme) {
+      if (typeof window.__setTheme === 'function') {
+        window.__setTheme(theme);
+      }
+      setIcon(theme);
+    }
 
   function openMenu() {
     if (!menu || !btn) return;
@@ -177,22 +173,14 @@ type Theme = typeof LABELS[number];
   // Initial icon state
   setIcon(currentTheme());
 
-  // Wire handlers
-  btn?.addEventListener('click', toggleMenu);
-
-  // Click on an option
-  menu?.querySelectorAll('.themes-menu-option').forEach((li) => {
-    li.addEventListener('click', () => {
-      const theme = li.dataset.theme;
-      if (!theme) return;
-      apply(theme);
-      closeMenu();
+    btn?.addEventListener('click', toggleMenu);
+    menu?.querySelectorAll('.themes-menu-option').forEach((li) => {
+      li.addEventListener('click', () => {
+        const theme = li.dataset.theme;
+        if (!theme) return;
+        apply(theme);
+        closeMenu();
+      });
     });
-  });
-
-  // Keep icon in sync if system theme changes while on "system"
-  mql?.addEventListener?.('change', () => {
-    const t = localStorage.getItem(THEME_KEY) || 'system';
-    if (t === 'system') setIcon('system'); // visual state stays "system"
-  });
+  })();
 </script>
