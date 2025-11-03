@@ -26,11 +26,9 @@ const { description, title } = Astro.props
   <body class="relative text-black dark:text-white min-h-screen">
     <!-- background layer (this is what actually changes) -->
     <div
-      class="pointer-events-none fixed inset-0 -z-10
+      class="pointer-events-none fixed inset-0 -z-20
              bg-white
-             dark:bg-black
-             bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(217,216,255,0.4),rgba(255,255,255,0.95))]
-             dark:bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(26,26,26,0.4),rgba(0,0,0,1))]"
+             dark:bg-black"
     ></div>
 
     <Header />
