@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from "./ThemeToggle.astro";
+
 const navItems = [
   { name: "experience", href: "#experience" },
   { name: "education", href: "#education" },
@@ -10,9 +12,9 @@ const navItems = [
 ---
 
 <header class="fixed top-0 z-10 w-full mt-2">
-  <div id="navbar" class="mx-auto w-full max-w-xl px-4">
+  <div id="navbar" class="mx-auto w-full max-w-2xl px-2">
     <div
-      class="relative overflow-hidden rounded-full
+      class="relative overflow-visible rounded-full
              bg-white/40 dark:bg-zinc-900/30
              backdrop-filter backdrop-blur-xs
              border border-white/50 dark:border-zinc-700/50
@@ -33,41 +35,48 @@ const navItems = [
           home
         </a>
 
-        <button
-          type="button"
-          class="inline-flex items-center justify-center p-2 rounded-full hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-          data-mobile-menu-button
-        >
-          <span class="sr-only">Toggle navigation</span>
-          <svg
-            data-icon="open"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="h-5 w-5"
+        <div class="flex items-center gap-1">
+          <!-- Mobile theme toggle -->
+          <div class="md:hidden">
+            <ThemeToggle />
+          </div>
+
+          <button
+            type="button"
+            class="inline-flex items-center justify-center p-2 rounded-full hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            data-mobile-menu-button
           >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-          <svg
-            data-icon="close"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="hidden h-5 w-5"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+            <span class="sr-only">Toggle navigation</span>
+            <svg
+              data-icon="open"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="h-5 w-5"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+            <svg
+              data-icon="close"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="hidden h-5 w-5"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- desktop nav (unchanged) -->
-      <nav class="hidden md:flex items-center justify-center gap-4">
+      <nav class="hidden md:flex items-center justify-center gap-6">
         {navItems.map((item) => (
           <a
             href={item.href}
@@ -76,6 +85,8 @@ const navItems = [
             {item.name}
           </a>
         ))}
+        <!-- Desktop theme toggle -->
+        <ThemeToggle />
       </nav>
     </div>
 
@@ -110,6 +121,7 @@ const navItems = [
     </nav>
   </div>
 </header>
+
 
 <script>
   const sections = document.querySelectorAll("section[id]");
