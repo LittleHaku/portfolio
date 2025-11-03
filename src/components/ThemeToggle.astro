@@ -7,31 +7,28 @@ const LABELS = ["Light", "Dark", "System"] as const;
 type Theme = typeof LABELS[number];
 ---
 
-<div class="relative ml-1 mr-1">
+<div class="relative ml-1 mr-1" data-theme-toggle-root>
   <button
-    id="theme-toggle-btn"
-    class="appearance-none border-none flex items-center justify-center
+    type="button"
+    class="theme-toggle-btn appearance-none border-none flex items-center justify-center
            hover:scale-125 transition focus:outline-none"
     aria-haspopup="menu"
     aria-expanded="false"
-    aria-controls="themes-menu"
   >
     <span class="sr-only">Toggle theme</span>
 
     <!-- We animate visibility by toggling opacity/scale -->
-    <SunIcon id="icon-light" class="theme-toggle-icon size-5 transition-all opacity-0 scale-75" />
-    <MoonIcon id="icon-dark" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
-    <MonitorIcon id="icon-system" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
+    <SunIcon data-icon="light" class="theme-toggle-icon size-5 transition-all opacity-0 scale-75" />
+    <MoonIcon data-icon="dark" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
+    <MonitorIcon data-icon="system" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
   </button>
 
   <div
-    id="themes-menu"
-    class="absolute hidden origin-top-right top-8 right-0 text-sm p-1 min-w-32
+    class="themes-menu absolute hidden origin-top-right top-8 right-0 text-sm p-1 min-w-32
            rounded-md border border-zinc-100 bg-white/90 dark:bg-zinc-900/90
            dark:border-zinc-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)]
            backdrop-blur-md transition transform"
     role="menu"
-    aria-labelledby="theme-toggle-btn"
   >
     <ul class="outline-none">
       {LABELS.map((label) => (
@@ -56,11 +53,11 @@ type Theme = typeof LABELS[number];
   .theme-icon--inactive { opacity: 0; transform: scale(0.75); pointer-events: none; }
 
   /* menu show / hide animations */
-  #themes-menu[data-open="true"] {
+  .themes-menu[data-open="true"] {
     display: block !important;
     animation: tm-enter 140ms ease-out forwards;
   }
-  #themes-menu[data-open="false"] {
+  .themes-menu[data-open="false"] {
     animation: tm-exit 120ms ease-in forwards;
   }
   @keyframes tm-enter { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
@@ -69,22 +66,8 @@ type Theme = typeof LABELS[number];
 
 <script is:inline>
   (function () {
-    const btn = document.getElementById('theme-toggle-btn');
-    const menu = document.getElementById('themes-menu');
-
-    const icons = {
-      light: document.getElementById('icon-light'),
-      dark: document.getElementById('icon-dark'),
-      system: document.getElementById('icon-system'),
-    };
-
-    if (!btn || !menu) return;
-
-    if (btn.dataset.themeToggleBound === 'true') {
-      return;
-    }
-    btn.dataset.themeToggleBound = 'true';
-
+    const roots = Array.from(document.querySelectorAll('[data-theme-toggle-root]'));
+    if (!roots.length) return;
 
     function currentTheme() {
       const fromDataset = document.documentElement.dataset.theme;
@@ -95,9 +78,11 @@ type Theme = typeof LABELS[number];
       return stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
     }
 
-    function setIcon(theme) {
-      Object.entries(icons).forEach(([key, el]) => {
-        if (!el) return;
+    function setIconForRoot(root, theme) {
+      const icons = root.querySelectorAll('[data-icon]');
+      icons.forEach((el) => {
+        const key = el.dataset.icon;
+        if (!key) return;
         if (key === theme) {
           el.classList.add('theme-icon--active');
           el.classList.remove('theme-icon--inactive');
@@ -108,79 +93,115 @@ type Theme = typeof LABELS[number];
       });
     }
 
+    function setIcons(theme) {
+      roots.forEach((root) => setIconForRoot(root, theme));
+    }
+
     function apply(theme) {
       if (typeof window.__setTheme === 'function') {
         window.__setTheme(theme);
       }
-      setIcon(theme);
+      setIcons(theme);
     }
 
-  function openMenu() {
-    if (!menu || !btn) return;
-    menu.dataset.open = 'true';
-    menu.classList.remove('hidden');
-    btn.setAttribute('aria-expanded', 'true');
-    // focus the active option for keyboard users
-    const active = menu.querySelector(`[data-theme="${currentTheme()}"]`);
-    (active ?? menu.querySelector('[role="menuitem"]'))?.focus();
-    document.addEventListener('click', onOutsideClick, true);
-    document.addEventListener('keydown', onKeydown, true);
-  }
+    function bindRoot(root) {
+      const btn = root.querySelector('.theme-toggle-btn');
+      const menu = root.querySelector('.themes-menu');
 
-  function closeMenu() {
-    if (!menu || !btn) return;
-    menu.dataset.open = 'false';
-    // hide after exit animation
-    setTimeout(() => { if (menu.dataset.open === 'false') menu.classList.add('hidden'); }, 140);
-    btn.setAttribute('aria-expanded', 'false');
-    document.removeEventListener('click', onOutsideClick, true);
-    document.removeEventListener('keydown', onKeydown, true);
-  }
+      if (!btn || !menu || btn.dataset.themeToggleBound === 'true') return;
+      btn.dataset.themeToggleBound = 'true';
 
-  function toggleMenu() {
-    const isOpen = menu?.dataset.open === 'true';
-    (isOpen ? closeMenu : openMenu)();
-  }
+      function openMenu() {
+        menu.dataset.open = 'true';
+        menu.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
 
-  function onOutsideClick(e) {
-    if (!menu || !btn) return;
-    const target = e.target;
-    if (!menu.contains(target) && !btn.contains(target)) closeMenu();
-  }
+        const active = menu.querySelector(`[data-theme="${currentTheme()}"]`);
+        (active ?? menu.querySelector('[role="menuitem"]'))?.focus();
 
-  function onKeydown(e) {
-    if (e.key === 'Escape') { closeMenu(); }
-    // basic arrow key navigation
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      const items = Array.from(menu.querySelectorAll('[role="menuitem"]'));
-      const idx = items.indexOf(document.activeElement);
-      const next = e.key === 'ArrowDown'
-        ? items[(idx + 1) % items.length]
-        : items[(idx - 1 + items.length) % items.length];
-      next?.focus();
-    }
-    if (e.key === 'Enter' || e.key === ' ') {
-      const el = document.activeElement;
-      if (el && el instanceof HTMLElement && el.dataset.theme) {
-        e.preventDefault();
-        apply(el.dataset.theme);
-        closeMenu();
+        document.addEventListener('click', onOutsideClick, true);
+        document.addEventListener('keydown', onKeydown, true);
       }
-    }
-  }
 
-  // Initial icon state
-  setIcon(currentTheme());
+      function closeMenu() {
+        menu.dataset.open = 'false';
+        setTimeout(() => {
+          if (menu.dataset.open === 'false') menu.classList.add('hidden');
+        }, 140);
+        btn.setAttribute('aria-expanded', 'false');
 
-    btn?.addEventListener('click', toggleMenu);
-    menu?.querySelectorAll('.themes-menu-option').forEach((li) => {
-      li.addEventListener('click', () => {
-        const theme = li.dataset.theme;
-        if (!theme) return;
-        apply(theme);
-        closeMenu();
+        document.removeEventListener('click', onOutsideClick, true);
+        document.removeEventListener('keydown', onKeydown, true);
+      }
+
+      function toggleMenu() {
+        const isOpen = menu.dataset.open === 'true';
+        (isOpen ? closeMenu : openMenu)();
+      }
+
+      function onOutsideClick(e) {
+        const target = e.target;
+        if (!(target instanceof Node)) return;
+        if (!root.contains(target)) closeMenu();
+      }
+
+      function onKeydown(e) {
+        if (e.key === 'Escape') {
+          closeMenu();
+          return;
+        }
+
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const items = Array.from(menu.querySelectorAll('[role="menuitem"]'));
+          const idx = items.indexOf(document.activeElement);
+          const next =
+            e.key === 'ArrowDown'
+              ? items[(idx + 1) % items.length]
+              : items[(idx - 1 + items.length) % items.length];
+          next?.focus();
+        }
+
+        if (e.key === 'Enter' || e.key === ' ') {
+          const el = document.activeElement;
+          if (el && el instanceof HTMLElement && el.dataset.theme) {
+            e.preventDefault();
+            apply(el.dataset.theme);
+            closeMenu();
+          }
+        }
+      }
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleMenu();
       });
-    });
+
+      menu.querySelectorAll('.themes-menu-option').forEach((li) => {
+        li.addEventListener('click', () => {
+          const theme = li.dataset.theme;
+          if (!theme) return;
+          apply(theme);
+          closeMenu();
+        });
+      });
+    }
+
+    // Bind all instances
+    roots.forEach(bindRoot);
+
+    // Initial icon state for all instances
+    setIcons(currentTheme());
+
+    // If you want icons to react when on System and the OS theme changes:
+    const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
+    if (mql && typeof mql.addEventListener === 'function') {
+      mql.addEventListener('change', (e) => {
+        const theme = currentTheme();
+        if (theme === 'system') {
+          setIcons(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
   })();
 </script>
