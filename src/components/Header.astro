@@ -129,6 +129,7 @@ const navItems = [
   const mobileMenu = document.querySelector("[data-mobile-menu]");
   const openIcon = mobileMenuButton?.querySelector('[data-icon="open"]');
   const closeIcon = mobileMenuButton?.querySelector('[data-icon="close"]');
+  const navbarWrapper = document.getElementById("navbar");
 
   // active section highlight
   const observer = new IntersectionObserver(
@@ -186,5 +187,19 @@ const navItems = [
     if (window.innerWidth >= 768) {
       closeMobileMenu();
     }
+  });
+
+  // close when clicking outside
+  document.addEventListener("click", (event) => {
+    const target = event.target as Node | null;
+
+    if (
+      navbarWrapper?.contains(target) ||
+      mobileMenu?.contains(target)
+    ) {
+      return;
+    }
+
+    closeMobileMenu();
   });
 </script>
