@@ -33,6 +33,16 @@ const PROJECTS: any[] = [
     type: "Personal"
   },
   {
+    title: "Drumscribe AI",
+    description:
+    "AI model that transcribed a drumset audio recording into MIDI. This was done by generating a mel spectrogram of the audio input, then extracts features using a CNN that progressively reduces spectral resolution while increasing channel depth. These features are fed into a bidirectional LSTM to model temporal dynamics, followed by two heads that detect onsets and predict hit velocities for each drum element. This was done as a personal project, then I also used it for a Deep Learning for Audio Signal Course, so the slides I did are also available (check the \"Live\" link).",
+    screenshotSrc: "/screenshots/drumscribe-ai.webp",
+    techs: ["PyTorch", "Python", "Deep Learning"],
+    githubLink: "https://github.com/LittleHaku/DrumScribe-AI",
+    liveLink: "https://docs.google.com/presentation/d/e/2PACX-1vRZMLv54Lwds3XjPzL-EkvlxaNIu4ZqrGLiD8GjuV42B5Cri0M5aMMj-cHX-8UGUVEaHpDuh8Z1HQRC/pub",
+    type: "Personal"
+  },
+  {
     title: "U.D.I.N.",
     description: "Windows desktop application developed for a team of mechanical engineers that lets them input all the data related to a vehicle and its modifications thanks to a dynamic form. Then, generates all the Word documents needed for the homologation.",
     screenshotSrc: "/screenshots/UDIN.webp",
