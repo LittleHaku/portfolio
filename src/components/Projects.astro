@@ -26,11 +26,18 @@ const PROJECTS: any[] = [
   {
     title: "Obsidian Smart Export",
     description:
-    "Obsidian plugin (with already more than 600 downloads) that exports multiple linked notes into a single one. Useful to print them, study, or send them to a LLM to analyze them. To do this a root note and a depth is selected, then the wikilinks are explored in a BFS (Breadth-First Search) way until the depth, this allow to for example join all of our Deep Learning notes so we can study before an exam, or to pass them to an LLM so that it helps us by telling us what is incorrect, or finding gaps in our knowledge.",
-    "screenshotSrc": "/screenshots/obsidian-smart-export.png",
+    "Obsidian plugin (600+ downloads) that exports multiple linked notes into a single document. This allows to aggregate all the notes of a given topic into a single document for printing, studying, or LLM analysis. To do this, users select a root note and a link depth, then the wikilinks are explored in a BFS (Breadth-First Search) way until the given depth aggregating all the notes together.",
+    screenshotSrc: "/screenshots/obsidian-smart-export.png",
     techs: ["TypeScript", "BFS", "Obsidian"],
     githubLink: "https://github.com/LittleHaku/obsidian-smart-export",
     type: "Personal"
+  },
+  {
+    title: "U.D.I.N.",
+    description: "Windows desktop application developed for a team of mechanical engineers that lets them input all the data related to a vehicle, the modifications they have suffered, based on that different data will be asked. Finally, all the Word documents needed for the homologation will be generated.",
+    screenshotSrc: "/screenshots/UDIN.png",
+    techs: ["C#", "WPF"],
+    type: "Professional",
   }
 ];
 ---
