@@ -16,6 +16,7 @@ const {
   degree,
   description,
   link,
+  linkDescription,
   courses = [],
 } = Astro.props;
 ---
@@ -79,7 +80,7 @@ const {
     {
       link && (
         <LinkInline href={link}>
-          Learn more
+          {linkDescription ?? "Learn more"}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="w-4 h-4"
