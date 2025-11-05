@@ -192,16 +192,5 @@ type Theme = typeof LABELS[number];
 
     // Initial icon state for all instances
     setIcons(currentTheme());
-
-    // If you want icons to react when on System and the OS theme changes:
-    const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
-    if (mql && typeof mql.addEventListener === 'function') {
-      mql.addEventListener('change', (e) => {
-        const theme = currentTheme();
-        if (theme === 'system') {
-          setIcons(e.matches ? 'dark' : 'light');
-        }
-      });
-    }
   })();
 </script>
