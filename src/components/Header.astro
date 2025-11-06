@@ -91,7 +91,7 @@ const navItems = [
     <!-- mobile dropdown -->
     <nav
       id="mobile-menu"
-      class="mobile-menu md:hidden flex flex-col gap-2 mt-2
+      class="mobile-menu md:hidden hidden flex flex-col gap-2 mt-2
              relative overflow-hidden rounded-3xl
              bg-white/75 dark:bg-zinc-900/70
              backdrop-filter backdrop-blur-xs
@@ -151,6 +151,7 @@ const navItems = [
   const openMobileMenu = () => {
     if (!mobileMenu) return;
     mobileMenu.dataset.state = "open";
+    mobileMenu.classList.remove("hidden");
     mobileMenu.classList.remove("translate-y-[-12px]", "opacity-0", "pointer-events-none");
     mobileMenu.classList.add("translate-y-0", "opacity-100");
     mobileMenuButton?.setAttribute("aria-expanded", "true");
@@ -163,6 +164,11 @@ const navItems = [
     mobileMenu.dataset.state = "closed";
     mobileMenu.classList.add("translate-y-[-12px]", "opacity-0", "pointer-events-none");
     mobileMenu.classList.remove("translate-y-0", "opacity-100");
+    window.setTimeout(() => {
+      if (mobileMenu?.dataset.state === "closed") {
+        mobileMenu.classList.add("hidden");
+      }
+    }, 300);
     mobileMenuButton?.setAttribute("aria-expanded", "false");
     openIcon?.classList.remove("hidden");
     closeIcon?.classList.add("hidden");
