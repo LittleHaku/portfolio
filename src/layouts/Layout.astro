@@ -21,7 +21,22 @@ const { description, title } = Astro.props
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="sitemap" href="/sitemap-index.xml"/>
+    <link rel="canonical" href={Astro.site} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="robots" content="index,follow" />
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Iván Sotillo del Horno",
+        url: "https://ivansotillo.com",
+        jobTitle: "Software Engineer & AI Researcher",
+        sameAs: [
+          "https://github.com/littlehaku",
+          "https://www.linkedin.com/in/ivansotillo/",
+        ],
+      })}
+    </script>
   </head>
 
   <body class="relative text-black dark:text-white min-h-screen">
