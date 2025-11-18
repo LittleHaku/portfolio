@@ -8,9 +8,12 @@ import '@fontsource-variable/roboto'
 interface Props {
   title: string
   description: string
+  siteUrl: string
+  ogImageUrl: string
+  ogImageTwitter: string
 }
 
-const { description, title } = Astro.props
+const { description, title, siteUrl, ogImageUrl, ogImageTwitter} = Astro.props
 ---
 <!doctype html>
 <html lang="en">
@@ -23,7 +26,21 @@ const { description, title } = Astro.props
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.site} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="robots" content="index,follow" />
+    
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url"         content={siteUrl} />
+    <meta property="og:image"       content={ogImageUrl}>
+    <meta property="og:site_name"   content="Iván Sotillo" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card"         content="summary_large_image" />
+    <meta name="twitter:title"        content={title} />
+    <meta name="twitter:description"  content={description} />
+    <meta name="twitter:image"        content={ogImageTwitter} />
+
     <script type="application/ld+json">
       {JSON.stringify({
         "@context": "https://schema.org",
