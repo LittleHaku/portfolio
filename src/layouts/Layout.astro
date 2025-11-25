@@ -15,7 +15,9 @@ interface Props {
 
 const { description, title, siteUrl, ogImageUrl, ogImageTwitter } = Astro.props
 
-const baseUrl = (Astro.site?.toString() ?? siteUrl).replace(/\/+$/, '') // strip trailing slash for consistency
+const siteName = 'Iván Sotillo - Software Engineer & AI Researcher'
+const rawBaseUrl = (Astro.site?.toString() ?? siteUrl).replace(/\/+$/, '') // strip trailing slash for consistency
+const baseUrl = rawBaseUrl.replace(/^http:\/\//i, 'https://') // prefer https to avoid insecure canonicals
 const canonicalUrl = baseUrl + '/'
 const resolvedOgImage = new URL(ogImageUrl, baseUrl + '/').toString()
 const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/').toString()
@@ -25,7 +27,13 @@ const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/'
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="title" content={title} />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0f172a" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -38,7 +46,8 @@ const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/'
     <meta property="og:description" content={description} />
     <meta property="og:url"         content={canonicalUrl} />
     <meta property="og:image"       content={resolvedOgImage} />
-    <meta property="og:site_name"   content="Iván Sotillo" />
+    <meta property="og:site_name"   content={siteName} />
+    <meta property="og:image:alt"   content={title} />
 
     <!-- Twitter -->
     <meta name="twitter:card"         content="summary_large_image" />
