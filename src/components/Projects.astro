@@ -3,6 +3,15 @@ import ProjectItem from "./ProjectItem.astro";
 
 const PROJECTS: any[] = [
   {
+    title: "Obsidian Smart Export",
+    description:
+    "Obsidian plugin (1.4k+ downloads) that exports multiple linked notes into a single document. This allows to aggregate all the notes of a given topic into a single document for printing, studying, or LLM analysis. To do this, users select a root note and a link depth, then, the wikilinks to other notes are explored in a BFS (Breadth-First Search) way and merged into a single document until the given depth is reached.",
+    screenshotSrc: "/screenshots/obsidian-smart-export.webp",
+    techs: ["TypeScript", "BFS", "Obsidian"],
+    githubLink: "https://github.com/LittleHaku/obsidian-smart-export",
+    type: "Personal"
+  },
+  {
     title: "TRACER",
     description:
       "Built a tool that using LLMs, holds a conversation with a chatbot to model its behaviour. From these conversations it generates a model of the chatbot's functionalities, finally, it builds different DSL user profiles that can be used to test the chatbot's behavior under various scenarios.",
@@ -22,15 +31,6 @@ const PROJECTS: any[] = [
     videoLink: "https://www.youtube.com/watch?v=dFsbN1FKGVg",
     githubLink: "https://github.com/satori-chatbots/chatbot-dojo",
     type: "Professional",
-  },
-  {
-    title: "Obsidian Smart Export",
-    description:
-    "Obsidian plugin (600+ downloads) that exports multiple linked notes into a single document. This allows to aggregate all the notes of a given topic into a single document for printing, studying, or LLM analysis. To do this, users select a root note and a link depth, then, the wikilinks to other notes are explored in a BFS (Breadth-First Search) way and merged into a single document until the given depth is reached.",
-    screenshotSrc: "/screenshots/obsidian-smart-export.webp",
-    techs: ["TypeScript", "BFS", "Obsidian"],
-    githubLink: "https://github.com/LittleHaku/obsidian-smart-export",
-    type: "Personal"
   },
   {
     title: "Drumscribe AI",
