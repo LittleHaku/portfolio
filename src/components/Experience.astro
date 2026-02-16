@@ -2,13 +2,21 @@
 import ExperienceItem from "./ExperienceItem.astro"
 const EXPERIENCE = [
   {
-    date: "Dec 2024 - Present",
-    title: "Researcher",
-    company: "MISO - UAM",
-    description:
-      "Developed \"TRACER\", a tool that uses LLMs to have conversations with chatbots and models their functionalities. Then with the generated model, it creates user profiles that can be run against the chatbot to test its behavior. All of this can be executed inside \"Chatbot Dojo\", a web application that allows users to easily run TRACER and SENSEI.",
-    link: "http://miso.ii.uam.es:8081/",
-    techs: ["LangGraph", "React", "Django", "Python"],
+    date: "Dec. 2024 - Present",
+    title: "Research Staff",
+    company: "Universidad Autónoma de Madrid - MISO Research Group (Madrid, Spain)",
+    highlights: [
+      "Designed and implemented TRACER (Python, LangGraph, OpenAI API), an agent that interacts with a chatbot to extract a model of its functionalities and generate test cases from it.",
+      {
+        text: "Published TRACER: Automated Exploration of Conversational Agents for the Synthesis of Testing Profiles.",
+        href: "https://doi.org/10.1007/978-3-032-05188-2_14",
+        linkLabel: "DOI",
+      },
+      "Built a full-stack web application (React, Tailwind, Django REST, PostgreSQL, Celery, Docker, Nginx) to unify chatbot testing tools into a single platform.",
+      "Currently working on an agentic assistant to help users with all chatbot testing tools.",
+    ],
+    link: "https://doi.org/10.1007/978-3-032-05188-2_14",
+    techs: ["Python", "LangGraph", "OpenAI API", "React", "Django REST", "PostgreSQL"],
   },
 ]
 ---

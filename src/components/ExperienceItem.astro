@@ -5,13 +5,17 @@ import TechPill from "./TechPill.astro"
 interface Props {
   title: string
   company: string
-  description: string
+  description?: string
+  highlights?: Array<string | { text: string; href?: string; linkLabel?: string }>
   link?: string
   date: string
   techs?: string[]
 }
 
-const { title, company, description, link, date, techs = [] } = Astro.props
+const { title, company, description = "", highlights = [], link, date, techs = [] } = Astro.props
+const normalizedHighlights = highlights.map((highlight) =>
+  typeof highlight === "string" ? { text: highlight } : highlight,
+)
 ---
 
 <div
@@ -43,7 +47,25 @@ const { title, company, description, link, date, techs = [] } = Astro.props
   </div>
 
   <div class="relative flex flex-col gap-3 pb-4 text-zinc-600 dark:text-zinc-200 md:col-span-3 leading-relaxed">
-    {description}
+    {description && <p>{description}</p>}
+
+    {normalizedHighlights.length > 0 && (
+      <ul class="list-disc space-y-2 pl-5">
+        {normalizedHighlights.map((highlight) => (
+          <li>
+            {highlight.text}
+            {highlight.href && (
+              <>
+                {" "}
+                <LinkInline href={highlight.href}>
+                  {highlight.linkLabel ?? "Read publication"}
+                </LinkInline>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
 
     {techs.length > 0 && (
       <div class="flex flex-wrap gap-2 mt-2">
