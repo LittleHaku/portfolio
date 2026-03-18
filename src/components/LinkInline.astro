@@ -8,7 +8,7 @@ const isExternal = typeof href === "string" && /^https?:\/\//.test(href);
   target={isExternal ? "_blank" : undefined}
   rel={isExternal ? "noopener noreferrer" : undefined}
   role="link"
-  class="inline-flex items-center gap-1 underline underline-offset-2 decoration-1
+  class="inline-flex items-center gap-1 min-h-[44px] focus-visible:ring-2 focus-visible:outline-none underline underline-offset-2 decoration-1
         text-zinc-800 decoration-zinc-400
         dark:text-zinc-200 dark:decoration-zinc-600
         hover:text-black hover:decoration-black

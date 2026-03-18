@@ -37,7 +37,7 @@ const navItems = [
 
           <button
             type="button"
-            class="inline-flex items-center justify-center p-2 rounded-md hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+            class="inline-flex items-center justify-center w-11 h-11 p-2 rounded-md hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
             aria-expanded="false"
             aria-controls="mobile-menu"
             data-mobile-menu-button
@@ -70,11 +70,11 @@ const navItems = [
       </div>
 
       <!-- desktop nav (unchanged) -->
-      <nav class="hidden md:flex items-center justify-center gap-6">
+      <nav class="hidden md:flex items-center justify-center gap-5">
         {navItems.map((item) => (
           <a
             href={item.href}
-            class="nav-link relative transition-colors duration-200 hover:font-semibold text-zinc-900 dark:text-zinc-100"
+            class="nav-link whitespace-nowrap relative transition-colors duration-200 hover:font-semibold text-zinc-900 dark:text-zinc-100"
           >
             {item.name}
           </a>
