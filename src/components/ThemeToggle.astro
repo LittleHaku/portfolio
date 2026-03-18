@@ -12,6 +12,7 @@ type Theme = typeof LABELS[number];
     type="button"
     class="theme-toggle-btn appearance-none border-none flex items-center justify-center w-11 h-11
            hover:scale-125 transition focus:outline-none"
+    aria-label="Change theme"
     aria-haspopup="menu"
     aria-expanded="false"
   >
@@ -29,18 +30,22 @@ type Theme = typeof LABELS[number];
            dark:border-zinc-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)]
            backdrop-blur-md transition transform"
     role="menu"
+    aria-label="Theme options"
   >
     <ul class="outline-none">
       {LABELS.map((label) => (
-        <li
-          class="themes-menu-option px-2 py-1.5 rounded-sm cursor-default select-none
-                 hover:bg-neutral-400/40 dark:hover:bg-zinc-500/50 focus:bg-neutral-300/50
-                 focus:dark:bg-zinc-600/50 outline-none"
-          role="menuitem"
-          tabindex="0"
-          data-theme={label.toLowerCase()}
-        >
-          {label}
+        <li role="none">
+          <button
+            type="button"
+            class="themes-menu-option w-full rounded-sm px-2 py-1.5 text-left cursor-pointer select-none
+                   hover:bg-neutral-400/40 dark:hover:bg-zinc-500/50 focus:bg-neutral-300/50
+                   focus:dark:bg-zinc-600/50 outline-none"
+            role="menuitemradio"
+            aria-checked="false"
+            data-theme={label.toLowerCase()}
+          >
+            {label}
+          </button>
         </li>
       ))}
     </ul>
@@ -62,6 +67,13 @@ type Theme = typeof LABELS[number];
   }
   @keyframes tm-enter { from { opacity: 0; translate: 0 -6px; } to { opacity: 1; translate: 0 0; } }
   @keyframes tm-exit  { from { opacity: 1; translate: 0 0; } to { opacity: 0; translate: 0 -6px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .themes-menu[data-open="true"],
+    .themes-menu[data-open="false"] {
+      animation: none;
+    }
+  }
 </style>
 
 <script is:inline>
@@ -91,6 +103,10 @@ type Theme = typeof LABELS[number];
           el.classList.remove('theme-icon--active');
         }
       });
+
+      root.querySelectorAll('[data-theme]').forEach((item) => {
+        item.setAttribute('aria-checked', item.dataset.theme === theme ? 'true' : 'false');
+      });
     }
 
     function setIcons(theme) {
@@ -104,12 +120,15 @@ type Theme = typeof LABELS[number];
       setIcons(theme);
     }
 
-    function bindRoot(root) {
+    function bindRoot(root, index) {
       const btn = root.querySelector('.theme-toggle-btn');
       const menu = root.querySelector('.themes-menu');
 
       if (!btn || !menu || btn.dataset.themeToggleBound === 'true') return;
       btn.dataset.themeToggleBound = 'true';
+      const menuId = `theme-menu-${index + 1}`;
+      menu.id = menuId;
+      btn.setAttribute('aria-controls', menuId);
 
       function openMenu() {
         menu.dataset.open = 'true';
@@ -123,12 +142,13 @@ type Theme = typeof LABELS[number];
         document.addEventListener('keydown', onKeydown, true);
       }
 
-      function closeMenu() {
+      function closeMenu({ restoreFocus = false } = {}) {
         menu.dataset.open = 'false';
         setTimeout(() => {
           if (menu.dataset.open === 'false') menu.classList.add('hidden');
         }, 140);
         btn.setAttribute('aria-expanded', 'false');
+        if (restoreFocus) btn.focus();
 
         document.removeEventListener('click', onOutsideClick, true);
         document.removeEventListener('keydown', onKeydown, true);
@@ -147,13 +167,13 @@ type Theme = typeof LABELS[number];
 
       function onKeydown(e) {
         if (e.key === 'Escape') {
-          closeMenu();
+          closeMenu({ restoreFocus: true });
           return;
         }
 
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
           e.preventDefault();
-          const items = Array.from(menu.querySelectorAll('[role="menuitem"]'));
+          const items = Array.from(menu.querySelectorAll('[role="menuitemradio"]'));
           const idx = items.indexOf(document.activeElement);
           const next =
             e.key === 'ArrowDown'
@@ -167,7 +187,7 @@ type Theme = typeof LABELS[number];
           if (el && el instanceof HTMLElement && el.dataset.theme) {
             e.preventDefault();
             apply(el.dataset.theme);
-            closeMenu();
+            closeMenu({ restoreFocus: true });
           }
         }
       }
@@ -182,13 +202,13 @@ type Theme = typeof LABELS[number];
           const theme = li.dataset.theme;
           if (!theme) return;
           apply(theme);
-          closeMenu();
+          closeMenu({ restoreFocus: true });
         });
       });
     }
 
     // Bind all instances
-    roots.forEach(bindRoot);
+    roots.forEach((root, index) => bindRoot(root, index));
 
     // Initial icon state for all instances
     setIcons(currentTheme());

@@ -25,7 +25,7 @@ const navItems = [
       <!-- top row on mobile -->
       <div class="flex items-center justify-between md:hidden">
         <a
-          href="#"
+          href="/"
           class="uppercase tracking-wide text-sm font-medium text-zinc-900 dark:text-zinc-100"
         >
           home
@@ -38,6 +38,7 @@ const navItems = [
           <button
             type="button"
             class="inline-flex items-center justify-center w-11 h-11 p-2 rounded-md hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+            aria-label="Open navigation menu"
             aria-expanded="false"
             aria-controls="mobile-menu"
             data-mobile-menu-button
@@ -70,7 +71,7 @@ const navItems = [
       </div>
 
       <!-- desktop nav (unchanged) -->
-      <nav class="hidden md:flex items-center justify-center gap-5">
+      <nav aria-label="Primary" class="hidden md:flex items-center justify-center gap-5">
         {navItems.map((item) => (
           <a
             href={item.href}
@@ -86,6 +87,8 @@ const navItems = [
 
     <nav
       id="mobile-menu"
+      aria-label="Primary"
+      aria-hidden="true"
       class="mobile-menu md:hidden hidden flex flex-col gap-2 mt-2
              relative overflow-hidden rounded-2xl
              bg-white/60 dark:bg-zinc-900/60
@@ -121,18 +124,27 @@ const navItems = [
   const openIcon = mobileMenuButton?.querySelector('[data-icon="open"]');
   const closeIcon = mobileMenuButton?.querySelector('[data-icon="close"]');
   const navbarWrapper = document.getElementById("navbar");
+  const mobileMenuLinks = Array.from(mobileMenu?.querySelectorAll('a[href]') ?? []);
+
+  const setActiveLink = (id) => {
+    navLinks.forEach((link) => {
+      const isActive = link.getAttribute("href") === `#${id}`;
+      link.classList.toggle("font-bold", isActive);
+      if (isActive) {
+        link.setAttribute("aria-current", "location");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+  };
 
   // active section highlight
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         const id = entry.target.getAttribute("id");
-        if (entry.isIntersecting) {
-          navLinks.forEach((link) => {
-            const isActive = link.getAttribute("href") === `#${id}`;
-            link.classList.toggle("font-bold", isActive);
-            link.setAttribute("aria-current", isActive ? "true" : "false");
-          });
+        if (entry.isIntersecting && id) {
+          setActiveLink(id);
         }
       });
     },
@@ -144,17 +156,21 @@ const navItems = [
   const openMobileMenu = () => {
     if (!mobileMenu) return;
     mobileMenu.dataset.state = "open";
+    mobileMenu.setAttribute("aria-hidden", "false");
     mobileMenu.classList.remove("hidden");
     mobileMenu.classList.remove("translate-y-[-12px]", "opacity-0", "pointer-events-none");
     mobileMenu.classList.add("translate-y-0", "opacity-100");
     mobileMenuButton?.setAttribute("aria-expanded", "true");
+    mobileMenuButton?.setAttribute("aria-label", "Close navigation menu");
     openIcon?.classList.add("hidden");
     closeIcon?.classList.remove("hidden");
+    mobileMenuLinks[0]?.focus();
   };
 
-  const closeMobileMenu = () => {
+  const closeMobileMenu = ({ restoreFocus = false } = {}) => {
     if (!mobileMenu) return;
     mobileMenu.dataset.state = "closed";
+    mobileMenu.setAttribute("aria-hidden", "true");
     mobileMenu.classList.add("translate-y-[-12px]", "opacity-0", "pointer-events-none");
     mobileMenu.classList.remove("translate-y-0", "opacity-100");
     window.setTimeout(() => {
@@ -163,8 +179,12 @@ const navItems = [
       }
     }, 300);
     mobileMenuButton?.setAttribute("aria-expanded", "false");
+    mobileMenuButton?.setAttribute("aria-label", "Open navigation menu");
     openIcon?.classList.remove("hidden");
     closeIcon?.classList.add("hidden");
+    if (restoreFocus) {
+      mobileMenuButton?.focus();
+    }
   };
 
   mobileMenuButton?.addEventListener("click", () => {
@@ -188,6 +208,32 @@ const navItems = [
     }
   });
 
+  document.addEventListener("keydown", (event) => {
+    if (mobileMenu?.dataset.state !== "open") return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeMobileMenu({ restoreFocus: true });
+      return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const focusable = [mobileMenuButton, ...mobileMenuLinks].filter(Boolean);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (!first || !last) return;
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
   // close when clicking outside
   document.addEventListener("click", (event) => {
     const target = event.target as Node | null;
@@ -201,4 +247,8 @@ const navItems = [
 
     closeMobileMenu();
   });
+
+  if (window.location.hash) {
+    setActiveLink(window.location.hash.slice(1));
+  }
 </script>

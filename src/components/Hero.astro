@@ -22,24 +22,24 @@ import PDFIcon from "./icons/PDFIcon.astro";
   >.
 </p>
 
-<nav class="flex flex-wrap gap-2 mt-8">
-  <a href="mailto:ivandelhorno@gmail.com" target="_blank" rel="noopener">
+<nav aria-label="Primary actions" class="flex flex-wrap gap-2 mt-8">
+  <a href="mailto:ivandelhorno@gmail.com">
     <Badge>
-      <MailIcon />
+      <MailIcon aria-hidden="true" />
       Open to Work
     </Badge>
   </a>
 
   <Button href="https://www.github.com/LittleHaku">
-    <GitHubIcon />
+    <GitHubIcon aria-hidden="true" />
     GitHub
   </Button>
   <Button href="https://www.linkedin.com/in/ivansotillo/">
-    <LinkedInIcon />
+    <LinkedInIcon aria-hidden="true" />
     LinkedIn
   </Button>
   <Button href="/documents/CV_Ivan_Sotillo.pdf" download>
-    <PDFIcon />
+    <PDFIcon aria-hidden="true" />
     Download CV
   </Button>
 </nav>

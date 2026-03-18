@@ -1,16 +1,39 @@
+---
+const {
+  href,
+  target,
+  rel,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const isExternal = typeof href === "string" && /^https?:\/\//.test(href);
+const resolvedTarget = target ?? (isExternal ? "_blank" : undefined);
+const relTokens = new Set(
+  typeof rel === "string" ? rel.split(/\s+/).filter(Boolean) : [],
+);
+
+if (resolvedTarget === "_blank") {
+  relTokens.add("noopener");
+  relTokens.add("noreferrer");
+}
+
+const resolvedRel = relTokens.size > 0 ? Array.from(relTokens).join(" ") : undefined;
+---
+
 <a
-  {...Astro.props}
-  target="_blank"
-  rel="noopener noreferrer"
-  role="link"
-  class="inline-flex items-center justify-center gap-2 px-4 py-2 min-h-[44px] min-w-[44px] text-sm font-mono tracking-widest uppercase rounded-md
+  {...rest}
+  href={href}
+  target={resolvedTarget}
+  rel={resolvedRel}
+  class={`inline-flex items-center justify-center gap-2 px-4 py-2 min-h-[44px] min-w-[44px] text-sm font-mono tracking-widest uppercase rounded-md
          bg-white/40 dark:bg-zinc-900/30 backdrop-blur-sm
          border border-zinc-200/50 dark:border-zinc-700/50
          text-zinc-900 dark:text-zinc-100
          hover:bg-white/60 dark:hover:bg-zinc-900/50
          transition-all duration-200 ease-out hover:scale-[1.02] shadow-sm
          focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500
-         max-w-fit cursor-pointer"
+         max-w-fit cursor-pointer ${className ?? ""}`}
 >
   <slot />
 </a>

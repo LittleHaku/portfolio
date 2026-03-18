@@ -13,20 +13,20 @@ import LinkedInIcon from "./icons/LinkedInIcon.astro";
 </p>
 
 {/* quick links */}
-<nav class="flex flex-wrap gap-2 mt-8">
-  <a href="mailto:ivandelhorno@gmail.com" target="_blank" rel="noopener">
+<nav aria-label="Contact links" class="flex flex-wrap gap-2 mt-8">
+  <a href="mailto:ivandelhorno@gmail.com">
     <Badge>
-      <MailIcon />
+      <MailIcon aria-hidden="true" />
       Email Me
     </Badge>
   </a>
 
   <Button href="https://www.github.com/LittleHaku">
-    <GitHubIcon />
+    <GitHubIcon aria-hidden="true" />
     GitHub
   </Button>
   <Button href="https://www.linkedin.com/in/ivansotillo/">
-    <LinkedInIcon />
+    <LinkedInIcon aria-hidden="true" />
     LinkedIn
   </Button>
 </nav>
