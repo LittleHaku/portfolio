@@ -105,6 +105,12 @@ const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/'
         scroll-behavior: smooth;
       }
 
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
       body {
         /* no hard background here — the layer above owns it */
         display: flex;

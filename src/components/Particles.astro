@@ -20,6 +20,12 @@
     left: 0;
     pointer-events: none;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    canvas {
+      display: none;
+    }
+  }
 </style>
 
 <script>
@@ -30,6 +36,11 @@
 
       const ctx = canvasEl.getContext("2d");
       if (!ctx) return;
+      const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      if (reducedMotionQuery.matches) {
+        return;
+      }
 
       // ---- THEME-AWARE COLOR ----
       function getParticleColor() {
@@ -72,6 +83,7 @@
       const canvas = canvasEl;
       const context = ctx;
       const particles = [];
+      let animationFrameId = 0;
 
       const mouse = {
         x: 0,
@@ -203,10 +215,20 @@
           p.draw();
         }
 
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       }
 
       animate();
+
+      reducedMotionQuery.addEventListener("change", (event) => {
+        if (event.matches) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = 0;
+          context.clearRect(0, 0, canvas.width, canvas.height);
+        } else if (!animationFrameId) {
+          animate();
+        }
+      });
     });
   }
 </script>
