@@ -79,6 +79,13 @@ const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/'
              dark:bg-zinc-950"
     ></div>
 
+    <a
+      href="#main-content"
+      class="skip-link fixed left-4 top-4 z-50 -translate-y-24 rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-950 shadow-sm transition-transform focus:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+    >
+      Skip to main content
+    </a>
+
     <Header />
     <slot />
     <Footer />
@@ -104,6 +111,10 @@ const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/'
         flex-direction: column;
         min-height: 100vh;
         overscroll-behavior: none;
+      }
+
+      .skip-link {
+        text-decoration: none;
       }
     </style>
 
