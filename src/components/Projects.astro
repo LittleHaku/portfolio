@@ -5,16 +5,17 @@ const PROJECTS: any[] = [
   {
     title: "Obsidian Smart Export",
     description:
-    "Obsidian plugin (1.4k+ downloads) that exports multiple linked notes into a single document. This allows to aggregate all the notes of a given topic into a single document for printing, studying, or LLM analysis. To do this, users select a root note and a link depth, then, the wikilinks to other notes are explored in a BFS (Breadth-First Search) way and merged into a single document until the given depth is reached.",
+    "Open-source Obsidian plugin used by 1.9k+ users to export linked notes into a single Markdown document. Built the traversal and export logic with BFS over wikilinks and automated releases with GitHub Actions.",
     screenshotSrc: "/screenshots/obsidian-smart-export.webp",
     techs: ["TypeScript", "BFS", "Obsidian"],
+    liveLink: "https://smart-export.vercel.app/",
     githubLink: "https://github.com/LittleHaku/obsidian-smart-export",
     type: "Personal"
   },
   {
     title: "TRACER",
     description:
-      "Built a tool that using LLMs, holds a conversation with a chatbot to model its behaviour. From these conversations it generates a model of the chatbot's functionalities, finally, it builds different DSL user profiles that can be used to test the chatbot's behavior under various scenarios.",
+      "Automated chatbot exploration system that extracts functional models and turns them into reusable test scenarios. Built as part of my research and software engineering work on conversational AI testing at UAM.",
     techs: ["LangGraph", "NLP", "Python"],
     screenshotSrc: "/screenshots/tracer.webp",
     liveLink: "https://pypi.org/project/chatbot-tracer/",
@@ -24,7 +25,7 @@ const PROJECTS: any[] = [
   {
     title: "Chatbot Dojo",
     description:
-      "Developed a web app that integrates TRACER and SENSEI tools. TRACER models a chatbot and generates user profiles, while SENSEI runs these profiles against the chatbot to evaluate its behavior. The frontend was done with React, while the backend was built with Django. ",
+      "Full-stack platform that unifies chatbot testing tools into a single workflow. Built with React and Django to handle async processing, persistence, and deployment for research and evaluation tasks.",
     techs: ["Django", "React", "Docker", "Celery", "PostgreSQL"],
     screenshotSrc: "/screenshots/chatbot-dojo.webp",
     liveLink: "http://miso.ii.uam.es:8081/",
@@ -35,7 +36,7 @@ const PROJECTS: any[] = [
   {
     title: "Drumscribe AI",
     description:
-    "AI model that transcribed a drumset audio recording into MIDI. This was done by generating a mel spectrogram of the audio input, then extracts features using a CNN that progressively reduces spectral resolution while increasing channel depth. These features are fed into a bidirectional LSTM to model temporal dynamics, followed by two heads that detect onsets and predict hit velocities for each drum element. This was done as a personal project, then I also used it for a Deep Learning for Audio Signal Course, so the slides I did are also available (check the \"Live\" link).",
+    "Deep learning project that converts drum audio into General MIDI. I built it as a personal audio ML project and later reused it for coursework in deep learning for audio.",
     screenshotSrc: "/screenshots/drumscribe-ai.webp",
     techs: ["PyTorch", "Python", "Deep Learning"],
     githubLink: "https://github.com/LittleHaku/DrumScribe-AI",
@@ -44,14 +45,14 @@ const PROJECTS: any[] = [
   },
   {
     title: "U.D.I.N.",
-    description: "Windows desktop application developed for a team of mechanical engineers that lets them input all the data related to a vehicle and its modifications thanks to a dynamic form. Then, generates all the Word documents needed for the homologation.",
+    description: "Desktop tool for vehicle homologation workflows in Spain that automates the generation of official engineering documents. Replaced repetitive manual documentation work with a structured app used in a professional setting.",
     screenshotSrc: "/screenshots/UDIN.webp",
     techs: ["C#", "WPF"],
     type: "Professional",
   },
   {
     title: "Spotify Reviews Sentiment Analysis",
-    description: " Sentiment analysis of Spotify Reviews. This was a personal project I did to learn about Natural Language Processing (NLP). The idea was to analyze Spotify reviews and detect if they were positive or negative. The fun part was that I tried to make it as from scratch as possible, so I didn't use any library that did the sentiment analysis for me. I did the preprocessing myself, even implemented my own stemming algorithm. Then I tried converting each word to an ID (didn't work well) and then I used a Bag of Words approach to convert the reviews to a matrix. Then I used a TensorFlow neural network to classify the reviews. The pretrained model is included in the repo.",
+    description: "NLP learning project that classifies roughly 50k Kaggle Spotify reviews as positive or negative. I built most of the preprocessing pipeline myself, including a simple custom stemmer, and trained a TensorFlow bag-of-words classifier.",
     screenshotSrc: "/screenshots/spotify.webp",
     githubLink:"https://github.com/LittleHaku/spotify-reviews-sentiment-analysis",
     techs: ["Python", "TensorFlow", "NLP"],
