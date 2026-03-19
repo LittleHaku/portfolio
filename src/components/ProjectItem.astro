@@ -48,32 +48,33 @@ const typeClasses =
         alt={screenshotAlt}
         loading="lazy"
         decoding="async"
-        class="w-full aspect-video object-cover object-top group-hover:scale-105 transition-transform duration-300"
+        class="w-full aspect-[16/9] object-cover object-top group-hover:scale-105 transition-transform duration-300"
       />
     )
   }
 
-  <div class="p-6 flex flex-col flex-grow">
-    <!-- Title row -->
-    <div class="flex items-center justify-between mb-2">
-      <h3 class="font-serif text-xl text-zinc-900 dark:text-zinc-50">
+  <div class="flex flex-col flex-grow p-4 md:p-5">
+    <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+      <h3 class="max-w-[18ch] font-serif text-xl leading-tight text-zinc-900 dark:text-zinc-50">
         {title}
       </h3>
 
       <span
-        class={`px-3 py-1 text-[10px] font-mono rounded-md uppercase tracking-widest ${typeClasses}`}
+        class={`w-fit rounded-md px-2.5 py-1 text-[10px] font-mono uppercase tracking-widest ${typeClasses}`}
       >
         {type}
       </span>
     </div>
 
-    <p class="text-zinc-600 dark:text-zinc-300 flex-grow mb-4">
+    <p
+      class="mb-3 flex-grow text-base leading-6 text-zinc-700 dark:text-zinc-300"
+    >
       {description}
     </p>
 
     {
       techs.length > 0 && (
-        <div class="flex flex-wrap gap-2 mb-4">
+        <div class="mb-3 flex flex-wrap gap-1.5">
           {techs.map((tech) => (
             <TechPill label={tech} />
           ))}
@@ -81,10 +82,10 @@ const typeClasses =
       )
     }
 
-    <div class="mt-auto flex items-center space-x-4">
+    <div class="mt-auto flex flex-wrap items-center gap-2 pt-1">
       {
           liveLink && (
-              <Button href={liveLink}>
+              <Button href={liveLink} class="min-h-9 min-w-0 gap-1.5 px-3 py-1.5 text-[11px]">
             <LinkIcon class="w-4 h-4" aria-hidden="true" />
             Live
           </Button>
@@ -92,7 +93,7 @@ const typeClasses =
     }
     {
       githubLink && (
-        <Button href={githubLink}>
+        <Button href={githubLink} class="min-h-9 min-w-0 gap-1.5 px-3 py-1.5 text-[11px]">
           <GitHubIcon class="w-4 h-4" aria-hidden="true" />
           GitHub
         </Button>
@@ -100,7 +101,7 @@ const typeClasses =
     }
       {
         videoLink && (
-          <Button href={videoLink}>
+          <Button href={videoLink} class="min-h-9 min-w-0 gap-1.5 px-3 py-1.5 text-[11px]">
             <VideoIcon class="w-4 h-4" aria-hidden="true" />
             Video
           </Button>
