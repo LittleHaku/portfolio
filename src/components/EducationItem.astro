@@ -46,11 +46,11 @@ const {
         {degree}
       </h3>
       <h4
-        class="mt-2 text-balance text-[10px] font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-400"
+        class="mt-2 text-balance text-[11px] md:text-[10px] font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-400"
       >
         {institution}
       </h4>
-      <time class="mt-1 block text-[10px] font-mono tracking-widest uppercase text-zinc-500 dark:text-zinc-500">
+      <time class="mt-1 block text-[11px] md:text-[10px] font-mono tracking-widest uppercase text-zinc-500 dark:text-zinc-500">
         {date}
       </time>
     </div>
@@ -63,14 +63,14 @@ const {
 
     {
       courses.length > 0 && (
-        <div class="flex flex-balance gap-2 mt-2">
+        <div class="mt-2 flex flex-wrap gap-2">
           {courses.map((c) => (
             <span
               class="inline-flex items-center rounded-md border
                    border-zinc-300/70 dark:border-zinc-700/40
                    bg-white/88 dark:bg-zinc-800/60
                    text-zinc-800 dark:text-zinc-300
-                   px-2 py-1 text-[10px] font-mono tracking-widest uppercase"
+                   px-2 py-1 text-[11px] md:text-[10px] font-mono tracking-widest uppercase whitespace-nowrap"
             >
               {c}
             </span>
