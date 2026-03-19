@@ -3,20 +3,21 @@ import ExperienceItem from "./ExperienceItem.astro"
 const EXPERIENCE = [
   {
     date: "Dec. 2024 - Present",
-    title: "Research Staff",
+    title: "Software Engineer",
     company: "Universidad Autónoma de Madrid - MISO Research Group (Madrid, Spain)",
     highlights: [
-      "Designed and implemented TRACER (Python, LangGraph, OpenAI API), an agent that interacts with a chatbot to extract a model of its functionalities and generate test cases from it.",
+      "Built and deployed a full-stack platform that integrates chatbot testing tools into a single workflow using React, Django REST, PostgreSQL, Celery, Docker, and Nginx.",
+      "Designed backend workflows for task orchestration, data persistence, and API-based integration across evaluation components.",
+      "Developed internal applied AI tooling with LangGraph and OpenAI APIs to automate chatbot exploration, capability extraction, and reusable test-scenario generation.",
+      "Implemented CI/CD and release automation with GitHub Actions, including publishing Python packages to PyPI in a shared pull-request-based codebase.",
       {
-        text: "Published TRACER: Automated Exploration of Conversational Agents for the Synthesis of Testing Profiles.",
+        text: "Co-authored and published work on automated exploration of conversational agents for testing.",
         href: "https://doi.org/10.1007/978-3-032-05188-2_14",
         linkLabel: "DOI",
       },
-      "Built a full-stack web application (React, Tailwind, Django REST, PostgreSQL, Celery, Docker, Nginx) to unify chatbot testing tools into a single platform.",
-      "Currently working on an agentic assistant to help users with all chatbot testing tools.",
     ],
     link: "https://doi.org/10.1007/978-3-032-05188-2_14",
-    techs: ["Python", "LangGraph", "OpenAI API", "React", "Django REST", "PostgreSQL"],
+    techs: ["Python", "LangGraph", "OpenAI API", "Django REST", "PostgreSQL", "React"],
   },
 ]
 ---
