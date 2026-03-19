@@ -34,8 +34,8 @@ const {
       <span
         class="absolute -left-[43px] top-6 -translate-y-1/2
                inline-flex h-4 w-4 items-center justify-center
-               rounded-md bg-white/40 dark:bg-zinc-900/30
-               backdrop-blur-sm border border-zinc-200/50 dark:border-zinc-700/50 shadow-sm"
+               rounded-md bg-white/88 dark:bg-zinc-900/30
+               backdrop-blur-sm border border-zinc-300/70 dark:border-zinc-700/50 shadow-[0_4px_14px_rgba(15,23,42,0.05)]"
       >
         <span class="h-1.5 w-1.5 rounded-sm bg-zinc-800 dark:bg-zinc-200"></span>
       </span>
@@ -46,18 +46,18 @@ const {
         {degree}
       </h3>
       <h4
-        class="mt-2 text-balance text-[10px] font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400"
+        class="mt-2 text-balance text-[10px] font-mono uppercase tracking-widest text-zinc-600 dark:text-zinc-400"
       >
         {institution}
       </h4>
-      <time class="mt-1 block text-[10px] font-mono tracking-widest uppercase text-zinc-400 dark:text-zinc-500">
+      <time class="mt-1 block text-[10px] font-mono tracking-widest uppercase text-zinc-500 dark:text-zinc-500">
         {date}
       </time>
     </div>
   </div>
 
   <div
-    class="relative text-balance flex flex-col gap-3 pb-4 text-zinc-600 dark:text-zinc-200 md:col-span-3 leading-relaxed"
+    class="relative text-balance flex flex-col gap-3 pb-4 text-zinc-700 dark:text-zinc-200 md:col-span-3 leading-relaxed"
   >
     {description}
 
@@ -67,9 +67,9 @@ const {
           {courses.map((c) => (
             <span
               class="inline-flex items-center rounded-md border
-                   border-zinc-200/80 dark:border-zinc-700/40
-                   bg-zinc-100 dark:bg-zinc-800/60
-                   text-zinc-700 dark:text-zinc-300
+                   border-zinc-300/70 dark:border-zinc-700/40
+                   bg-white/88 dark:bg-zinc-800/60
+                   text-zinc-800 dark:text-zinc-300
                    px-2 py-1 text-[10px] font-mono tracking-widest uppercase"
             >
               {c}
