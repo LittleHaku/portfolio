@@ -78,6 +78,8 @@ type Theme = typeof LABELS[number];
 
 <script is:inline>
   (function () {
+    const MOBILE_MENU_OPEN_EVENT = 'mobile-menu:open';
+    const THEME_TOGGLE_OPEN_EVENT = 'theme-toggle:open';
     const roots = Array.from(document.querySelectorAll('[data-theme-toggle-root]'));
     if (!roots.length) return;
 
@@ -140,6 +142,11 @@ type Theme = typeof LABELS[number];
       btn.setAttribute('aria-controls', menuId);
 
       function openMenu() {
+        window.dispatchEvent(
+          new CustomEvent(THEME_TOGGLE_OPEN_EVENT, {
+            detail: { menuId },
+          }),
+        );
         menu.dataset.open = 'true';
         menu.classList.remove('hidden');
         btn.setAttribute('aria-expanded', 'true');
@@ -166,6 +173,11 @@ type Theme = typeof LABELS[number];
       function toggleMenu() {
         const isOpen = menu.dataset.open === 'true';
         (isOpen ? closeMenu : openMenu)();
+      }
+
+      function onAnotherMenuOpen(event) {
+        if (!(event instanceof CustomEvent) || event.detail?.menuId === menuId) return;
+        closeMenu();
       }
 
       function onOutsideClick(e) {
@@ -205,6 +217,9 @@ type Theme = typeof LABELS[number];
         e.preventDefault();
         toggleMenu();
       });
+
+      window.addEventListener(MOBILE_MENU_OPEN_EVENT, () => closeMenu());
+      window.addEventListener(THEME_TOGGLE_OPEN_EVENT, onAnotherMenuOpen);
 
       menu.querySelectorAll('.themes-menu-option').forEach((li) => {
         li.addEventListener('click', () => {

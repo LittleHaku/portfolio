@@ -114,6 +114,8 @@ const navItems = [
 
 
 <script>
+  const MOBILE_MENU_OPEN_EVENT = "mobile-menu:open";
+  const THEME_TOGGLE_OPEN_EVENT = "theme-toggle:open";
   const sections = Array.from(document.querySelectorAll("section[id]"));
   const navLinks = document.querySelectorAll(".nav-link");
   const header = document.querySelector("header");
@@ -187,6 +189,7 @@ const navItems = [
     mobileMenuButton?.setAttribute("aria-label", "Close navigation menu");
     openIcon?.classList.add("hidden");
     closeIcon?.classList.remove("hidden");
+    window.dispatchEvent(new CustomEvent(MOBILE_MENU_OPEN_EVENT));
     mobileMenuLinks[0]?.focus();
   };
 
@@ -227,6 +230,12 @@ const navItems = [
   // close on resize to desktop
   window.addEventListener("resize", () => {
     if (window.innerWidth >= 768) {
+      closeMobileMenu();
+    }
+  });
+
+  window.addEventListener(THEME_TOGGLE_OPEN_EVENT, () => {
+    if (mobileMenu?.dataset.state === "open") {
       closeMobileMenu();
     }
   });
