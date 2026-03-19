@@ -10,7 +10,8 @@ const PROJECTS: any[] = [
     techs: ["TypeScript", "BFS", "Obsidian"],
     liveLink: "https://smart-export.vercel.app/",
     githubLink: "https://github.com/LittleHaku/obsidian-smart-export",
-    type: "Personal"
+    type: "Personal",
+    featured: true,
   },
   {
     title: "TRACER",
@@ -59,10 +60,21 @@ const PROJECTS: any[] = [
     type: "Personal"
   }
 ];
+
+const featuredProject = PROJECTS.find((project) => project.featured);
+const secondaryProjects = PROJECTS.filter((project) => !project.featured);
 ---
 
-<div class="grid gap-8 md:grid-cols-2">
-  {PROJECTS.map((project) => (
-    <ProjectItem {...project} />
-  ))}
+<div class="space-y-8">
+  {
+    featuredProject && (
+      <ProjectItem {...featuredProject} featured />
+    )
+  }
+
+  <div class="grid gap-8 md:grid-cols-2">
+    {secondaryProjects.map((project) => (
+      <ProjectItem {...project} />
+    ))}
+  </div>
 </div>
