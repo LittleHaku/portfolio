@@ -19,28 +19,36 @@ import SelectedCredentials from '../components/SelectedCredentials.astro';
 >
   <Particles />
   <main id="main-content" tabindex="-1" class="px-4 focus:outline-none">
-    <div class="flex flex-col space-y-8">
+    <div class="flex flex-col gap-20 pb-8 md:gap-28 md:pb-12">
       <SectionContainer class="mt-20 md:mt-48">
         <Hero />
       </SectionContainer>
 
       <SectionContainer id="projects">
-        <TitleSection>Projects</TitleSection>
+        <TitleSection eyebrow="Selected Work">
+          Projects
+        </TitleSection>
         <Projects />
       </SectionContainer>
 
       <SectionContainer id="experience">
-        <TitleSection>Experience</TitleSection>
+        <TitleSection eyebrow="Current Role">
+          Experience
+        </TitleSection>
         <Experience />
       </SectionContainer>
 
       <SectionContainer id="credentials">
-        <TitleSection>Selected Credentials</TitleSection>
+        <TitleSection eyebrow="Academic Track">
+          Selected Credentials
+        </TitleSection>
         <SelectedCredentials />
       </SectionContainer>
 
       <SectionContainer id="contact-me">
-        <TitleSection>Let's Connect</TitleSection>
+        <TitleSection eyebrow="Availability">
+          Let's Connect
+        </TitleSection>
         <ContactMe />
       </SectionContainer>
     </div>
