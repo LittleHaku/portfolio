@@ -7,11 +7,11 @@ const LABELS = ["Light", "Dark", "System"] as const;
 type Theme = typeof LABELS[number];
 ---
 
-<div class="relative ml-1 mr-1" data-theme-toggle-root>
+<div class="relative" data-theme-toggle-root>
   <button
     type="button"
-    class="theme-toggle-btn appearance-none border-none flex items-center justify-center w-11 h-11
-           hover:scale-125 transition focus:outline-none"
+    class="theme-toggle-btn appearance-none border-none flex cursor-pointer items-center justify-center h-10 w-10 md:h-9 md:w-9
+           rounded-md transition hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
     aria-label="Change theme"
     aria-haspopup="menu"
     aria-expanded="false"
@@ -19,13 +19,13 @@ type Theme = typeof LABELS[number];
     <span class="sr-only">Toggle theme</span>
 
     <!-- We animate visibility by toggling opacity/scale -->
-    <SunIcon data-icon="light" aria-hidden="true" class="theme-toggle-icon size-5 transition-all opacity-0 scale-75" />
-    <MoonIcon data-icon="dark" aria-hidden="true" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
-    <MonitorIcon data-icon="system" aria-hidden="true" class="theme-toggle-icon absolute size-5 transition-all opacity-0 scale-75" />
+    <SunIcon data-icon="light" aria-hidden="true" class="theme-toggle-icon size-[18px] transition-all opacity-0 scale-75" />
+    <MoonIcon data-icon="dark" aria-hidden="true" class="theme-toggle-icon absolute size-[18px] transition-all opacity-0 scale-75" />
+    <MonitorIcon data-icon="system" aria-hidden="true" class="theme-toggle-icon absolute size-[18px] transition-all opacity-0 scale-75" />
   </button>
 
   <div
-    class="themes-menu absolute hidden origin-top-right top-8 right-0 text-sm p-1 min-w-32
+    class="themes-menu absolute hidden origin-top-right top-9 right-0 text-sm p-1 min-w-32
            rounded-md border border-zinc-100 bg-white/90 dark:bg-zinc-900/90
            dark:border-zinc-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)]
            backdrop-blur-md transition transform"

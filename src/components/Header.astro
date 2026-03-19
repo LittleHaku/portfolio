@@ -9,33 +9,33 @@ const navItems = [
 ];
 ---
 
-<header class="fixed top-0 z-10 w-full mt-2">
-  <div id="navbar" class="mx-auto w-full max-w-2xl px-2">
+<header class="fixed top-0 z-10 w-full pt-2">
+  <div id="navbar" class="mx-auto w-full max-w-[34rem] px-2 sm:px-3">
     <div
-      class="relative overflow-visible rounded-xl
+      class="relative overflow-visible rounded-[1.1rem]
              bg-white/85 dark:bg-zinc-900/30
              backdrop-blur-sm
              border border-zinc-300/70 dark:border-zinc-700/50
-             text-zinc-950 dark:text-zinc-100 text-sm font-normal
+             text-zinc-950 dark:text-zinc-100 text-[13px] font-normal
              shadow-[0_8px_30px_rgba(15,23,42,0.06)]
-             px-4 md:py-2 py-1 transition-all duration-200"
+             px-3 py-1.5 md:px-3.5 md:py-1.5 transition-all duration-200"
     >
       <!-- top row on mobile -->
       <div class="flex items-center justify-between md:hidden">
         <a
           href="/"
-          class="uppercase tracking-wide text-sm font-medium text-zinc-900 dark:text-zinc-100"
+          class="text-[13px] font-medium uppercase tracking-[0.18em] text-zinc-900 dark:text-zinc-100"
         >
           home
         </a>
 
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-0.5">
           <!-- Mobile theme toggle -->
           <ThemeToggle />
 
           <button
             type="button"
-            class="inline-flex items-center justify-center w-11 h-11 p-2 rounded-md hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
+            class="inline-flex items-center justify-center h-10 w-10 rounded-md hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
             aria-label="Open navigation menu"
             aria-expanded="false"
             aria-controls="mobile-menu"
@@ -69,11 +69,11 @@ const navItems = [
       </div>
 
       <!-- desktop nav (unchanged) -->
-      <nav aria-label="Primary" class="hidden md:flex items-center justify-center gap-5">
+      <nav aria-label="Primary" class="hidden md:flex items-center justify-center gap-4">
         {navItems.map((item) => (
           <a
             href={item.href}
-            class="nav-link whitespace-nowrap relative transition-colors duration-200 hover:font-semibold text-zinc-900 dark:text-zinc-100"
+            class="nav-link whitespace-nowrap relative text-[11px] uppercase tracking-[0.16em] transition-colors duration-200 hover:text-zinc-700 dark:hover:text-zinc-200 text-zinc-900 dark:text-zinc-100"
           >
             {item.name}
           </a>
@@ -87,14 +87,14 @@ const navItems = [
       id="mobile-menu"
       aria-label="Primary"
       aria-hidden="true"
-      class="mobile-menu md:hidden hidden flex flex-col gap-2 mt-2
+      class="mobile-menu md:hidden hidden flex flex-col gap-1.5 mt-2
              relative overflow-hidden rounded-2xl
              bg-white/92 dark:bg-zinc-900/60
              backdrop-blur-md
              border border-zinc-300/70 dark:border-zinc-700/50
-             text-zinc-950 dark:text-zinc-100 text-sm font-normal
+             text-zinc-950 dark:text-zinc-100 text-[13px] font-normal
              shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-none
-             px-4 py-3
+             px-3 py-2.5
              transition-all duration-300 ease-out
              translate-y-[-12px] opacity-0 pointer-events-none"
       data-mobile-menu
@@ -103,7 +103,7 @@ const navItems = [
       {navItems.map((item) => (
         <a
           href={item.href}
-          class="nav-link relative transition-colors duration-200 hover:font-semibold text-zinc-900 dark:text-zinc-100 py-1.5"
+          class="nav-link relative py-1.5 uppercase tracking-[0.16em] transition-colors duration-200 hover:text-zinc-700 dark:hover:text-zinc-200 text-zinc-900 dark:text-zinc-100"
         >
           {item.name}
         </a>
@@ -114,8 +114,9 @@ const navItems = [
 
 
 <script>
-  const sections = document.querySelectorAll("section[id]");
+  const sections = Array.from(document.querySelectorAll("section[id]"));
   const navLinks = document.querySelectorAll(".nav-link");
+  const header = document.querySelector("header");
 
   const mobileMenuButton = document.querySelector("[data-mobile-menu-button]");
   const mobileMenu = document.querySelector("[data-mobile-menu]");
@@ -136,20 +137,44 @@ const navItems = [
     });
   };
 
-  // active section highlight
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const id = entry.target.getAttribute("id");
-        if (entry.isIntersecting && id) {
-          setActiveLink(id);
-        }
-      });
-    },
-    { threshold: 0.5 }
-  );
+  const clearActiveLink = () => {
+    navLinks.forEach((link) => {
+      link.classList.remove("font-bold");
+      link.removeAttribute("aria-current");
+    });
+  };
 
-  sections.forEach((section) => observer.observe(section));
+  const updateActiveSection = () => {
+    const headerHeight = header?.getBoundingClientRect().height ?? 0;
+    const activationLine = headerHeight + 24;
+
+    const activeSection = sections.find((section) => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= activationLine && rect.bottom > activationLine;
+    });
+
+    if (!activeSection) {
+      clearActiveLink();
+      return;
+    }
+
+    setActiveLink(activeSection.id);
+  };
+
+  let ticking = false;
+  const requestActiveSectionUpdate = () => {
+    if (ticking) return;
+
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      updateActiveSection();
+      ticking = false;
+    });
+  };
+
+  requestActiveSectionUpdate();
+  window.addEventListener("scroll", requestActiveSectionUpdate, { passive: true });
+  window.addEventListener("resize", requestActiveSectionUpdate);
 
   const openMobileMenu = () => {
     if (!mobileMenu) return;
@@ -248,5 +273,7 @@ const navItems = [
 
   if (window.location.hash) {
     setActiveLink(window.location.hash.slice(1));
+  } else {
+    requestActiveSectionUpdate();
   }
 </script>
