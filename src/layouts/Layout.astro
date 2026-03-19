@@ -16,7 +16,7 @@ interface Props {
 
 const { description, title, siteUrl, ogImageUrl, ogImageTwitter } = Astro.props
 
-const siteName = 'Iván Sotillo - Software Engineer & AI Researcher'
+const siteName = 'Iván Sotillo - Software Engineer'
 const rawBaseUrl = (Astro.site?.toString() ?? siteUrl).replace(/\/+$/, '') // strip trailing slash for consistency
 const baseUrl = rawBaseUrl.replace(/^http:\/\//i, 'https://') // prefer https to avoid insecure canonicals
 const canonicalUrl = baseUrl + '/'
@@ -62,7 +62,7 @@ const resolvedTwitterImage = new URL(ogImageTwitter ?? ogImageUrl, baseUrl + '/'
         "@type": "Person",
         name: "Iván Sotillo del Horno",
         url: "https://ivansotillo.com",
-        jobTitle: "Software Engineer & AI Researcher",
+        jobTitle: "Software Engineer",
         sameAs: [
           "https://github.com/littlehaku",
           "https://www.linkedin.com/in/ivansotillo/",
