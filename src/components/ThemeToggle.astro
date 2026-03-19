@@ -90,12 +90,21 @@ type Theme = typeof LABELS[number];
       return stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
     }
 
+    function resolvedIconTheme(theme) {
+      if (theme === 'system') {
+        return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      }
+
+      return theme;
+    }
+
     function setIconForRoot(root, theme) {
+      const activeIconTheme = resolvedIconTheme(theme);
       const icons = root.querySelectorAll('[data-icon]');
       icons.forEach((el) => {
         const key = el.dataset.icon;
         if (!key) return;
-        if (key === theme) {
+        if (key === activeIconTheme) {
           el.classList.add('theme-icon--active');
           el.classList.remove('theme-icon--inactive');
         } else {
