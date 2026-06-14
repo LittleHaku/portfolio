@@ -2,8 +2,20 @@
 import ExperienceItem from "./ExperienceItem.astro"
 const EXPERIENCE = [
   {
-    date: "Dec. 2024 - Present",
-    title: "Software Engineer",
+    date: "May 2026 - Present",
+    title: "Software Engineer, Data & Integrations",
+    company: "Gambooza (Madrid, Spain)",
+    highlights: [
+      "Built and productionized a multi-tenant POS ingestion and reconciliation pipeline using Google Cloud Functions and Firebase Firestore, integrating heterogeneous TPV/POS providers across 18 venues.",
+      "Automated weekly data-processing and discrepancy reporting workflows, reducing report preparation from roughly half a workday to ~10 minutes while scaling coverage from 10 to 18 venues.",
+      "Designed the POS data model and normalization layer for noisy catalogs of 100-700 products per venue, mapping relevant beer products and taps for dashboards and client-facing reports.",
+      "Built reconciliation logic that connects external sales data with product analytics signals to surface operational discrepancies across client venues.",
+    ],
+    techs: ["Python", "Google Cloud Functions", "Firebase Firestore", "SQL", "Data Ingestion", "Data Processing"],
+  },
+  {
+    date: "Dec. 2024 - Apr. 2026",
+    title: "Software Engineer / Research Staff",
     company: "Universidad Autónoma de Madrid - MISO Research Group (Madrid, Spain)",
     highlights: [
       "Built and deployed a full-stack platform that integrates chatbot testing tools into a single workflow using React, Django REST, PostgreSQL, Celery, Docker, and Nginx.",
