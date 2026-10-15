@@ -297,7 +297,10 @@
 
   if (root && scene && panel && pourButton && chargeButton && pouredEl && chargedEl && verdict) {
     // Without the script the svg shows a frozen frame of an open tap; with it, the tap starts closed.
+    scene.classList.add("no-anim");
     scene.classList.remove("is-open");
+    void scene.getBoundingClientRect();
+    scene.classList.remove("no-anim");
     panel.hidden = false;
 
     let poured = 0;
