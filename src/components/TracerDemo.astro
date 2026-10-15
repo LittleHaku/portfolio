@@ -25,16 +25,27 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
     </div>
 
     <div class="panes">
-      <ol class="talk" data-talk aria-label="Example exploration">
-        <li class="explorer">Hi! What can you do?</li>
-        <li class="bot">I can show you the menu, take your order or tell you our opening hours.</li>
-        <li class="explorer">Show me the menu, please.</li>
-        <li class="bot">Margherita, pepperoni or four cheese. Which one, and what size?</li>
-        <li class="explorer">A large pepperoni.</li>
-        <li class="bot">Anything to drink?</li>
-        <li class="explorer">A cola.</li>
-        <li class="bot">That's €14.50. Shall I confirm the order?</li>
-      </ol>
+      <div class="talk-col">
+        <ol class="talk" data-talk aria-label="Example exploration">
+          <li class="exchange current">
+            <p class="explorer">Hi! What can you do?</p>
+            <p class="bot">I can show you the menu, take your order or tell you our opening hours.</p>
+          </li>
+          <li class="exchange">
+            <p class="explorer">Show me the menu, please.</p>
+            <p class="bot">Margherita, pepperoni or four cheese. Which one, and what size?</p>
+          </li>
+          <li class="exchange">
+            <p class="explorer">A large pepperoni.</p>
+            <p class="bot">Anything to drink?</p>
+          </li>
+          <li class="exchange">
+            <p class="explorer">A cola.</p>
+            <p class="bot">That's €14.50. Shall I confirm the order?</p>
+          </li>
+        </ol>
+        <p class="found"><span class="num" data-found-live>5</span> functionalities found</p>
+      </div>
 
       <div class="graph">
         <svg viewBox="0 0 520 300" role="img" aria-label="The workflow graph TRACER builds: show menu, order pizza, add drinks and confirm order, plus opening hours.">
@@ -115,13 +126,9 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
     padding: 1rem;
   }
 
+  /* All exchanges share one grid cell, so the box keeps the size of the tallest and nothing moves. */
   .talk {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 0.4rem;
-    height: 19.5rem;
-    overflow: hidden;
+    display: grid;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -129,14 +136,46 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
     line-height: 1.35;
   }
 
-  .talk li {
+  .exchange {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    opacity: 0;
+    transition: opacity 260ms ease;
+  }
+
+  .exchange.current {
+    opacity: 1;
+  }
+
+  .exchange .bot {
+    transition: opacity 300ms ease;
+  }
+
+  .exchange.asking .bot {
+    opacity: 0;
+  }
+
+  .found {
+    margin-top: 1rem;
+    color: #a1a1aa;
+    font-size: 0.8rem;
+  }
+
+  .found .num {
+    color: var(--signal);
+    font-weight: 600;
+  }
+
+  .talk p {
     max-width: 90%;
     padding: 0.45rem 0.65rem;
     border-radius: 0.75rem;
     transition: opacity 300ms ease, transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  .talk li::before {
+  .talk p::before {
     display: block;
     margin-bottom: 0.1rem;
     font-size: 0.66rem;
@@ -258,23 +297,8 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
   }
 
   /* While the script plays it, hidden pieces wait for their turn. */
-  .tracer.is-playing .talk li:not(.on),
   .tracer.is-playing .profiles li:not(.on) {
     opacity: 0;
-    transform: translateY(8px);
-  }
-
-  .tracer.is-playing .talk li:not(.on) {
-    display: none;
-  }
-
-  .tracer.is-playing .talk li.on {
-    animation: line-in 420ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  @keyframes line-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: none; }
   }
 
   .tracer.is-playing .node:not(.on) {
@@ -313,7 +337,19 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
   const root = document.querySelector<HTMLElement>("[data-tracer]");
 
   if (root && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const lines = Array.from(root.querySelectorAll<HTMLElement>("[data-talk] li"));
+    const exchanges = Array.from(root.querySelectorAll<HTMLElement>("[data-talk] .exchange"));
+    const foundLive = root.querySelector<HTMLElement>("[data-found-live]");
+    let found = 0;
+    const setFound = (n: number) => {
+      found = n;
+      if (foundLive) foundLive.textContent = String(n);
+    };
+    const showExchange = (i: number) => {
+      exchanges.forEach((ex, j) => {
+        ex.classList.toggle("current", j === i);
+        ex.classList.toggle("asking", j === i);
+      });
+    };
     const node = (id: string) => root.querySelector(`[data-node="${id}"]`);
     const edge = (id: string) => root.querySelector(`[data-edge="${id}"]`);
     const result = root.querySelector<HTMLElement>("[data-result]");
@@ -341,6 +377,8 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
     const reset = () => {
       root.classList.add("is-resetting");
       root.querySelectorAll(".on").forEach((el) => el.classList.remove("on"));
+      showExchange(0);
+      setFound(0);
       void root.offsetWidth;
       root.classList.remove("is-resetting");
     };
@@ -354,14 +392,16 @@ const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_witho
 
         for (let i = 0; i < discoveries.length; i++) {
           await whenVisible();
-          show(lines[i * 2]);
+          showExchange(i);
+          await wait(1000);
+          exchanges[i].classList.remove("asking");
           await wait(900);
-          show(lines[i * 2 + 1]);
-          await wait(700);
           for (const el of discoveries[i]) {
             show(el);
+            if (el?.matches("[data-node]")) setFound(found + 1);
             await wait(260);
           }
+          await wait(700);
           await wait(500);
         }
 
