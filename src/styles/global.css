@@ -135,15 +135,15 @@ img {
 /* Inline text links: underline that thickens on hover. */
 .link {
   text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.22em;
-  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
-  transition: text-decoration-color 160ms ease, text-decoration-thickness 160ms ease;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.24em;
+  text-decoration-color: var(--signal);
+  transition: text-decoration-thickness 160ms ease, text-underline-offset 160ms ease;
 }
 
 .link:hover {
-  text-decoration-color: currentColor;
-  text-decoration-thickness: 2px;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.18em;
 }
 
 /* The one button style on the page: flat, fully round. */

@@ -4,8 +4,8 @@ import RoleHeader from "./RoleHeader.astro";
 const TOOLS = [
   {
     title: "TRACER",
-    image: "/screenshots/tracer.webp",
-    alt: "A behaviour graph that TRACER inferred for a pizza-ordering chatbot: welcome, list pizza types, ask for details, confirm, ask for drinks, give the total.",
+    image: "/screenshots/tracer-cover.webp",
+    alt: "A TRACER run in the terminal exploring the Madrid te cuida health chatbot, next to the workflow graph it generated.",
     text: "An agent that talks to any chatbot as a black box, maps what it can do and writes the test profiles for it. It reached 94% average precision on real production chatbots. It was my MSc thesis, graded 10/10.",
     links: [
       { label: "Paper", href: "https://link.springer.com/article/10.1007/s42979-026-05237-5" },
@@ -15,10 +15,11 @@ const TOOLS = [
   },
   {
     title: "Chatbot Dōjō",
-    image: "/screenshots/chatbot-dojo.webp",
-    alt: "Chatbot Dōjō's test centre, with TRACER runs listed for a chatbot called ada.",
+    image: "/screenshots/chatbot-dojo-cover.webp",
+    alt: "Chatbot Dōjō's public TRACER dashboard with past runs, and the analysis report of one of them.",
     text: "A full-stack platform I designed and built. It runs TRACER, the lab's Sensei user simulator and its correctness checks as one testing pipeline, and I presented it as a tool demo at ICSE 2026.",
     links: [
+      { label: "Live", href: "http://miso.ii.uam.es:8081/" },
       { label: "Demo video", href: "https://www.youtube.com/watch?v=dFsbN1FKGVg" },
       { label: "Code", href: "https://github.com/satori-chatbots/chatbot-dojo" },
     ],
@@ -75,7 +76,7 @@ const PUBLICATIONS = [
             <p>{tool.text}</p>
             <p class="links">
               {tool.links.map((link) => (
-                <a class="link" href={link.href}>{link.label}</a>
+                <a class="link" href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
               ))}
             </p>
           </div>
@@ -88,7 +89,7 @@ const PUBLICATIONS = [
       <ol>
         {PUBLICATIONS.map((paper) => (
           <li>
-            <a class="link paper-title" href={paper.href}>{paper.title}</a>
+            <a class="link paper-title" href={paper.href} target="_blank" rel="noopener noreferrer">{paper.title}</a>
             <span class="muted">{paper.venue}, {paper.year}</span>
           </li>
         ))}
@@ -133,7 +134,7 @@ const PUBLICATIONS = [
     border-radius: 1.25rem;
     background: var(--surface);
     overflow: hidden;
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 16 / 10;
   }
 
   .shot img {
@@ -141,16 +142,6 @@ const PUBLICATIONS = [
     height: 100%;
     object-fit: cover;
     object-position: top center;
-  }
-
-  .tool:first-child .shot {
-    background: #fff;
-  }
-
-  .tool:first-child .shot img {
-    object-fit: contain;
-    padding: 1.5rem;
-    box-sizing: border-box;
   }
 
   .tool-copy p {

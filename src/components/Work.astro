@@ -36,6 +36,7 @@ const SOFTWARE = [
   },
   {
     title: "gambooza.com",
+    href: "https://gambooza.com",
     text: "Designed from scratch and built by me: a completely new site, off WordPress and onto Firebase Hosting, with Playwright tests in CI and a design system the whole team now builds on.",
   },
 ]
@@ -102,7 +103,13 @@ const SOFTWARE = [
       <ul>
         {SOFTWARE.map((item) => (
           <li data-reveal>
-            <h4>{item.title}</h4>
+            <h4>
+              {item.href ? (
+                <a class="link" href={item.href} target="_blank" rel="noopener noreferrer">{item.title}</a>
+              ) : (
+                item.title
+              )}
+            </h4>
             <p class="muted">{item.text}</p>
           </li>
         ))}

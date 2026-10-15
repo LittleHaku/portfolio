@@ -54,8 +54,8 @@ const MORE = [
           <li>TypeScript</li><li>Obsidian API</li><li>Graph traversal</li><li>GitHub Actions</li>
         </ul>
         <p class="links">
-          <a class="link" href="https://smart-export.vercel.app/">Website</a>
-          <a class="link" href="https://github.com/LittleHaku/obsidian-smart-export">Code</a>
+          <a class="link" href="https://smart-export.vercel.app/" target="_blank" rel="noopener noreferrer">Website</a>
+          <a class="link" href="https://github.com/LittleHaku/obsidian-smart-export" target="_blank" rel="noopener noreferrer">Code</a>
         </p>
       </div>
       <div class="featured-shot">
@@ -84,7 +84,7 @@ const MORE = [
             {project.links.length > 0 && (
               <p class="links">
                 {project.links.map((link) => (
-                  <a class="link" href={link.href}>{link.label}</a>
+                  <a class="link" href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
                 ))}
               </p>
             )}
