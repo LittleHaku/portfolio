@@ -6,22 +6,22 @@
 :root {
   color-scheme: light;
 
-  --bg: #f3f5f1;
-  --surface: #e6ebe4;
-  --ink: #111613;
-  --ink-2: #47514b;
-  --field: #2e3d34;
-  --field-deep: #1b241f;
-  --on-field: #eef2ec;
-  --on-field-2: #b4c2b8;
-  --signal: #c6ef3d;
-  --action: #2e3d34;
-  --on-action: #f3f5f1;
+  --bg: #fafafa;
+  --surface: #f0f0f1;
+  --ink: #09090b;
+  --ink-2: #52525b;
+  --field: #18181b;
+  --field-deep: #0e0e10;
+  --on-field: #fafafa;
+  --on-field-2: #a1a1aa;
+  --signal: #51e4b8;
+  --action: #09090b;
+  --on-action: #fafafa;
   --beer: #e3a52a;
   --foam: #f6f1e2;
 
-  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-text: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display Variable", ui-serif, Georgia, serif;
+  --font-text: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 
   --step-display: clamp(4rem, 12.5vw, 11.5rem);
   --step-h2: clamp(2.5rem, 6.2vw, 5.5rem);
@@ -40,14 +40,14 @@
 :root.dark {
   color-scheme: dark;
 
-  --bg: #0e1210;
-  --surface: #172019;
-  --ink: #e8ede7;
-  --ink-2: #a5b0a8;
-  --field: #2e3d34;
-  --field-deep: #121914;
-  --action: #c6ef3d;
-  --on-action: #111613;
+  --bg: #09090b;
+  --surface: #18181b;
+  --ink: #fafafa;
+  --ink-2: #a1a1aa;
+  --field: #141416;
+  --field-deep: #0b0b0d;
+  --action: #fafafa;
+  --on-action: #09090b;
 }
 
 /* -------------------------------------------------------------------- base */
@@ -71,7 +71,7 @@ body {
 
 ::selection {
   background: var(--signal);
-  color: #111613;
+  color: #09090b;
 }
 
 :focus-visible {
@@ -81,9 +81,9 @@ body {
 
 h1, h2, h3 {
   font-family: var(--font-display);
-  font-weight: 650;
-  letter-spacing: -0.035em;
-  line-height: 0.95;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
   text-wrap: balance;
   margin: 0;
 }
@@ -113,9 +113,10 @@ img {
 .statement {
   font-family: var(--font-display);
   font-size: var(--step-statement);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.18;
   max-width: 30ch;
 }
 
@@ -128,7 +129,7 @@ img {
 }
 
 .num {
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* Inline text links: underline that thickens on hover. */
