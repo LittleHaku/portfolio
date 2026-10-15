@@ -1,0 +1,593 @@
+---
+// A WhatsApp-style phone that plays example conversations with the Gambooza agent, one message at a time.
+const waveform = [6, 10, 16, 12, 20, 14, 8, 18, 22, 12, 9, 15, 19, 11, 7, 13, 17, 10, 6, 12];
+const days = [
+  { d: "M", v: 520 },
+  { d: "T", v: 610 },
+  { d: "W", v: 580 },
+  { d: "T", v: 760 },
+  { d: "F", v: 1090 },
+  { d: "S", v: 1240 },
+  { d: "S", v: 830 },
+];
+const maxDay = Math.max(...days.map((day) => day.v));
+---
+
+<figure class="agent-chat" data-agent-chat>
+  <div class="phone">
+    <div class="head">
+      <span class="avatar" aria-hidden="true">g</span>
+      <span class="who">
+        <b>Gambooza agent</b>
+        <small>online · sees your 3 venues</small>
+      </span>
+    </div>
+
+    <div class="body" data-chat-body></div>
+
+    <div class="foot" aria-hidden="true">
+      <span class="input">Message</span>
+      <span class="mic">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
+      </span>
+    </div>
+  </div>
+
+  <figcaption>Example conversations. The agent answers with text, tables, charts, files and video clips.</figcaption>
+
+  <!-- Conversation 1: a voice note answered with a table -->
+  <template data-convo>
+    <div class="msg out">
+      <div class="voice">
+        <span class="play" aria-hidden="true"><svg viewBox="0 0 12 12" width="11" height="11"><path d="M3 1.5l7 4.5-7 4.5z" fill="currentColor" /></svg></span>
+        <span class="wave" aria-hidden="true">{waveform.map((h) => <i style={`height:${h}px`}></i>)}</span>
+        <span class="time">0:04</span>
+      </div>
+      <p class="transcript">“How did the venues do yesterday? Make me a table.”</p>
+    </div>
+    <div class="msg in">
+      <div class="card">
+        <p class="card-title">Sales by venue</p>
+        <p class="card-sub">Yesterday vs. the same day last year</p>
+        <table>
+          <thead><tr><th>Venue</th><th>Yesterday</th><th>2025</th><th>Δ</th></tr></thead>
+          <tbody>
+            <tr><td>Downtown</td><td>€3,180</td><td>€2,990</td><td class="up">+6%</td></tr>
+            <tr><td>North</td><td>€2,640</td><td>€2,720</td><td class="down">−3%</td></tr>
+            <tr><td>Riverside</td><td>€1,910</td><td>€1,705</td><td class="up">+12%</td></tr>
+            <tr class="total"><td>Total</td><td>€7,730</td><td>€7,415</td><td class="up">+4%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>€7,730</b> across the three, 4% up on the same day last year.</p>
+    </div>
+  </template>
+
+  <!-- Conversation 2: an uncharged pour, answered with the clip -->
+  <template data-convo>
+    <div class="msg out"><p>How many beers went uncharged yesterday?</p></div>
+    <div class="msg in">
+      <p>The taps poured <b>412</b> and the till charged <b>398</b>. Most of the 14 missing were at bar 2, between 23:00 and 00:30.</p>
+    </div>
+    <div class="msg in media">
+      <div class="clip">
+        <svg viewBox="0 0 160 90" aria-hidden="true">
+          <rect width="160" height="90" fill="#141416" />
+          <rect y="66" width="160" height="24" fill="#232326" />
+          <rect x="70" y="34" width="10" height="32" fill="#8f9a94" />
+          <rect x="64" y="30" width="22" height="7" rx="2" fill="#a8b1ac" />
+          <path d="M86 33h12v8" fill="none" stroke="#a8b1ac" stroke-width="3" />
+          <rect x="74" y="10" width="4" height="22" rx="2" fill="#e7e3d7" transform="rotate(22 76 31)" />
+          <path d="M91 50h15l-2 16h-11z" fill="#e3a52a" />
+          <rect x="62" y="6" width="34" height="34" fill="none" stroke="#51e4b8" stroke-width="1.5" />
+        </svg>
+        <span class="play-big" aria-hidden="true"><svg viewBox="0 0 12 12" width="14" height="14"><path d="M3 1.5l7 4.5-7 4.5z" fill="currentColor" /></svg></span>
+        <span class="clip-meta">Bar 2 · 23:41</span>
+        <span class="clip-time">0:12</span>
+      </div>
+      <p class="caption">Tap 3 opens, a pint is poured, nothing is rung up.</p>
+    </div>
+    <div class="msg out"><p>Send me the rest too</p></div>
+  </template>
+
+  <!-- Conversation 3: the weekly report as a file, plus a chart -->
+  <template data-convo>
+    <div class="msg out"><p>Send me last week's report</p></div>
+    <div class="msg in media">
+      <div class="file">
+        <span class="file-icon" aria-hidden="true">PDF</span>
+        <span class="file-name">
+          <b>Weekly report · Week 41.pdf</b>
+          <small>4 pages · 412 KB</small>
+        </span>
+        <svg class="file-get" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
+      </div>
+    </div>
+    <div class="msg in">
+      <div class="card">
+        <p class="card-title">Pints poured per day</p>
+        <p class="card-sub">Week 41, all venues</p>
+        <svg class="chart" viewBox="0 0 210 92" aria-hidden="true">
+          {days.map((day, i) => {
+            const h = Math.round((day.v / maxDay) * 66);
+            return (
+              <g>
+                <rect x={i * 30 + 6} y={72 - h} width="18" height={h} rx="2" class={day.v === maxDay ? "bar top" : "bar"} />
+                <text x={i * 30 + 15} y="88" text-anchor="middle">{day.d}</text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+      <p>Saturday was the busiest day: <b>1,240 pints</b>, 14% more than the week before.</p>
+    </div>
+  </template>
+</figure>
+
+<style>
+  .agent-chat {
+    --chat-bg: #ececed;
+    --chat-head: #ffffff;
+    --bubble-in: #ffffff;
+    --bubble-out: #d4f6ea;
+    --chat-ink: #09090b;
+    --chat-ink-2: #6b6b73;
+    --chat-line: #e4e4e7;
+    margin: 0;
+    width: 100%;
+    max-width: 22.5rem;
+  }
+
+  :global(.dark) .agent-chat {
+    --chat-bg: #0f0f11;
+    --chat-head: #1a1a1d;
+    --bubble-in: #1f1f23;
+    --bubble-out: #12392d;
+    --chat-ink: #f4f4f5;
+    --chat-ink-2: #a1a1aa;
+    --chat-line: #2a2a2e;
+  }
+
+  .phone {
+    overflow: hidden;
+    border: 10px solid #09090b;
+    border-radius: 2.6rem;
+    background: var(--chat-bg);
+    color: var(--chat-ink);
+    box-shadow: 0 30px 60px -20px rgba(9, 9, 11, 0.35);
+  }
+
+  :global(.dark) .phone {
+    border-color: #27272a;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.4rem 1rem 0.7rem;
+    background: var(--chat-head);
+  }
+
+  .avatar {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    background: var(--signal);
+    color: #09090b;
+    font: 600 1.15rem/1 var(--font-display);
+  }
+
+  .who {
+    display: grid;
+    line-height: 1.2;
+  }
+
+  .who b {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .who small {
+    color: var(--chat-ink-2);
+    font-size: 0.75rem;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.45rem;
+    height: 29rem;
+    padding: 0.8rem 0.7rem;
+    overflow: hidden;
+    font-size: 0.84rem;
+    line-height: 1.38;
+    transition: opacity 300ms ease;
+  }
+
+  .body.is-leaving {
+    opacity: 0;
+  }
+
+  .foot {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.7rem 1rem;
+    background: var(--chat-bg);
+  }
+
+  .input {
+    flex: 1;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: var(--chat-head);
+    color: var(--chat-ink-2);
+    font-size: 0.8rem;
+  }
+
+  .mic {
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 999px;
+    background: var(--signal);
+    color: #09090b;
+  }
+
+  figcaption {
+    margin-top: 1rem;
+    color: var(--ink-2);
+    font-size: var(--step-small);
+    text-align: center;
+  }
+
+  /* --- messages (cloned from templates, hence :global) --- */
+  .body :global(.msg) {
+    max-width: 86%;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.9rem;
+    box-shadow: 0 1px 1px rgba(9, 9, 11, 0.06);
+  }
+
+  .body :global(.msg.enter) {
+    animation: msg-in 380ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .body :global(.msg.out) {
+    align-self: flex-end;
+    background: var(--bubble-out);
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  .body :global(.msg.in) {
+    align-self: flex-start;
+    background: var(--bubble-in);
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  .body :global(.msg.media) {
+    padding: 0.3rem;
+  }
+
+  .body :global(.msg p + p),
+  .body :global(.msg .card + p) {
+    margin-top: 0.4rem;
+  }
+
+  .body :global(.msg b) {
+    font-weight: 600;
+  }
+
+  .body :global(.voice) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .body :global(.play) {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: var(--chat-ink);
+    color: var(--bubble-out);
+  }
+
+  .body :global(.wave) {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .body :global(.wave i) {
+    display: block;
+    width: 2.5px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--chat-ink) 55%, transparent);
+  }
+
+  .body :global(.time) {
+    color: var(--chat-ink-2);
+    font-size: 0.72rem;
+  }
+
+  .body :global(.transcript) {
+    margin-top: 0.4rem;
+    padding-top: 0.35rem;
+    border-top: 1px solid color-mix(in srgb, var(--chat-ink) 12%, transparent);
+    font-style: italic;
+  }
+
+  .body :global(.card) {
+    padding: 0.6rem;
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--chat-bg) 55%, var(--bubble-in));
+  }
+
+  .body :global(.card-title) {
+    font-weight: 600;
+  }
+
+  .body :global(.card-sub) {
+    margin-bottom: 0.45rem;
+    color: var(--chat-ink-2);
+    font-size: 0.72rem;
+  }
+
+  .body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .body :global(th) {
+    padding: 0.3rem 0.35rem;
+    background: var(--chat-ink);
+    color: var(--chat-bg);
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .body :global(td) {
+    padding: 0.28rem 0.35rem;
+    text-align: right;
+  }
+
+  .body :global(th:first-child),
+  .body :global(td:first-child) {
+    text-align: left;
+  }
+
+  .body :global(tbody tr:nth-child(even)) {
+    background: color-mix(in srgb, var(--chat-ink) 5%, transparent);
+  }
+
+  .body :global(tr.total td) {
+    font-weight: 600;
+  }
+
+  .body :global(.up) {
+    color: #0f8a62;
+  }
+
+  .body :global(.down) {
+    color: #c2410c;
+  }
+
+  :global(.dark) .body :global(.up) {
+    color: var(--signal);
+  }
+
+  :global(.dark) .body :global(.down) {
+    color: #fb923c;
+  }
+
+  .body :global(.clip) {
+    position: relative;
+    overflow: hidden;
+    width: 14.5rem;
+    border-radius: 0.65rem;
+  }
+
+  .body :global(.clip svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .body :global(.play-big) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #09090b;
+    transform: translate(-50%, -50%);
+  }
+
+  .body :global(.clip-meta),
+  .body :global(.clip-time) {
+    position: absolute;
+    bottom: 0.35rem;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
+  .body :global(.clip-meta) {
+    left: 0.45rem;
+  }
+
+  .body :global(.clip-time) {
+    right: 0.45rem;
+  }
+
+  .body :global(.caption) {
+    padding: 0.35rem 0.35rem 0.15rem;
+  }
+
+  .body :global(.file) {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 14.5rem;
+    padding: 0.55rem;
+    border-radius: 0.6rem;
+    background: color-mix(in srgb, var(--chat-bg) 55%, var(--bubble-in));
+  }
+
+  .body :global(.file-icon) {
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.5rem;
+    border-radius: 0.3rem;
+    background: #dc2626;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .body :global(.file-name) {
+    display: grid;
+    flex: 1;
+    line-height: 1.25;
+  }
+
+  .body :global(.file-name b) {
+    font-size: 0.78rem;
+  }
+
+  .body :global(.file-name small) {
+    color: var(--chat-ink-2);
+    font-size: 0.7rem;
+  }
+
+  .body :global(.file-get) {
+    color: var(--chat-ink-2);
+  }
+
+  .body :global(.chart) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .body :global(.chart .bar) {
+    fill: color-mix(in srgb, var(--chat-ink) 30%, transparent);
+  }
+
+  .body :global(.chart .bar.top) {
+    fill: #2bbf93;
+  }
+
+  .body :global(.chart text) {
+    fill: var(--chat-ink-2);
+    font: 500 9px var(--font-text);
+  }
+
+  .body :global(.typing) {
+    display: flex;
+    gap: 4px;
+    padding: 0.7rem 0.8rem;
+  }
+
+  .body :global(.typing i) {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--chat-ink-2);
+    animation: typing 1s ease-in-out infinite;
+  }
+
+  .body :global(.typing i:nth-child(2)) {
+    animation-delay: 150ms;
+  }
+
+  .body :global(.typing i:nth-child(3)) {
+    animation-delay: 300ms;
+  }
+
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.35; transform: none; }
+    30% { opacity: 1; transform: translateY(-3px); }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-agent-chat]");
+  const body = root?.querySelector<HTMLElement>("[data-chat-body]");
+  const convos = Array.from(root?.querySelectorAll<HTMLTemplateElement>("template[data-convo]") ?? []);
+
+  if (root && body && convos.length > 0) {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const messagesOf = (template: HTMLTemplateElement) =>
+      Array.from(template.content.children).map((node) => node.cloneNode(true) as HTMLElement);
+
+    // Always render the first conversation, so the phone is never empty.
+    body.replaceChildren(...messagesOf(convos[0]));
+
+    if (!reduced) {
+      let visible = false;
+      new IntersectionObserver((entries) => {
+        visible = entries.some((entry) => entry.isIntersecting);
+      }).observe(root);
+
+      const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+      const whenVisible = async () => {
+        while (!visible || document.hidden) await wait(400);
+      };
+
+      const play = async () => {
+        let index = 0;
+        await wait(1200);
+        for (;;) {
+          await whenVisible();
+          body.classList.add("is-leaving");
+          await wait(320);
+          body.replaceChildren();
+          body.classList.remove("is-leaving");
+          index = (index + 1) % convos.length;
+
+          for (const message of messagesOf(convos[index])) {
+            await whenVisible();
+            if (message.classList.contains("in")) {
+              const typing = document.createElement("div");
+              typing.className = "msg in typing enter";
+              typing.innerHTML = "<i></i><i></i><i></i>";
+              body.append(typing);
+              await wait(1100);
+              typing.remove();
+            } else {
+              await wait(700);
+            }
+            message.classList.add("enter");
+            body.append(message);
+            await wait(900);
+          }
+          await wait(4200);
+        }
+      };
+
+      play();
+    }
+  }
+</script>

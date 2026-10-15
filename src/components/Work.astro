@@ -1,5 +1,6 @@
 ---
 import RoleHeader from "./RoleHeader.astro";
+import AgentChat from "./AgentChat.astro";
 
 const RESULTS = [
   {
@@ -10,12 +11,12 @@ const RESULTS = [
   {
     figure: "18",
     title: "Venues whose till data flows in by itself",
-    text: "A multi-tenant pipeline on Cloud Functions and Firestore that pulls sales from 6 different POS systems, including Revo's OAuth certification, and reconciles them with what the cameras saw.",
+    text: "A multi-tenant pipeline on Cloud Functions and Firestore that ingests 72,000 to 180,000 sale lines a week from 6 POS systems and reconciles them with what the cameras saw.",
   },
   {
-    figure: "1 click",
-    title: "To send a client's weekly report",
-    text: "Reports used to take up to a full workday of spreadsheets and Looker Studio. Now a dashboard reads straight from Firestore: someone checks it and presses send.",
+    figure: "1 min",
+    title: "To send the weekly reports, down from half a day",
+    text: "The client dashboard I built took us off Looker Studio and spreadsheets. It reads straight from Firestore and updates itself, so we check the reports and send them in about a minute.",
   },
   {
     figure: "−35%",
@@ -26,22 +27,18 @@ const RESULTS = [
 
 const SOFTWARE = [
   {
-    title: "The client dashboard",
-    text: "Per-venue and group views, benchmarks against the median venue, and a sending workflow that shows the status of every weekly report and warns in plain language when videos or annotations are missing.",
-  },
-  {
     title: "POS integrations",
-    text: "Revo with OAuth and PKCE through its certification, Madisa and BDP, plus a Square integration I recovered from an old Cloud Run revision and moved to Secret Manager with tests in CI.",
+    text: "BDP, Ágora, Glop, Square, Revo and Madisa, each with its own adapter. Revo with OAuth and PKCE, through the vendor's certification process.",
   },
   {
-    title: "A data model for messy catalogs",
-    text: "A normalisation layer that maps the 10 to 20 beers that matter out of POS catalogs of 100 to 700 products per venue.",
+    title: "The client dashboard",
+    text: "Per-venue and group views, benchmarks against the median venue and a sending workflow for every weekly report. It's what took us off Looker Studio.",
   },
   {
     title: "gambooza.com",
-    text: "Migrated from WordPress to Firebase Hosting, with analytics, Playwright tests in CI and a design system with tokens that the whole team builds on.",
+    text: "Designed from scratch and built by me: a completely new site, off WordPress and onto Firebase Hosting, with Playwright tests in CI and a design system the whole team now builds on.",
   },
-];
+]
 ---
 
 <section id="work" class="work">
@@ -54,7 +51,7 @@ const SOFTWARE = [
           against the till.
         </p>
         <p class="body muted">
-          We are two engineers, so I own projects end to end: the meetings with clients and POS
+          I own projects end to end: the meetings with clients and POS
           vendors, the backend and the integrations, the client dashboard, the company website and
           the models that run every night in production.
         </p>
@@ -72,22 +69,20 @@ const SOFTWARE = [
       <div class="agent-copy" data-reveal>
         <h3>An agent owners can text</h3>
         <p>
-          Bar owners ask about their sales and their discrepancies on WhatsApp, and an agent answers
-          from their own data. Simple questions go through fixed workflows, open ones through the
-          LLM, and every client gets its own container and can only see its own venues.
+          Bar owners ask on WhatsApp, by text or voice note, and the agent answers from their own
+          data: a table of last night's sales, a chart of the week, the weekly report as a PDF or the
+          video clip of the pint that was never charged.
+        </p>
+        <p>
+          Simple questions go through fixed workflows and open ones through the LLM. Every client gets
+          its own container and can only see its own venues.
         </p>
         <p class="muted">Built with OpenClaw, Pydantic AI and Docker.</p>
       </div>
 
-      <figure class="chat" data-reveal>
-        <div class="bubble from-owner">How many beers went uncharged yesterday?</div>
-        <div class="bubble from-agent">
-          Yesterday the taps poured 412 beers and the till charged 398. Most of the 14 missing were
-          poured at bar 2 between 23:00 and 00:30. Want me to send you the clips?
-        </div>
-        <div class="bubble from-owner">Yes, send them over</div>
-        <figcaption>An example of the questions owners send.</figcaption>
-      </figure>
+      <div class="stage">
+        <AgentChat />
+      </div>
     </div>
 
     <ul class="ledger">
@@ -150,39 +145,11 @@ const SOFTWARE = [
     max-width: 48ch;
   }
 
-  .chat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin: 0;
-    padding: clamp(1.25rem, 3vw, 2.25rem);
+  .stage {
+    display: grid;
+    place-items: center;
+    padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
     background: var(--surface);
-  }
-
-  .bubble {
-    max-width: 30ch;
-    padding: 0.7rem 0.95rem;
-    border-radius: 1.1rem;
-    line-height: 1.4;
-  }
-
-  .from-owner {
-    align-self: flex-end;
-    background: var(--field);
-    color: var(--on-field);
-    border-bottom-right-radius: 0.3rem;
-  }
-
-  .from-agent {
-    align-self: flex-start;
-    background: var(--bg);
-    border-bottom-left-radius: 0.3rem;
-  }
-
-  .chat figcaption {
-    margin-top: 0.75rem;
-    color: var(--ink-2);
-    font-size: var(--step-small);
   }
 
   /* --- the ledger of results --- */
@@ -242,8 +209,8 @@ const SOFTWARE = [
 
   @media (min-width: 52rem) {
     .software ul {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 2.5rem 4rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2.5rem 3rem;
     }
 
     .intro {
