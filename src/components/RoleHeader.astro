@@ -1,0 +1,53 @@
+---
+import Stack from "./Stack.astro";
+
+interface Props {
+  title: string;
+  company: string;
+  dates: string;
+  stack: string[];
+}
+
+const { title, company, dates, stack } = Astro.props;
+---
+
+<div class="role" data-reveal>
+  <p class="who"><strong>{title}</strong> <span class="muted">at {company}</span></p>
+  <p class="when muted num">{dates}</p>
+  <div class="tech"><Stack items={stack} /></div>
+</div>
+
+<style>
+  .role {
+    display: grid;
+    gap: 0.35rem 2rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-block: 1.25rem;
+    font-size: 1.125rem;
+  }
+
+  .who strong {
+    font-weight: 600;
+  }
+
+  .tech {
+    margin-top: 0.75rem;
+  }
+
+  @media (min-width: 52rem) {
+    .role {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .when {
+      grid-row: 2;
+    }
+
+    .tech {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      margin-top: 0;
+    }
+  }
+</style>

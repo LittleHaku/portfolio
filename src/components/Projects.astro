@@ -1,11 +1,14 @@
 ---
+import Stack from "./Stack.astro";
+
 const MORE = [
   {
     title: "CertiCamper",
     image: "/screenshots/certicamper.webp",
     alt: "CertiCamper's landing page: homologate your camper, simply and quickly.",
     text: "A platform for a vehicle engineering consultancy that moved camper homologation out of email threads and into one guided workflow, with roles for clients and engineers.",
-    stack: "FastAPI, React, PostgreSQL, Docker",
+    type: "Client work",
+    stack: ["FastAPI", "React", "TypeScript", "PostgreSQL", "Docker", "RBAC"],
     links: [],
   },
   {
@@ -13,7 +16,8 @@ const MORE = [
     image: "/screenshots/UDIN.webp",
     alt: "U.D.I.N. desktop windows: a new modification form and a document generation menu.",
     text: "A desktop app for the same consultancy that writes the official engineering documents for vehicle modifications in Spain, replacing repetitive manual paperwork.",
-    stack: "C#, WPF",
+    type: "Client work",
+    stack: ["C#", "WPF", "Document generation"],
     links: [],
   },
   {
@@ -21,7 +25,8 @@ const MORE = [
     image: "/screenshots/drumscribe-ai.webp",
     alt: "Mel spectrogram of a jazz drum fill above the ground-truth and predicted drum hits.",
     text: "A deep learning model that listens to drum recordings and writes them out as General MIDI.",
-    stack: "PyTorch",
+    type: "Personal",
+    stack: ["PyTorch", "Python", "Audio ML"],
     links: [
       { label: "Code", href: "https://github.com/LittleHaku/DrumScribe-AI" },
       { label: "Slides", href: "https://docs.google.com/presentation/d/e/2PACX-1vRZMLv54Lwds3XjPzL-EkvlxaNIu4ZqrGLiD8GjuV42B5Cri0M5aMMj-cHX-8UGUVEaHpDuh8Z1HQRC/pub" },
@@ -32,18 +37,22 @@ const MORE = [
 
 <section id="projects" class="projects">
   <div class="wrap">
-    <h2 class="section-title" data-reveal><span>Other things I built</span></h2>
+    <h2 class="section-title" data-reveal><span>Projects</span></h2>
   </div>
 
   <article class="featured" data-reveal>
     <div class="wrap featured-grid">
       <div class="featured-copy">
+        <p class="type">Personal, open source</p>
         <h3>Obsidian Smart Export</h3>
         <p class="downloads">Close to <span class="num">3,000</span> downloads</p>
         <p>
           An open-source Obsidian plugin that follows the links between your notes and exports them
           as one Markdown file, ready to paste into an LLM or print as a PDF.
         </p>
+        <ul class="se-stack" aria-label="Stack">
+          <li>TypeScript</li><li>Obsidian API</li><li>Graph traversal</li><li>GitHub Actions</li>
+        </ul>
         <p class="links">
           <a class="link" href="https://smart-export.vercel.app/">Website</a>
           <a class="link" href="https://github.com/LittleHaku/obsidian-smart-export">Code</a>
@@ -68,9 +77,10 @@ const MORE = [
             <img src={project.image} alt={project.alt} loading="lazy" decoding="async" />
           </div>
           <div>
+            <p class="type muted">{project.type}</p>
             <h3>{project.title}</h3>
             <p>{project.text}</p>
-            <p class="muted stack">{project.stack}</p>
+            <div class="stack"><Stack items={project.stack} /></div>
             {project.links.length > 0 && (
               <p class="links">
                 {project.links.map((link) => (
@@ -183,7 +193,31 @@ const MORE = [
   }
 
   .more .stack {
-    margin-top: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .type {
+    margin-bottom: 0.5rem;
+    font-size: var(--step-small);
+  }
+
+  .featured .type {
+    color: #b9b9c6;
+  }
+
+  .se-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+  }
+
+  .se-stack li {
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: #1d1d26;
     font-size: var(--step-small);
   }
 

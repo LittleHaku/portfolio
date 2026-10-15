@@ -1,4 +1,6 @@
 ---
+import RoleHeader from "./RoleHeader.astro";
+
 const TOOLS = [
   {
     title: "TRACER",
@@ -54,6 +56,13 @@ const PUBLICATIONS = [
         Madrid, building agents that test other chatbots.
       </p>
     </div>
+
+    <RoleHeader
+      title="Research Software Engineer"
+      company="MISO group, Universidad Autónoma de Madrid"
+      dates="Dec 2024 – Apr 2026"
+      stack={["Python", "LangGraph", "Django REST", "React", "PostgreSQL", "Celery", "Docker", "GitHub Actions"]}
+    />
 
     <div class="tools">
       {TOOLS.map((tool) => (
@@ -112,7 +121,7 @@ const PUBLICATIONS = [
   .tools {
     display: grid;
     gap: clamp(4rem, 8vw, 7rem);
-    margin-top: clamp(4rem, 8vw, 7rem);
+    margin-top: clamp(3rem, 6vw, 5rem);
   }
 
   .tool {

@@ -1,4 +1,6 @@
 ---
+import RoleHeader from "./RoleHeader.astro";
+
 const RESULTS = [
   {
     figure: "0.998",
@@ -21,6 +23,25 @@ const RESULTS = [
     text: "I redesigned the video pipeline: full-frame HD storage, rotation and cropping on the GPU, and audits that keep an eye on recall every night.",
   },
 ];
+
+const SOFTWARE = [
+  {
+    title: "The client dashboard",
+    text: "Per-venue and group views, benchmarks against the median venue, and a sending workflow that shows the status of every weekly report and warns in plain language when videos or annotations are missing.",
+  },
+  {
+    title: "POS integrations",
+    text: "Revo with OAuth and PKCE through its certification, Madisa and BDP, plus a Square integration I recovered from an old Cloud Run revision and moved to Secret Manager with tests in CI.",
+  },
+  {
+    title: "A data model for messy catalogs",
+    text: "A normalisation layer that maps the 10 to 20 beers that matter out of POS catalogs of 100 to 700 products per venue.",
+  },
+  {
+    title: "gambooza.com",
+    text: "Migrated from WordPress to Firebase Hosting, with analytics, Playwright tests in CI and a design system with tokens that the whole team builds on.",
+  },
+];
 ---
 
 <section id="work" class="work">
@@ -34,10 +55,18 @@ const RESULTS = [
         </p>
         <p class="body muted">
           We are two engineers, so I own projects end to end: the meetings with clients and POS
-          vendors, the models, the integrations and the code that runs every night in production.
+          vendors, the backend and the integrations, the client dashboard, the company website and
+          the models that run every night in production.
         </p>
       </div>
     </div>
+
+    <RoleHeader
+      title="Forward Deployed AI Engineer"
+      company="Gambooza"
+      dates="May 2026 – now"
+      stack={["Python", "YOLO", "Pydantic AI", "OpenClaw", "Google Cloud Functions", "Firestore", "Firebase Hosting", "Docker", "Playwright"]}
+    />
 
     <div class="agent">
       <div class="agent-copy" data-reveal>
@@ -72,6 +101,18 @@ const RESULTS = [
         </li>
       ))}
     </ul>
+
+    <div class="software">
+      <h3 data-reveal><span>And the software around it</span></h3>
+      <ul>
+        {SOFTWARE.map((item) => (
+          <li data-reveal>
+            <h4>{item.title}</h4>
+            <p class="muted">{item.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -101,7 +142,7 @@ const RESULTS = [
   .agent {
     display: grid;
     gap: 2.5rem;
-    margin-top: clamp(4rem, 8vw, 7rem);
+    margin-top: clamp(3rem, 6vw, 5rem);
   }
 
   .agent-copy p {
@@ -171,7 +212,40 @@ const RESULTS = [
     max-width: 56ch;
   }
 
+  /* --- the software around it --- */
+  .software {
+    margin-top: clamp(4rem, 8vw, 7rem);
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+    background: var(--surface);
+  }
+
+  .software ul {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 2rem;
+  }
+
+  h4 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+
+  .software p {
+    margin-top: 0.5rem;
+    max-width: 52ch;
+  }
+
   @media (min-width: 52rem) {
+    .software ul {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 2.5rem 4rem;
+    }
+
     .intro {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       align-items: start;
