@@ -1,0 +1,449 @@
+---
+// Smart Export in miniature: pick a note, follow its links breadth-first, get one Markdown file.
+const NOTES = [
+  { id: "kickoff", title: "Project kickoff", x: 48, y: 14, text: "Goal: ship the beta by March.", tokens: 420 },
+  { id: "meetings", title: "Meeting notes", x: 20, y: 34, text: "The client wants weekly reports by email.", tokens: 610 },
+  { id: "api", title: "API design", x: 78, y: 26, text: "REST, versioned under /v1.", tokens: 530 },
+  { id: "roadmap", title: "Roadmap", x: 52, y: 50, text: "Beta in March, public launch in May.", tokens: 380 },
+  { id: "auth", title: "Auth flow", x: 88, y: 60, text: "OAuth with PKCE for third-party logins.", tokens: 470 },
+  { id: "schema", title: "Database schema", x: 74, y: 84, text: "Venues, taps, sales and detections.", tokens: 560 },
+  { id: "feedback", title: "Client feedback", x: 14, y: 62, text: "Dashboard first, mobile later.", tokens: 290 },
+  { id: "ideas", title: "Ideas", x: 32, y: 76, text: "Export straight to PDF.", tokens: 210 },
+  { id: "reading", title: "Reading list", x: 12, y: 92, text: "Designing Data-Intensive Applications.", tokens: 150 },
+];
+const LINKS = [
+  ["kickoff", "meetings"],
+  ["kickoff", "api"],
+  ["kickoff", "roadmap"],
+  ["meetings", "feedback"],
+  ["api", "auth"],
+  ["api", "schema"],
+  ["roadmap", "ideas"],
+  ["roadmap", "schema"],
+  ["feedback", "ideas"],
+  ["reading", "ideas"],
+];
+const byId = Object.fromEntries(NOTES.map((note) => [note.id, note]));
+---
+
+<div class="se" data-se data-notes={JSON.stringify(NOTES)} data-links={JSON.stringify(LINKS)}>
+  <div class="controls">
+    <p>Pick a note and how deep to follow its links. Each number is how many links away that note is.</p>
+    <div class="depth" role="group" aria-label="Link depth">
+      <span>Depth</span>
+      {[1, 2, 3].map((d) => (
+        <button type="button" data-depth={d} aria-pressed={d === 2 ? "true" : "false"}>{d}</button>
+      ))}
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="vault">
+      <div class="field">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {LINKS.map(([a, b]) => (
+          <line
+            x1={byId[a].x} y1={byId[a].y} x2={byId[b].x} y2={byId[b].y}
+            data-link={`${a}|${b}`}
+            vector-effect="non-scaling-stroke"
+          />
+        ))}
+      </svg>
+      {NOTES.map((note) => (
+        <button
+          type="button"
+          class="note"
+          data-note={note.id}
+          style={`left:${note.x}%;top:${note.y}%`}
+          aria-pressed="false"
+        >
+          {note.title}
+        </button>
+      ))}
+      </div>
+    </div>
+
+    <div class="file" aria-live="polite">
+      <div class="file-bar">
+        <span class="file-name" data-file-name>project-kickoff.md</span>
+        <span class="file-meta" data-file-meta></span>
+      </div>
+      <div class="file-body" data-file-body>
+        <p class="hint">Pick a note to export its context.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .se {
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    border-radius: 1.25rem;
+    background: #15151c;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    color: #b9b9c6;
+    font-size: 0.9rem;
+  }
+
+  .depth {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .depth span {
+    margin-right: 0.25rem;
+  }
+
+  .depth button {
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 0;
+    border-radius: 999px;
+    background: #23232c;
+    color: #eeeef3;
+    font: 600 0.85rem var(--font-text);
+    cursor: pointer;
+    transition: background-color 160ms ease, transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .depth button:active,
+  .note:active {
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+
+  .depth button:active {
+    transform: scale(0.94);
+  }
+
+  .depth button[aria-pressed="true"] {
+    background: var(--signal);
+    color: #09090b;
+  }
+
+  .stage {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .vault {
+    position: relative;
+    height: 19rem;
+  }
+
+  .field {
+    position: absolute;
+    inset: 7% 13%;
+  }
+
+  .vault svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .vault line {
+    stroke: #34343f;
+    stroke-width: 1.5;
+    transition: stroke 300ms ease;
+  }
+
+  .vault line.on {
+    stroke: var(--signal);
+  }
+
+  .note {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    padding: 0.4rem 0.7rem;
+    border: 1px solid #34343f;
+    border-radius: 999px;
+    background: #1d1d25;
+    color: #c9c9d4;
+    font: 500 0.78rem var(--font-text);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 300ms ease,
+      border-color 300ms ease,
+      color 300ms ease,
+      transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .note:hover {
+    border-color: #5a5a68;
+  }
+
+  .note.in {
+    border-color: var(--signal);
+    background: rgba(81, 228, 184, 0.14);
+    color: #fafafa;
+  }
+
+  .note[data-level]::after {
+    content: attr(data-level);
+    position: absolute;
+    top: -0.55rem;
+    right: -0.45rem;
+    display: grid;
+    place-items: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    background: #fafafa;
+    color: #09090b;
+    font-size: 0.62rem;
+    font-weight: 700;
+    animation: badge-in 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes badge-in {
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .note[aria-pressed="true"] {
+    background: var(--signal);
+    border-color: var(--signal);
+    color: #09090b;
+  }
+
+  .note:focus-visible,
+  .depth button:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 40rem) {
+    .vault {
+      height: 20rem;
+    }
+
+    .field {
+      inset: 8% 15%;
+    }
+
+    .note {
+      padding: 0.3rem 0.55rem;
+      font-size: 0.7rem;
+    }
+  }
+
+  .file {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 0.9rem;
+    background: #0e0e13;
+  }
+
+  .file-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 0.9rem;
+    background: #1d1d25;
+    color: #b9b9c6;
+    font-size: 0.78rem;
+  }
+
+  .file-name {
+    color: #eeeef3;
+    font-weight: 500;
+  }
+
+  .file-meta {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .file-body {
+    height: 17rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #34343f transparent;
+    padding: 0.9rem;
+    font: 0.8rem/1.55 ui-monospace, "SFMono-Regular", Menlo, monospace;
+    color: #c9c9d4;
+  }
+
+  .file-body :global(.md-h1) {
+    color: #fafafa;
+  }
+
+  .file-body :global(.md-h2) {
+    margin-top: 0.55rem;
+    color: var(--signal);
+  }
+
+  .file-body :global(p) {
+    animation: md-in 360ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  @keyframes md-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .hint {
+    color: #7c7c8a;
+  }
+
+  @media (min-width: 52rem) {
+    .stage {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-rows: 22rem;
+    }
+
+    .vault {
+      height: 100%;
+    }
+
+    .file {
+      height: 100%;
+    }
+
+    .file-body {
+      height: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .field {
+      inset: 8% 9%;
+    }
+  }
+</style>
+
+<script>
+  type Note = { id: string; title: string; text: string; tokens: number };
+  const root = document.querySelector<HTMLElement>("[data-se]");
+
+  if (root) {
+    const notes: Note[] = JSON.parse(root.dataset.notes ?? "[]");
+    const links: Array<[string, string]> = JSON.parse(root.dataset.links ?? "[]");
+    const byId = new Map(notes.map((note) => [note.id, note]));
+    const neighbours = new Map<string, string[]>(notes.map((note) => [note.id, []]));
+    links.forEach(([a, b]) => {
+      neighbours.get(a)?.push(b);
+      neighbours.get(b)?.push(a);
+    });
+
+    const noteButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-note]"));
+    const depthButtons = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-depth]"));
+    const lines = Array.from(root.querySelectorAll<SVGLineElement>("[data-link]"));
+    const body = root.querySelector<HTMLElement>("[data-file-body]")!;
+    const fileName = root.querySelector<HTMLElement>("[data-file-name]")!;
+    const fileMeta = root.querySelector<HTMLElement>("[data-file-meta]")!;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const step = reduced ? 0 : 380;
+
+    let start = "kickoff";
+    let depth = 2;
+    let run = 0;
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    const slug = (title: string) => title.toLowerCase().replace(/\s+/g, "-");
+
+    // Breadth-first levels from the starting note, up to the chosen depth.
+    const levels = (from: string, maxDepth: number) => {
+      const seen = new Set([from]);
+      const result: string[][] = [[from]];
+      for (let d = 1; d <= maxDepth; d++) {
+        const next: string[] = [];
+        for (const id of result[d - 1]) {
+          for (const n of neighbours.get(id) ?? []) {
+            if (!seen.has(n)) {
+              seen.add(n);
+              next.push(n);
+            }
+          }
+        }
+        if (next.length === 0) break;
+        result.push(next);
+      }
+      return result;
+    };
+
+    const line = (cls: string, text: string) => {
+      const p = document.createElement("p");
+      p.className = cls;
+      p.textContent = text;
+      body.append(p);
+    };
+
+    const exportFrom = async () => {
+      const id = ++run;
+      noteButtons.forEach((button) => {
+        button.classList.remove("in");
+        button.removeAttribute("data-level");
+        button.setAttribute("aria-pressed", String(button.dataset.note === start));
+      });
+      lines.forEach((l) => l.classList.remove("on"));
+      body.replaceChildren();
+      fileName.textContent = `${slug(byId.get(start)!.title)}.md`;
+
+      const included = new Set<string>();
+      let tokens = 0;
+      const tree = levels(start, depth);
+      for (let d = 0; d < tree.length; d++) {
+        for (const noteId of tree[d]) {
+          if (id !== run) return;
+          const note = byId.get(noteId)!;
+          included.add(noteId);
+          tokens += note.tokens;
+          const button = root.querySelector<HTMLElement>(`[data-note="${noteId}"]`);
+          button?.classList.add("in");
+          button?.setAttribute("data-level", String(d));
+          lines.forEach((l) => {
+            const [a, b] = (l.dataset.link ?? "").split("|");
+            if (included.has(a) && included.has(b)) l.classList.add("on");
+          });
+          if (noteId === start) {
+            line("md-h1", `# ${note.title}`);
+          } else {
+            line("md-h2", `## ${note.title}`);
+          }
+          line("md-p", note.text);
+          body.scrollTop = body.scrollHeight;
+          fileMeta.textContent = `${included.size} notes · ≈${tokens.toLocaleString("en-US")} tokens`;
+        }
+        await wait(step);
+      }
+    };
+
+    noteButtons.forEach((button) =>
+      button.addEventListener("click", () => {
+        start = button.dataset.note!;
+        exportFrom();
+      }),
+    );
+
+    depthButtons.forEach((button) =>
+      button.addEventListener("click", () => {
+        depth = Number(button.dataset.depth);
+        depthButtons.forEach((b) => b.setAttribute("aria-pressed", String(b === button)));
+        exportFrom();
+      }),
+    );
+
+    // Play it once by itself when it first comes into view.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          io.disconnect();
+          exportFrom();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(root);
+  }
+</script>

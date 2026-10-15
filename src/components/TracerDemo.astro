@@ -1,0 +1,379 @@
+---
+// TRACER, played out on a made-up pizzeria chatbot: the explorer talks, the graph grows, profiles come out.
+const NODES = [
+  { id: "menu", x: 64, y: 70, w: 120, label: "Show menu" },
+  { id: "hours", x: 64, y: 222, w: 120, label: "Opening hours" },
+  { id: "order", x: 212, y: 62, w: 140, label: "Order pizza", params: "size · type" },
+  { id: "drinks", x: 380, y: 70, w: 120, label: "Add drinks" },
+  { id: "confirm", x: 380, y: 222, w: 120, label: "Confirm order", params: "total" },
+];
+const EDGES = [
+  { id: "start-menu", d: "M26 150 C40 150 44 95 64 95" },
+  { id: "start-hours", d: "M26 150 C40 150 44 247 64 247" },
+  { id: "menu-order", d: "M184 95 L212 95" },
+  { id: "order-drinks", d: "M352 95 L380 95" },
+  { id: "drinks-confirm", d: "M440 120 L440 222" },
+];
+const PROFILES = ["order_full_meal.yaml", "ask_opening_hours.yaml", "order_without_drinks.yaml"];
+---
+
+<figure class="tracer" data-tracer>
+  <div class="win">
+    <div class="bar" aria-hidden="true">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="title">tracer · exploring a pizzeria chatbot</span>
+    </div>
+
+    <div class="panes">
+      <ol class="talk" data-talk aria-label="Example exploration">
+        <li class="explorer">Hi! What can you do?</li>
+        <li class="bot">I can show you the menu, take your order or tell you our opening hours.</li>
+        <li class="explorer">Show me the menu, please.</li>
+        <li class="bot">Margherita, pepperoni or four cheese. Which one, and what size?</li>
+        <li class="explorer">A large pepperoni.</li>
+        <li class="bot">Anything to drink?</li>
+        <li class="explorer">A cola.</li>
+        <li class="bot">That's €14.50. Shall I confirm the order?</li>
+      </ol>
+
+      <div class="graph">
+        <svg viewBox="0 0 520 300" role="img" aria-label="The workflow graph TRACER builds: show menu, order pizza, add drinks and confirm order, plus opening hours.">
+          <defs>
+            <marker id="tracer-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L8 4 L0 8 z" fill="#71717a" />
+            </marker>
+          </defs>
+          <circle cx="20" cy="150" r="7" class="start" />
+          {EDGES.map((edge) => (
+            <path d={edge.d} class="edge" data-edge={edge.id} pathLength="1" marker-end="url(#tracer-arrow)" />
+          ))}
+          {NODES.map((node) => (
+            <g class="node" data-node={node.id}>
+              <rect x={node.x} y={node.y} width={node.w} height={node.params ? 62 : 50} rx="12" />
+              <text x={node.x + node.w / 2} y={node.y + (node.params ? 27 : 30)} text-anchor="middle" class="label">{node.label}</text>
+              {node.params && (
+                <text x={node.x + node.w / 2} y={node.y + 46} text-anchor="middle" class="params">{node.params}</text>
+              )}
+            </g>
+          ))}
+        </svg>
+
+        <div class="result" data-result>
+          <p class="status"><span class="num" data-found>5</span> functionalities · transactional chatbot</p>
+          <ul class="profiles" aria-label="Generated test profiles">
+            {PROFILES.map((profile) => <li>{profile}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <figcaption>A made-up example: TRACER chats with a pizzeria bot, maps what it can do and writes the tests.</figcaption>
+</figure>
+
+<style>
+  .tracer {
+    margin: 0;
+  }
+
+  .win {
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: #141416;
+    color: #e4e4e7;
+    box-shadow: 0 30px 60px -24px rgba(9, 9, 11, 0.45);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    background: #1f1f23;
+    color: #a1a1aa;
+    font-size: 0.78rem;
+  }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: #3f3f46;
+  }
+
+  .dots i:nth-child(1) { background: #ff5f57; }
+  .dots i:nth-child(2) { background: #febc2e; }
+  .dots i:nth-child(3) { background: #28c840; }
+
+  .panes {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .talk {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    height: 19.5rem;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+
+  .talk li {
+    max-width: 90%;
+    padding: 0.45rem 0.65rem;
+    border-radius: 0.75rem;
+    transition: opacity 300ms ease, transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .talk li::before {
+    display: block;
+    margin-bottom: 0.1rem;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .explorer {
+    align-self: flex-end;
+    background: rgba(81, 228, 184, 0.14);
+  }
+
+  .explorer::before {
+    content: "TRACER";
+    color: var(--signal);
+  }
+
+  .bot {
+    align-self: flex-start;
+    background: #232327;
+  }
+
+  .bot::before {
+    content: "Chatbot";
+    color: #a1a1aa;
+  }
+
+  .graph {
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+  }
+
+  .graph svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .start {
+    fill: #e4e4e7;
+  }
+
+  .edge {
+    fill: none;
+    stroke: #71717a;
+    stroke-width: 1.6;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 600ms cubic-bezier(0.77, 0, 0.175, 1), opacity 200ms ease;
+  }
+
+  .node {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: opacity 300ms ease, transform 500ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .node rect {
+    fill: rgba(81, 228, 184, 0.1);
+    stroke: var(--signal);
+    stroke-width: 1.4;
+  }
+
+  .label {
+    fill: #fafafa;
+    font: 600 13px var(--font-text);
+  }
+
+  .params {
+    fill: #a1a1aa;
+    font: 500 11px var(--font-text);
+  }
+
+  .status {
+    color: #a1a1aa;
+    font-size: 0.8rem;
+  }
+
+  .status .num {
+    color: #fafafa;
+    font-weight: 600;
+  }
+
+  .profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .profiles li {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: #232327;
+    color: #e4e4e7;
+    font-size: 0.74rem;
+    transition: opacity 300ms ease, transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .profiles li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .profiles li::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--signal);
+  }
+
+  .result {
+    transition: opacity 300ms ease;
+  }
+
+  /* While the script plays it, hidden pieces wait for their turn. */
+  .tracer.is-playing .talk li:not(.on),
+  .tracer.is-playing .profiles li:not(.on) {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .tracer.is-playing .talk li:not(.on) {
+    display: none;
+  }
+
+  .tracer.is-playing .talk li.on {
+    animation: line-in 420ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes line-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .tracer.is-playing .node:not(.on) {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  .tracer.is-playing .edge:not(.on) {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+
+  .tracer.is-playing .result:not(.on) {
+    opacity: 0;
+  }
+
+  .tracer.is-resetting * {
+    transition: none !important;
+  }
+
+  figcaption {
+    margin-top: 0.9rem;
+    color: var(--ink-2);
+    font-size: var(--step-small);
+  }
+
+  @media (min-width: 40rem) {
+    .panes {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+    }
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-tracer]");
+
+  if (root && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const lines = Array.from(root.querySelectorAll<HTMLElement>("[data-talk] li"));
+    const node = (id: string) => root.querySelector(`[data-node="${id}"]`);
+    const edge = (id: string) => root.querySelector(`[data-edge="${id}"]`);
+    const result = root.querySelector<HTMLElement>("[data-result]");
+    const profiles = Array.from(root.querySelectorAll<HTMLElement>(".profiles li"));
+
+    // After each exchange (explorer line + bot line), what TRACER adds to the graph.
+    const discoveries: Array<Array<Element | null>> = [
+      [edge("start-menu"), node("menu"), edge("start-hours"), node("hours")],
+      [edge("menu-order"), node("order")],
+      [edge("order-drinks"), node("drinks")],
+      [edge("drinks-confirm"), node("confirm")],
+    ];
+
+    let visible = false;
+    new IntersectionObserver((entries) => {
+      visible = entries.some((entry) => entry.isIntersecting);
+    }, { threshold: 0.3 }).observe(root);
+
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    const whenVisible = async () => {
+      while (!visible || document.hidden) await wait(300);
+    };
+    const show = (el: Element | null) => el?.classList.add("on");
+
+    const reset = () => {
+      root.classList.add("is-resetting");
+      root.querySelectorAll(".on").forEach((el) => el.classList.remove("on"));
+      void root.offsetWidth;
+      root.classList.remove("is-resetting");
+    };
+
+    const play = async () => {
+      root.classList.add("is-playing");
+      for (;;) {
+        reset();
+        await whenVisible();
+        await wait(600);
+
+        for (let i = 0; i < discoveries.length; i++) {
+          await whenVisible();
+          show(lines[i * 2]);
+          await wait(900);
+          show(lines[i * 2 + 1]);
+          await wait(700);
+          for (const el of discoveries[i]) {
+            show(el);
+            await wait(260);
+          }
+          await wait(500);
+        }
+
+        show(result);
+        for (const profile of profiles) {
+          await wait(350);
+          show(profile);
+        }
+        await wait(5000);
+      }
+    };
+
+    play();
+  }
+</script>

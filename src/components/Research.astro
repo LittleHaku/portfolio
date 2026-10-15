@@ -1,9 +1,11 @@
 ---
 import RoleHeader from "./RoleHeader.astro";
+import TracerDemo from "./TracerDemo.astro";
 
 const TOOLS = [
   {
     title: "TRACER",
+    demo: true,
     image: "/screenshots/tracer-cover.webp",
     alt: "A TRACER run in the terminal exploring the Madrid te cuida health chatbot, next to the workflow graph it generated.",
     text: "An agent that talks to any chatbot as a black box, maps what it can do and writes the test profiles for it. It reached 94% average precision on real production chatbots. It was my MSc thesis, graded 10/10.",
@@ -68,9 +70,13 @@ const PUBLICATIONS = [
     <div class="tools">
       {TOOLS.map((tool) => (
         <article class="tool" data-reveal>
-          <div class="shot">
-            <img src={tool.image} alt={tool.alt} loading="lazy" decoding="async" />
-          </div>
+          {tool.demo ? (
+            <div class="demo"><TracerDemo /></div>
+          ) : (
+            <div class="shot">
+              <img src={tool.image} alt={tool.alt} loading="lazy" decoding="async" />
+            </div>
+          )}
           <div class="tool-copy">
             <h3>{tool.title}</h3>
             <p>{tool.text}</p>
@@ -201,7 +207,8 @@ const PUBLICATIONS = [
       gap: clamp(2rem, 4vw, 4rem);
     }
 
-    .tool:nth-child(even) .shot {
+    .tool:nth-child(even) .shot,
+    .tool:nth-child(even) .demo {
       order: 2;
     }
   }

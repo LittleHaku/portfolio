@@ -5,21 +5,25 @@ import AgentChat from "./AgentChat.astro";
 const RESULTS = [
   {
     figure: "0.998",
+    count: { from: 0, to: 0.998, decimals: 3 },
     title: "Recall detecting when a tap opens",
     text: "Per-venue YOLO models, measured on days held out for testing, with regions of interest that follow the tap when someone bumps the camera. The method now runs in more than 10 venues.",
   },
   {
     figure: "18",
+    count: { from: 0, to: 18 },
     title: "Venues whose till data flows in by itself",
     text: "A multi-tenant pipeline on Cloud Functions and Firestore that ingests 72,000 to 180,000 sale lines a week from 6 POS systems and reconciles them with what the cameras saw.",
   },
   {
     figure: "1 min",
+    count: { from: 240, to: 1, suffix: " min" },
     title: "To send the weekly reports, down from half a day",
     text: "The client dashboard I built took us off Looker Studio and spreadsheets. It reads straight from Firestore and updates itself, so we check the reports and send them in about a minute.",
   },
   {
     figure: "−35%",
+    count: { from: 0, to: -35, suffix: "%" },
     title: "Nightly processing time per venue",
     text: "I redesigned the video pipeline: full-frame HD storage, rotation and cropping on the GPU, and audits that keep an eye on recall every night.",
   },
@@ -88,8 +92,8 @@ const SOFTWARE = [
 
     <ul class="ledger">
       {RESULTS.map((result) => (
-        <li data-reveal>
-          <p class="figure num">{result.figure}</p>
+        <li>
+          <p class="figure num" data-count={JSON.stringify(result.count)}>{result.figure}</p>
           <div>
             <h3>{result.title}</h3>
             <p class="muted">{result.text}</p>
@@ -117,6 +121,48 @@ const SOFTWARE = [
     </div>
   </div>
 </section>
+
+<script>
+  // Count each big figure up (or down) to its value the first time it scrolls into view.
+  const figures = document.querySelectorAll<HTMLElement>("[data-count]");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const format = (value: number, decimals: number, suffix: string) => {
+    const text = Math.abs(value).toLocaleString("en-US", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+    return `${value < 0 ? "−" : ""}${text}${suffix}`;
+  };
+
+  const animate = (el: HTMLElement) => {
+    const { from, to, decimals = 0, suffix = "" } = JSON.parse(el.dataset.count ?? "{}");
+    const final = el.textContent;
+    const duration = 2200;
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - t0) / duration);
+      const eased = 1 - Math.pow(1 - t, 4);
+      el.textContent = t < 1 ? format(from + (to - from) * eased, decimals, suffix) : final;
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  if (!reduced && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          io.unobserve(entry.target);
+          animate(entry.target as HTMLElement);
+        });
+      },
+      { threshold: 1, rootMargin: "0px 0px -30% 0px" },
+    );
+    figures.forEach((el) => io.observe(el));
+  }
+</script>
 
 <style>
   .work {
