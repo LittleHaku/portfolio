@@ -39,6 +39,24 @@ export const EDUCATION = [
 
 export const PUBLICATIONS = [
   {
+    title: "Reverse Engineering of Chatbot Behaviour for Automated Testing",
+    venue: "SN Computer Science (Springer)",
+    date: "Aug 2026",
+    description:
+      "Journal extension of TRACER: an LLM-based agent builds a behavioural model of a deployed chatbot through conversation and generates test profiles automatically, with 94% average precision on real-world production chatbots.",
+    link: "https://link.springer.com/article/10.1007/s42979-026-05237-5",
+    tags: ["LLM Agents", "Chatbots", "Testing"],
+  },
+  {
+    title: "Automated Testing of Conversational Agents with Chatbot Dōjō",
+    venue: "ICSE 2026 · Demonstrations",
+    date: "Apr 2026",
+    description:
+      "Tool demo of Chatbot Dōjō, the platform I built to run TRACER, the Sensei user simulator and the Sensei-check correctness rules as one testing pipeline.",
+    link: "https://conf.researchr.org/details/icse-2026/icse-2026-demonstrations/7/Automated-Testing-of-Conversational-Agents-with-Chatbot-D-j-",
+    tags: ["Django", "React", "Chatbots"],
+  },
+  {
     title: "Automated Exploration and Profiling of Conversational Agents",
     venue: "ICTSS 2025 (Cyprus)",
     date: "Sept 2025",

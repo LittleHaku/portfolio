@@ -3,33 +3,41 @@ import ExperienceItem from "./ExperienceItem.astro"
 const EXPERIENCE = [
   {
     date: "May 2026 - Present",
-    title: "Software Engineer, Data & Integrations",
+    title: "Forward Deployed AI Engineer",
     company: "Gambooza (Madrid, Spain)",
     highlights: [
-      "Built and productionized a multi-tenant POS ingestion and reconciliation pipeline using Google Cloud Functions and Firebase Firestore, integrating heterogeneous TPV/POS providers across 18 venues.",
-      "Automated weekly data-processing and discrepancy reporting workflows, reducing report preparation from roughly half a workday to ~10 minutes while scaling coverage from 10 to 18 venues.",
-      "Designed the POS data model and normalization layer for noisy catalogs of 100-700 products per venue, mapping relevant beer products and taps for dashboards and client-facing reports.",
-      "Built reconciliation logic that connects external sales data with product analytics signals to surface operational discrepancies across client venues.",
+      "Own projects end to end in a two-person engineering team, from client and POS-vendor meetings to production, for a computer-vision analytics product used by hospitality groups.",
+      "Shipped a multi-tenant WhatsApp AI agent with OpenClaw and Pydantic AI (one Docker container per client) that answers owners' questions on sales and discrepancies, with hybrid workflow/LLM routing and tenant-level data access controls.",
+      "Designed and trained per-venue YOLO tap-detection and tap-opening models with adaptive ROIs that relocate when the camera moves, reaching 0.998 recall on held-out data; the methodology was adopted across 10+ venues.",
+      "Built a multi-tenant POS ingestion and reconciliation pipeline on Google Cloud Functions and Firestore, integrating 6 POS systems (including Revo OAuth certification) across 18 venues.",
+      "Replaced spreadsheet and Looker Studio reporting with a self-updating client dashboard, cutting weekly report preparation from up to a full workday to a review and a one-click send.",
+      "Redesigned the nightly video pipeline (full-frame HD storage, GPU rotation and cropping, audit-based recall monitoring), cutting processing time per venue by ~35%.",
     ],
-    techs: ["Python", "Google Cloud Functions", "Firebase Firestore", "SQL", "Data Ingestion", "Data Processing"],
+    techs: ["Python", "OpenClaw", "Pydantic AI", "YOLO", "Google Cloud", "Firestore", "Docker"],
   },
   {
     date: "Dec. 2024 - Apr. 2026",
-    title: "Software Engineer / Research Staff",
+    title: "Research Software Engineer",
     company: "Universidad Autónoma de Madrid - MISO Research Group (Madrid, Spain)",
     highlights: [
-      "Built and deployed a full-stack platform that integrates chatbot testing tools into a single workflow using React, Django REST, PostgreSQL, Celery, Docker, and Nginx.",
-      "Designed backend workflows for task orchestration, data persistence, and API-based integration across evaluation components.",
-      "Developed applied AI tooling with LangGraph and OpenAI APIs to automate chatbot exploration, capability extraction, and reusable test-scenario generation.",
-      "Implemented CI/CD and release automation with GitHub Actions, including publishing Python packages to PyPI in a shared pull-request-based codebase.",
       {
-        text: "Co-authored and published work on automated exploration of conversational agents for testing.",
-        href: "https://doi.org/10.1007/978-3-032-05188-2_14",
-        linkLabel: "DOI",
+        text: "Built TRACER (my MSc thesis, 10/10), a LangGraph agent that reverse-engineers any chatbot as a black box to generate test profiles, with 94% average precision on real-world chatbots.",
+        href: "https://github.com/Chatbot-TRACER/TRACER",
+        linkLabel: "Code",
+      },
+      {
+        text: "Single-handedly designed, built and deployed Chatbot Dōjō, a full-stack testing platform that unifies TRACER and the lab's user simulator, presented as a tool demo at ICSE 2026.",
+        href: "https://github.com/satori-chatbots/chatbot-dojo",
+        linkLabel: "Code",
+      },
+      "Built a connector library for chatbots on different stacks (Rasa, LangChain/OpenAI) and automated releases with GitHub Actions and PyPI.",
+      {
+        text: "Published at ICTSS 2025 and in SN Computer Science (2026).",
+        href: "https://link.springer.com/article/10.1007/s42979-026-05237-5",
+        linkLabel: "Paper",
       },
     ],
-    link: "https://doi.org/10.1007/978-3-032-05188-2_14",
-    techs: ["Python", "LangGraph", "OpenAI API", "Django REST", "PostgreSQL", "React"],
+    techs: ["Python", "LangGraph", "Django REST", "React", "PostgreSQL", "Celery", "Docker"],
   },
 ]
 ---
