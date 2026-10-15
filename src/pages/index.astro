@@ -1,13 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import SectionContainer from '../components/SectionContainer.astro';
-import TitleSection from '../components/TitleSection.astro';
-import Experience from '../components/Experience.astro';
-import Particles from '../components/Particles.astro';
+import Work from '../components/Work.astro';
+import Research from '../components/Research.astro';
 import Projects from '../components/Projects.astro';
-import ContactMe from '../components/ContactMe.astro';
-import SelectedCredentials from '../components/SelectedCredentials.astro';
+import About from '../components/About.astro';
 ---
 
 <Layout
@@ -17,40 +14,11 @@ import SelectedCredentials from '../components/SelectedCredentials.astro';
   ogImageUrl="og.png"
   ogImageTwitter="og-twitter.png"
 >
-  <Particles />
-  <main id="main-content" tabindex="-1" class="px-4 focus:outline-none">
-    <div class="flex flex-col gap-20 pb-8 md:gap-28 md:pb-12">
-      <SectionContainer class="mt-20 md:mt-48">
-        <Hero />
-      </SectionContainer>
-
-      <SectionContainer id="projects">
-        <TitleSection eyebrow="Selected Work">
-          Projects
-        </TitleSection>
-        <Projects />
-      </SectionContainer>
-
-      <SectionContainer id="experience">
-        <TitleSection eyebrow="Professional Background">
-          Experience
-        </TitleSection>
-        <Experience />
-      </SectionContainer>
-
-      <SectionContainer id="academic-record">
-        <TitleSection eyebrow="Education & Research">
-          Academic Record
-        </TitleSection>
-        <SelectedCredentials />
-      </SectionContainer>
-
-      <SectionContainer id="contact-me">
-        <TitleSection eyebrow="Contact">
-          Let's Connect
-        </TitleSection>
-        <ContactMe />
-      </SectionContainer>
-    </div>
+  <main id="main-content" tabindex="-1">
+    <Hero />
+    <Work />
+    <Research />
+    <Projects />
+    <About />
   </main>
 </Layout>

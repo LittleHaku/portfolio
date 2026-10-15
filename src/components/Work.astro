@@ -1,0 +1,191 @@
+---
+const RESULTS = [
+  {
+    figure: "0.998",
+    title: "Recall detecting when a tap opens",
+    text: "Per-venue YOLO models, measured on days held out for testing, with regions of interest that follow the tap when someone bumps the camera. The method now runs in more than 10 venues.",
+  },
+  {
+    figure: "18",
+    title: "Venues whose till data flows in by itself",
+    text: "A multi-tenant pipeline on Cloud Functions and Firestore that pulls sales from 6 different POS systems, including Revo's OAuth certification, and reconciles them with what the cameras saw.",
+  },
+  {
+    figure: "1 click",
+    title: "To send a client's weekly report",
+    text: "Reports used to take up to a full workday of spreadsheets and Looker Studio. Now a dashboard reads straight from Firestore: someone checks it and presses send.",
+  },
+  {
+    figure: "−35%",
+    title: "Nightly processing time per venue",
+    text: "I redesigned the video pipeline: full-frame HD storage, rotation and cropping on the GPU, and audits that keep an eye on recall every night.",
+  },
+];
+---
+
+<section id="work" class="work">
+  <div class="wrap">
+    <div class="intro" data-reveal>
+      <h2 class="section-title">Work at Gambooza</h2>
+      <div>
+        <p class="statement">
+          Gambooza puts cameras over the beer taps of bars and restaurants and checks every pour
+          against the till.
+        </p>
+        <p class="body muted">
+          We are two engineers, so I own projects end to end: the meetings with clients and POS
+          vendors, the models, the integrations and the code that runs every night in production.
+        </p>
+      </div>
+    </div>
+
+    <div class="agent">
+      <div class="agent-copy" data-reveal>
+        <h3>An agent owners can text</h3>
+        <p>
+          Bar owners ask about their sales and their discrepancies on WhatsApp, and an agent answers
+          from their own data. Simple questions go through fixed workflows, open ones through the
+          LLM, and every client gets its own container and can only see its own venues.
+        </p>
+        <p class="muted">Built with OpenClaw, Pydantic AI and Docker.</p>
+      </div>
+
+      <figure class="chat" data-reveal>
+        <div class="bubble from-owner" lang="es">¿Cuántas cañas se quedaron sin cobrar ayer?</div>
+        <div class="bubble from-agent" lang="es">
+          Ayer los grifos sirvieron 412 cañas y el TPV cobró 398. Las 14 de diferencia se concentran
+          entre las 23:00 y las 00:30 en la barra 2. ¿Te paso los clips?
+        </div>
+        <div class="bubble from-owner" lang="es">Sí, pásamelos</div>
+        <figcaption>An example of the questions owners send. They write in Spanish.</figcaption>
+      </figure>
+    </div>
+
+    <ul class="ledger">
+      {RESULTS.map((result) => (
+        <li data-reveal>
+          <p class="figure num">{result.figure}</p>
+          <div>
+            <h3>{result.title}</h3>
+            <p class="muted">{result.text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .work {
+    margin-top: var(--section-gap);
+  }
+
+  .intro {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .body {
+    margin-top: 1.25rem;
+    max-width: 52ch;
+  }
+
+  h3 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  /* --- the agent --- */
+  .agent {
+    display: grid;
+    gap: 2.5rem;
+    margin-top: clamp(4rem, 8vw, 7rem);
+  }
+
+  .agent-copy p {
+    margin-top: 1rem;
+    max-width: 48ch;
+  }
+
+  .chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    background: var(--surface);
+  }
+
+  .bubble {
+    max-width: 30ch;
+    padding: 0.7rem 0.95rem;
+    border-radius: 1.1rem;
+    line-height: 1.4;
+  }
+
+  .from-owner {
+    align-self: flex-end;
+    background: var(--field);
+    color: var(--on-field);
+    border-bottom-right-radius: 0.3rem;
+  }
+
+  .from-agent {
+    align-self: flex-start;
+    background: var(--bg);
+    border-bottom-left-radius: 0.3rem;
+  }
+
+  .chat figcaption {
+    margin-top: 0.75rem;
+    color: var(--ink-2);
+    font-size: var(--step-small);
+  }
+
+  /* --- the ledger of results --- */
+  .ledger {
+    list-style: none;
+    margin: clamp(4rem, 8vw, 7rem) 0 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .ledger li {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .figure {
+    font-family: var(--font-display);
+    font-size: var(--step-h2);
+    font-weight: 650;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+  }
+
+  .ledger p.muted {
+    margin-top: 0.6rem;
+    max-width: 56ch;
+  }
+
+  @media (min-width: 52rem) {
+    .intro {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .agent {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+    }
+
+    .ledger li {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: baseline;
+      gap: 2rem;
+    }
+  }
+</style>

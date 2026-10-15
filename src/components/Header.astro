@@ -2,287 +2,118 @@
 import ThemeToggle from "./ThemeToggle.astro";
 
 const navItems = [
-  { name: "projects", href: "#projects" },
-  { name: "experience", href: "#experience" },
-  { name: "academic record", href: "#academic-record" },
-  { name: "contact me", href: "#contact-me" },
+  { name: "Work", href: "#work" },
+  { name: "Research", href: "#research" },
+  { name: "Projects", href: "#projects" },
+  { name: "About", href: "#about" },
 ];
 ---
 
-<header class="fixed top-0 z-10 w-full pt-2">
-  <div id="navbar" class="mx-auto w-full max-w-[34rem] px-2 sm:px-3">
-    <div
-      class="relative overflow-visible rounded-[1.1rem]
-             bg-white/85 dark:bg-zinc-900/30
-             backdrop-blur-sm
-             border border-zinc-300/70 dark:border-zinc-700/50
-             text-zinc-950 dark:text-zinc-100 text-[13px] font-normal
-             shadow-[0_8px_30px_rgba(15,23,42,0.06)]
-             px-3 py-1.5 md:px-3.5 md:py-1.5 transition-all duration-200"
-    >
-      <!-- top row on mobile -->
-      <div class="flex items-center justify-between md:hidden">
-        <a
-          href="/"
-          class="text-[13px] font-medium uppercase tracking-[0.18em] text-zinc-900 dark:text-zinc-100"
-        >
-          home
-        </a>
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="#top" class="wordmark">Iván Sotillo</a>
 
-        <div class="flex items-center gap-0.5">
-          <!-- Mobile theme toggle -->
-          <ThemeToggle />
-
-          <button
-            type="button"
-            class="inline-flex items-center justify-center h-10 w-10 rounded-md hover:bg-white/50 dark:hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500"
-            aria-label="Open navigation menu"
-            aria-expanded="false"
-            aria-controls="mobile-menu"
-            data-mobile-menu-button
-          >
-            <span class="sr-only">Toggle navigation</span>
-            <svg
-              data-icon="open"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="h-5 w-5"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-            <svg
-              data-icon="close"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="hidden h-5 w-5"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- desktop nav (unchanged) -->
-      <nav aria-label="Primary" class="hidden md:flex items-center justify-center gap-4">
-        {navItems.map((item) => (
-          <a
-            href={item.href}
-            class="nav-link whitespace-nowrap relative text-[11px] uppercase tracking-[0.16em] transition-colors duration-200 hover:text-zinc-700 dark:hover:text-zinc-200 text-zinc-900 dark:text-zinc-100"
-          >
-            {item.name}
-          </a>
-        ))}
-        <!-- Desktop theme toggle -->
-        <ThemeToggle />
-      </nav>
-    </div>
-
-    <nav
-      id="mobile-menu"
-      aria-label="Primary"
-      aria-hidden="true"
-      class="mobile-menu md:hidden hidden flex flex-col gap-1.5 mt-2
-             relative overflow-hidden rounded-2xl
-             bg-white/92 dark:bg-zinc-900/60
-             backdrop-blur-md
-             border border-zinc-300/70 dark:border-zinc-700/50
-             text-zinc-950 dark:text-zinc-100 text-[13px] font-normal
-             shadow-[0_8px_30px_rgba(0,0,0,0.12)] dark:shadow-none
-             px-3 py-2.5
-             transition-all duration-300 ease-out
-             translate-y-[-12px] opacity-0 pointer-events-none"
-      data-mobile-menu
-      data-state="closed"
-    >
+    <nav aria-label="Sections" class="sections">
       {navItems.map((item) => (
-        <a
-          href={item.href}
-          class="nav-link relative py-1.5 uppercase tracking-[0.16em] transition-colors duration-200 hover:text-zinc-700 dark:hover:text-zinc-200 text-zinc-900 dark:text-zinc-100"
-        >
-          {item.name}
-        </a>
+        <a href={item.href} class="nav-link">{item.name}</a>
       ))}
     </nav>
+
+    <div class="actions">
+      <ThemeToggle />
+      <a class="btn" href="#contact">Get in touch</a>
+    </div>
   </div>
 </header>
 
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    height: 4.25rem;
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 650;
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .sections {
+    display: none;
+    gap: 1.75rem;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: var(--ink-2);
+    transition: color 160ms ease;
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current] {
+    color: var(--ink);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .actions .btn {
+    min-height: 2.5rem;
+    padding: 0 1.1rem;
+    font-size: 0.9375rem;
+  }
+
+  @media (min-width: 52rem) {
+    .sections {
+      display: flex;
+    }
+  }
+</style>
 
 <script>
-  const MOBILE_MENU_OPEN_EVENT = "mobile-menu:open";
-  const THEME_TOGGLE_OPEN_EVENT = "theme-toggle:open";
-  const sections = Array.from(document.querySelectorAll("section[id]"));
-  const navLinks = document.querySelectorAll(".nav-link");
-  const header = document.querySelector("header");
-
-  const mobileMenuButton = document.querySelector("[data-mobile-menu-button]");
-  const mobileMenu = document.querySelector("[data-mobile-menu]");
-  const openIcon = mobileMenuButton?.querySelector('[data-icon="open"]');
-  const closeIcon = mobileMenuButton?.querySelector('[data-icon="close"]');
-  const navbarWrapper = document.getElementById("navbar");
-  const mobileMenuLinks = Array.from(mobileMenu?.querySelectorAll('a[href]') ?? []);
-
-  const setActiveLink = (id) => {
-    navLinks.forEach((link) => {
-      const isActive = link.getAttribute("href") === `#${id}`;
-      link.classList.toggle("font-bold", isActive);
-      if (isActive) {
-        link.setAttribute("aria-current", "location");
-      } else {
-        link.removeAttribute("aria-current");
-      }
-    });
-  };
-
-  const clearActiveLink = () => {
-    navLinks.forEach((link) => {
-      link.classList.remove("font-bold");
-      link.removeAttribute("aria-current");
-    });
-  };
-
-  const updateActiveSection = () => {
-    const headerHeight = header?.getBoundingClientRect().height ?? 0;
-    const activationLine = headerHeight + 24;
-
-    const activeSection = sections.find((section) => {
-      const rect = section.getBoundingClientRect();
-      return rect.top <= activationLine && rect.bottom > activationLine;
-    });
-
-    if (!activeSection) {
-      clearActiveLink();
-      return;
-    }
-
-    setActiveLink(activeSection.id);
-  };
+  // Mark the section currently under the header in the nav.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>(".nav-link"));
+  const sections = links
+    .map((link) => document.querySelector<HTMLElement>(link.hash))
+    .filter((section): section is HTMLElement => section !== null);
 
   let ticking = false;
-  const requestActiveSectionUpdate = () => {
-    if (ticking) return;
-
-    ticking = true;
-    window.requestAnimationFrame(() => {
-      updateActiveSection();
-      ticking = false;
+  const update = () => {
+    ticking = false;
+    const line = 120;
+    const active = sections.find((section) => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= line && rect.bottom > line;
+    });
+    links.forEach((link) => {
+      if (active && link.hash === `#${active.id}`) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
     });
   };
 
-  requestActiveSectionUpdate();
-  window.addEventListener("scroll", requestActiveSectionUpdate, { passive: true });
-  window.addEventListener("resize", requestActiveSectionUpdate);
-
-  const openMobileMenu = () => {
-    if (!mobileMenu) return;
-    mobileMenu.dataset.state = "open";
-    mobileMenu.setAttribute("aria-hidden", "false");
-    mobileMenu.classList.remove("hidden");
-    mobileMenu.classList.remove("translate-y-[-12px]", "opacity-0", "pointer-events-none");
-    mobileMenu.classList.add("translate-y-0", "opacity-100");
-    mobileMenuButton?.setAttribute("aria-expanded", "true");
-    mobileMenuButton?.setAttribute("aria-label", "Close navigation menu");
-    openIcon?.classList.add("hidden");
-    closeIcon?.classList.remove("hidden");
-    window.dispatchEvent(new CustomEvent(MOBILE_MENU_OPEN_EVENT));
-    mobileMenuLinks[0]?.focus();
-  };
-
-  const closeMobileMenu = ({ restoreFocus = false } = {}) => {
-    if (!mobileMenu) return;
-    mobileMenu.dataset.state = "closed";
-    mobileMenu.setAttribute("aria-hidden", "true");
-    mobileMenu.classList.add("translate-y-[-12px]", "opacity-0", "pointer-events-none");
-    mobileMenu.classList.remove("translate-y-0", "opacity-100");
-    window.setTimeout(() => {
-      if (mobileMenu?.dataset.state === "closed") {
-        mobileMenu.classList.add("hidden");
-      }
-    }, 300);
-    mobileMenuButton?.setAttribute("aria-expanded", "false");
-    mobileMenuButton?.setAttribute("aria-label", "Open navigation menu");
-    openIcon?.classList.remove("hidden");
-    closeIcon?.classList.add("hidden");
-    if (restoreFocus) {
-      mobileMenuButton?.focus();
-    }
-  };
-
-  mobileMenuButton?.addEventListener("click", () => {
-    const isClosed = mobileMenu?.dataset.state === "closed";
-    if (isClosed) {
-      openMobileMenu();
-    } else {
-      closeMobileMenu();
-    }
-  });
-
-  // close when clicking an item
-  mobileMenu?.querySelectorAll(".nav-link").forEach((link) => {
-    link.addEventListener("click", () => closeMobileMenu());
-  });
-
-  // close on resize to desktop
-  window.addEventListener("resize", () => {
-    if (window.innerWidth >= 768) {
-      closeMobileMenu();
-    }
-  });
-
-  window.addEventListener(THEME_TOGGLE_OPEN_EVENT, () => {
-    if (mobileMenu?.dataset.state === "open") {
-      closeMobileMenu();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (mobileMenu?.dataset.state !== "open") return;
-
-    if (event.key === "Escape") {
-      event.preventDefault();
-      closeMobileMenu({ restoreFocus: true });
-      return;
-    }
-
-    if (event.key !== "Tab") return;
-
-    const focusable = [mobileMenuButton, ...mobileMenuLinks].filter(Boolean);
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (!first || !last) return;
-
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  });
-
-  // close when clicking outside
-  document.addEventListener("click", (event) => {
-    const target = event.target as Node | null;
-
-    if (
-      navbarWrapper?.contains(target) ||
-      mobileMenu?.contains(target)
-    ) {
-      return;
-    }
-
-    closeMobileMenu();
-  });
-
-  if (window.location.hash) {
-    setActiveLink(window.location.hash.slice(1));
-  } else {
-    requestActiveSectionUpdate();
-  }
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    },
+    { passive: true },
+  );
+  update();
 </script>

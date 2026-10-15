@@ -1,48 +1,73 @@
 ---
-import Badge from "../components/Badge.astro";
-import Button from "../components/Button.astro";
-import GitHubIcon from "./icons/GitHubIcon.astro";
-import MailIcon from "./icons/MailIcon.astro";
-import LinkedInIcon from "./icons/LinkedInIcon.astro";
-import PDFIcon from "./icons/PDFIcon.astro";
+import PourDemo from "./PourDemo.astro";
 ---
 
-<div class="flex gap-4 mb-4">
-  <p class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500 dark:text-zinc-400">
-    Madrid, Spain
-  </p>
-</div>
+<section id="top" class="hero wrap">
+  <div class="copy" data-reveal>
+    <h1>Iván<br /> Sotillo</h1>
+    <p class="statement">I build AI agents that talk and cameras that count beers.</p>
+    <p class="support">
+      Forward Deployed AI Engineer at <a class="link" href="https://gambooza.com">Gambooza</a>, in Madrid.
+      I take AI from the first meeting with a client to production, and I publish research on
+      LLM agents.
+    </p>
+    <div class="cta">
+      <a class="btn" href="#contact">Get in touch</a>
+      <a class="link" href="https://www.linkedin.com/in/ivansotillo/">LinkedIn</a>
+      <a class="link" href="https://github.com/LittleHaku">GitHub</a>
+      <a class="link" href="/documents/CV_Ivan_Sotillo.pdf" download>CV (PDF)</a>
+    </div>
+  </div>
 
-<div class="flex gap-4 mb-4">
-  <h1 class="font-serif text-5xl md:text-7xl">IVÁN SOTILLO.</h1>
-</div>
+  <div class="demo">
+    <PourDemo />
+  </div>
+</section>
 
-<h2 class="font-serif text-balance text-3xl md:text-5xl w-full italic">
-  Forward Deployed AI Engineer building LLM agents and computer vision in production
-</h2>
+<style>
+  .hero {
+    display: grid;
+    gap: 3rem;
+    padding-top: clamp(2.5rem, 7vw, 6rem);
+  }
 
-<p class="w-full text-zinc-600 font-light text-lg md:text-2xl mt-4 max-w-3xl dark:text-zinc-300 leading-relaxed">
-  I build AI agents that talk and cameras that count beers at Gambooza, from the client's needs to production. Before that, I researched LLM agents at Universidad Autónoma de Madrid.
-</p>
+  h1 {
+    font-size: var(--step-display);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.86;
+    margin-left: -0.04em;
+  }
 
-<nav aria-label="Primary actions" class="flex flex-wrap gap-2 mt-8">
-  <a href="mailto:ivandelhorno@gmail.com">
-    <Badge>
-      <MailIcon aria-hidden="true" />
-      Email Me
-    </Badge>
-  </a>
+  .statement {
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    max-width: 22ch;
+  }
 
-  <Button href="https://www.github.com/LittleHaku">
-    <GitHubIcon aria-hidden="true" />
-    GitHub
-  </Button>
-  <Button href="https://www.linkedin.com/in/ivansotillo/">
-    <LinkedInIcon aria-hidden="true" />
-    LinkedIn
-  </Button>
-  <Button href="/documents/CV_Ivan_Sotillo.pdf" download>
-    <PDFIcon aria-hidden="true" />
-    Download CV
-  </Button>
-</nav>
+  .support {
+    margin-top: 1.25rem;
+    max-width: 46ch;
+    color: var(--ink-2);
+    font-size: 1.125rem;
+  }
+
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 2rem;
+  }
+
+  @media (min-width: 64rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      align-items: end;
+      gap: clamp(3rem, 5vw, 6rem);
+    }
+
+    h1 {
+      font-size: clamp(6rem, 10.5vw, 10.5rem);
+    }
+  }
+</style>

@@ -1,0 +1,367 @@
+---
+// A toy version of Gambooza: the camera counts what is poured, the till counts what is charged.
+---
+
+<figure class="pour" data-pour>
+  <div class="feed">
+    <svg
+      class="scene is-open"
+      viewBox="0 0 480 330"
+      role="img"
+      aria-label="Camera view of a beer tap. When the tap opens, a detection box marks it and the camera counts the pint."
+      data-scene
+    >
+      <defs>
+        <clipPath id="glass-clip">
+          <path d="M270 186 L330 186 L324 256 L276 256 Z" />
+        </clipPath>
+      </defs>
+
+      <rect width="480" height="330" fill="var(--field-deep)" />
+
+      <!-- back shelf with bottles -->
+      <g fill="#26332b">
+        <rect x="24" y="118" width="150" height="6" />
+        <rect x="330" y="118" width="130" height="6" />
+        <path d="M36 118v-44c0-6 4-10 6-14v-12h8v12c2 4 6 8 6 14v44z" />
+        <path d="M72 118v-36c0-5 3-8 5-12v-10h7v10c2 4 5 7 5 12v36z" />
+        <path d="M104 118v-50c0-6 4-10 6-15v-14h8v14c2 5 6 9 6 15v50z" />
+        <path d="M140 118v-30h22v30z" />
+        <path d="M346 118v-42c0-6 4-10 6-14v-12h8v12c2 4 6 8 6 14v42z" />
+        <path d="M384 118v-30h24v30z" />
+        <path d="M420 118v-48c0-6 4-10 6-14v-13h8v13c2 4 6 8 6 14v48z" />
+      </g>
+
+      <!-- counter -->
+      <rect y="256" width="480" height="74" fill="#2a372f" />
+      <rect y="252" width="480" height="8" fill="#3a4a40" />
+
+      <!-- tower and spout -->
+      <rect x="218" y="122" width="28" height="134" fill="#8f9c94" />
+      <rect x="222" y="122" width="5" height="134" fill="#b6c1ba" />
+      <rect x="204" y="106" width="56" height="22" rx="6" fill="#a8b3ac" />
+      <path d="M258 117 H300 V138" fill="none" stroke="#a8b3ac" stroke-width="10" stroke-linejoin="round" />
+      <rect x="295" y="136" width="10" height="8" rx="2" fill="#7d8a82" />
+
+      <!-- handle: pivots at the top of the tower -->
+      <g class="handle">
+        <rect x="228" y="56" width="8" height="54" rx="3" fill="#56635b" />
+        <rect x="221" y="22" width="22" height="42" rx="9" fill="#e7e3d7" />
+      </g>
+
+      <!-- stream -->
+      <rect class="stream" x="298" y="143" width="4" height="113" fill="var(--beer)" />
+
+      <!-- glass -->
+      <g class="glass">
+        <g clip-path="url(#glass-clip)">
+          <g class="beer">
+            <rect x="268" y="194" width="64" height="64" fill="var(--beer)" />
+            <rect x="268" y="184" width="64" height="11" fill="var(--foam)" />
+          </g>
+        </g>
+        <path
+          d="M270 186 L330 186 L324 256 L276 256 Z"
+          fill="rgba(255,255,255,0.07)"
+          stroke="rgba(255,255,255,0.4)"
+          stroke-width="2"
+          stroke-linejoin="round"
+        />
+      </g>
+
+      <!-- detection -->
+      <g class="detection">
+        <rect x="196" y="34" width="104" height="104" fill="none" stroke="var(--signal)" stroke-width="2.5" />
+        <rect x="196" y="12" width="122" height="22" fill="var(--signal)" />
+        <text x="204" y="27.5" class="det-label">tap open · 0.99</text>
+      </g>
+
+      <!-- on-screen display -->
+      <text x="456" y="30" text-anchor="end" class="osd">CAM 02 · <tspan data-clock>23:41:07</tspan></text>
+    </svg>
+  </div>
+
+  <div class="panel" data-panel hidden>
+    <dl class="tally">
+      <div>
+        <dt>The camera saw</dt>
+        <dd><span class="num" data-poured>0</span> <span class="unit">pints</span></dd>
+      </div>
+      <div>
+        <dt>The till charged</dt>
+        <dd><span class="num" data-charged>0</span> <span class="unit">pints</span></dd>
+      </div>
+    </dl>
+
+    <p class="verdict" data-verdict aria-live="polite">Pour a pint and see what the till misses.</p>
+
+    <div class="controls">
+      <button type="button" class="btn btn-signal" data-pour-button>Pour a pint</button>
+      <button type="button" class="btn btn-quiet" data-charge-button disabled>Charge it</button>
+    </div>
+  </div>
+
+  <figcaption>
+    A toy version of what I build at Gambooza. The real one watches the taps of real bars with
+    YOLO models, every night.
+  </figcaption>
+</figure>
+
+<style>
+  .pour {
+    margin: 0;
+    background: var(--field);
+    color: var(--on-field);
+  }
+
+  .feed {
+    padding: 0.75rem 0.75rem 0;
+  }
+
+  .scene {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .osd {
+    font: 500 12px var(--font-text);
+    font-variant-numeric: tabular-nums;
+    fill: var(--on-field-2);
+  }
+
+  .det-label {
+    font: 600 12.5px var(--font-text);
+    fill: #111613;
+  }
+
+  /* --- the pour, driven by classes on the svg --- */
+  .handle {
+    transform-box: view-box;
+    transform-origin: 232px 112px;
+    transition: transform 420ms var(--ease-in-out);
+  }
+
+  .stream {
+    transform-box: fill-box;
+    transform-origin: top;
+    transform: scaleY(0);
+    transition: transform 260ms var(--ease-out);
+  }
+
+  .beer {
+    transform: translateY(74px);
+    transition: transform 1500ms cubic-bezier(0.3, 0.1, 0.4, 1);
+  }
+
+  .glass {
+    transition: transform 420ms var(--ease-in-out), opacity 300ms ease;
+  }
+
+  .detection {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(1.06);
+    transition: opacity 160ms ease, transform 260ms var(--ease-out);
+  }
+
+  .scene.is-open .handle {
+    transform: rotate(26deg);
+  }
+
+  .scene.is-open .stream {
+    transform: scaleY(1);
+  }
+
+  .scene.is-open .beer,
+  .scene.is-full .beer {
+    transform: none;
+  }
+
+  .scene.is-open .detection {
+    opacity: 1;
+    transform: none;
+    transition-delay: 140ms;
+  }
+
+  .scene.is-served .glass {
+    transform: translateX(150px);
+    opacity: 0;
+  }
+
+  .scene.no-anim * {
+    transition: none !important;
+  }
+
+  /* --- the tally --- */
+  .panel {
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  .tally {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .tally dt {
+    color: var(--on-field-2);
+    font-size: var(--step-small);
+  }
+
+  .tally dd {
+    margin: 0.15rem 0 0;
+  }
+
+  .tally .num {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 3.25rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .tally .num.bump {
+    animation: bump 380ms var(--ease-out);
+  }
+
+  @keyframes bump {
+    from { transform: translateY(-0.18em); opacity: 0.4; }
+    to { transform: none; opacity: 1; }
+  }
+
+  .unit {
+    color: var(--on-field-2);
+  }
+
+  .verdict {
+    margin-top: 1rem;
+    min-height: 3.1em;
+    max-width: 38ch;
+  }
+
+  .verdict :global(strong) {
+    color: var(--signal);
+    font-weight: 600;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .btn-signal {
+    background: var(--signal);
+    color: #111613;
+  }
+
+  .btn-quiet {
+    background: rgba(238, 242, 236, 0.12);
+    color: var(--on-field);
+  }
+
+  .btn-quiet:not(:disabled):hover {
+    background: rgba(238, 242, 236, 0.2);
+  }
+
+  .btn:focus-visible {
+    outline-color: var(--signal);
+  }
+
+  figcaption {
+    padding: 1.25rem;
+    color: var(--on-field-2);
+    font-size: var(--step-small);
+    max-width: 52ch;
+  }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-pour]");
+  const scene = root?.querySelector<SVGSVGElement>("[data-scene]");
+  const panel = root?.querySelector<HTMLElement>("[data-panel]");
+  const pourButton = root?.querySelector<HTMLButtonElement>("[data-pour-button]");
+  const chargeButton = root?.querySelector<HTMLButtonElement>("[data-charge-button]");
+  const pouredEl = root?.querySelector<HTMLElement>("[data-poured]");
+  const chargedEl = root?.querySelector<HTMLElement>("[data-charged]");
+  const verdict = root?.querySelector<HTMLElement>("[data-verdict]");
+  const clock = root?.querySelector<SVGTSpanElement>("[data-clock]");
+
+  if (root && scene && panel && pourButton && chargeButton && pouredEl && chargedEl && verdict) {
+    // Without the script the svg shows a frozen frame of an open tap; with it, the tap starts closed.
+    scene.classList.remove("is-open");
+    panel.hidden = false;
+
+    let poured = 0;
+    let charged = 0;
+    let busy = false;
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const bump = (el: HTMLElement, value: number) => {
+      el.textContent = String(value);
+      el.classList.remove("bump");
+      void el.offsetWidth;
+      el.classList.add("bump");
+    };
+
+    const render = () => {
+      const gap = poured - charged;
+      chargeButton.disabled = busy || gap === 0;
+      pourButton.disabled = busy;
+
+      if (poured === 0) {
+        verdict.textContent = "Pour a pint and see what the till misses.";
+      } else if (gap === 0) {
+        verdict.textContent = "Every pint poured has been charged. Nothing to flag.";
+      } else {
+        verdict.innerHTML = `<strong>${gap} ${gap === 1 ? "pint" : "pints"} poured and not charged.</strong> That gap is what the owner gets told about the next morning.`;
+      }
+    };
+
+    pourButton.addEventListener("click", async () => {
+      if (busy) return;
+      busy = true;
+      render();
+
+      scene.classList.add("is-open");
+      await wait(1600);
+      scene.classList.remove("is-open");
+      scene.classList.add("is-full");
+      poured += 1;
+      bump(pouredEl, poured);
+      await wait(450);
+
+      scene.classList.add("is-served");
+      await wait(450);
+      scene.classList.add("no-anim");
+      scene.classList.remove("is-full", "is-served");
+      void scene.getBoundingClientRect();
+      scene.classList.remove("no-anim");
+
+      busy = false;
+      render();
+    });
+
+    chargeButton.addEventListener("click", () => {
+      if (charged >= poured) return;
+      charged += 1;
+      bump(chargedEl, charged);
+      render();
+    });
+
+    render();
+  }
+
+  if (clock) {
+    const tick = () => {
+      clock.textContent = new Date().toLocaleTimeString("en-GB", { hour12: false });
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
+</script>

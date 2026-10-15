@@ -1,0 +1,108 @@
+---
+const TIMELINE = [
+  { years: "2026–now", what: "Forward Deployed AI Engineer", where: "Gambooza" },
+  { years: "2024–2026", what: "Research Software Engineer", where: "MISO group, Universidad Autónoma de Madrid" },
+  { years: "2024–2025", what: "MSc in Data Science", where: "Universidad Autónoma de Madrid" },
+  { years: "2020–2024", what: "BSc in Computer Science Engineering", where: "Universidad Autónoma de Madrid" },
+];
+---
+
+<section id="about" class="about">
+  <div class="wrap grid">
+    <div class="portrait" data-reveal>
+      <img src="/ivan.webp" alt="Portrait of Iván Sotillo" width="720" height="720" loading="lazy" decoding="async" />
+    </div>
+
+    <div class="text" data-reveal>
+      <h2 class="section-title">About</h2>
+      <p class="statement">
+        I like the part of AI that happens after the demo: the client meeting, the messy data, the
+        night the camera moves.
+      </p>
+      <p>
+        I studied Computer Science Engineering and then Data Science at Universidad Autónoma de
+        Madrid, with a semester at the University of Helsinki and a spring school at Northwestern
+        Polytechnical University in China. I was awarded Excellence Scholarships by the Community of
+        Madrid and by the university, and highest honors in Recommendation Systems, Data Structures
+        and Mobile App Development.
+      </p>
+
+      <ol class="timeline">
+        {TIMELINE.map((item) => (
+          <li>
+            <span class="years num muted">{item.years}</span>
+            <span><strong>{item.what}</strong><br /><span class="muted">{item.where}</span></span>
+          </li>
+        ))}
+      </ol>
+
+      <p><a class="link" href="/documents/CV_Ivan_Sotillo.pdf" download>Download my CV (PDF)</a></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    margin-top: var(--section-gap);
+  }
+
+  .grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .portrait {
+    max-width: 26rem;
+  }
+
+  .portrait img {
+    width: 100%;
+    height: auto;
+  }
+
+  .text > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .text .statement {
+    margin-top: 2rem;
+    max-width: 28ch;
+  }
+
+  .text > p:not(.statement) {
+    max-width: 58ch;
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .timeline li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+    line-height: 1.4;
+  }
+
+  .timeline strong {
+    font-weight: 600;
+  }
+
+  @media (min-width: 52rem) {
+    .grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: clamp(2.5rem, 6vw, 6rem);
+      align-items: start;
+    }
+
+    .portrait {
+      max-width: none;
+      position: sticky;
+      top: 6rem;
+    }
+  }
+</style>

@@ -1,88 +1,203 @@
 ---
-import ProjectItem from "./ProjectItem.astro";
-
-const PROJECTS: any[] = [
-  {
-    title: "Obsidian Smart Export",
-    description:
-    "Open-source Obsidian plugin with close to 3,000 downloads that exports linked notes into one Markdown document, ready to use as LLM context or as a PDF. Built with BFS-based traversal and GitHub Actions release automation.",
-    screenshotSrc: "/screenshots/obsidian-smart-export.webp",
-    techs: ["TypeScript", "BFS", "Obsidian"],
-    liveLink: "https://smart-export.vercel.app/",
-    githubLink: "https://github.com/LittleHaku/obsidian-smart-export",
-    type: "Personal",
-    featured: true,
-  },
-  {
-    title: "Chatbot Dojo",
-    description:
-      "Full-stack platform I built on my own to test conversational agents end to end, unifying TRACER and the Sensei user simulator. Presented as a tool demo at ICSE 2026.",
-    techs: ["Django", "React", "Docker", "Celery", "PostgreSQL"],
-    screenshotSrc: "/screenshots/chatbot-dojo.webp",
-    liveLink: "http://miso.ii.uam.es:8081/",
-    videoLink: "https://www.youtube.com/watch?v=dFsbN1FKGVg",
-    githubLink: "https://github.com/satori-chatbots/chatbot-dojo",
-    type: "Professional",
-  },
+const MORE = [
   {
     title: "CertiCamper",
-    description:
-      "Backend-heavy full-stack platform for a vehicle engineering consultancy that digitizes camper homologation workflows, replacing fragmented email and document processes with a structured product.",
-    techs: ["FastAPI", "React", "PostgreSQL", "Docker", "RBAC"],
-    screenshotSrc: "/screenshots/certicamper.webp",
-    type: "Professional",
-  },
-  {
-    title: "TRACER",
-    description:
-      "My MSc thesis: an LLM agent that reverse-engineers any chatbot as a black box and generates test profiles automatically. Published at ICTSS 2025 and in SN Computer Science.",
-    techs: ["LangGraph", "NLP", "Python"],
-    screenshotSrc: "/screenshots/tracer.webp",
-    liveLink: "https://pypi.org/project/chatbot-tracer/",
-    githubLink: "https://github.com/Chatbot-TRACER/TRACER",
-    type: "Professional",
-  },
-  {
-    title: "Drumscribe AI",
-    description:
-    "Deep learning project that converts drum audio into General MIDI. Built as a personal audio ML project and later reused for coursework.",
-    screenshotSrc: "/screenshots/drumscribe-ai.webp",
-    techs: ["PyTorch", "Python", "Deep Learning"],
-    githubLink: "https://github.com/LittleHaku/DrumScribe-AI",
-    liveLink: "https://docs.google.com/presentation/d/e/2PACX-1vRZMLv54Lwds3XjPzL-EkvlxaNIu4ZqrGLiD8GjuV42B5Cri0M5aMMj-cHX-8UGUVEaHpDuh8Z1HQRC/pub",
-    type: "Personal"
+    image: "/screenshots/certicamper.webp",
+    alt: "CertiCamper's landing page: homologate your camper, simply and quickly.",
+    text: "A platform for a vehicle engineering consultancy that moved camper homologation out of email threads and into one guided workflow, with roles for clients and engineers.",
+    stack: "FastAPI, React, PostgreSQL, Docker",
+    links: [],
   },
   {
     title: "U.D.I.N.",
-    description: "Desktop tool for vehicle homologation workflows in Spain that automates official engineering documents. Replaced repetitive manual documentation work with a structured app used professionally.",
-    screenshotSrc: "/screenshots/UDIN.webp",
-    techs: ["C#", "WPF"],
-    type: "Professional",
+    image: "/screenshots/UDIN.webp",
+    alt: "U.D.I.N. desktop windows: a new modification form and a document generation menu.",
+    text: "A desktop app for the same consultancy that writes the official engineering documents for vehicle modifications in Spain, replacing repetitive manual paperwork.",
+    stack: "C#, WPF",
+    links: [],
   },
   {
-    title: "Spotify Reviews Sentiment Analysis",
-    description: "NLP project that classifies roughly 50k Spotify reviews as positive or negative. Built a custom preprocessing pipeline and trained a TensorFlow bag-of-words classifier.",
-    screenshotSrc: "/screenshots/spotify.webp",
-    githubLink:"https://github.com/LittleHaku/spotify-reviews-sentiment-analysis",
-    techs: ["Python", "TensorFlow", "NLP"],
-    type: "Personal"
-  }
+    title: "Drumscribe AI",
+    image: "/screenshots/drumscribe-ai.webp",
+    alt: "Mel spectrogram of a jazz drum fill above the ground-truth and predicted drum hits.",
+    text: "A deep learning model that listens to drum recordings and writes them out as General MIDI.",
+    stack: "PyTorch",
+    links: [
+      { label: "Code", href: "https://github.com/LittleHaku/DrumScribe-AI" },
+      { label: "Slides", href: "https://docs.google.com/presentation/d/e/2PACX-1vRZMLv54Lwds3XjPzL-EkvlxaNIu4ZqrGLiD8GjuV42B5Cri0M5aMMj-cHX-8UGUVEaHpDuh8Z1HQRC/pub" },
+    ],
+  },
 ];
-
-const featuredProject = PROJECTS.find((project) => project.featured);
-const secondaryProjects = PROJECTS.filter((project) => !project.featured);
 ---
 
-<div class="space-y-8">
-  {
-    featuredProject && (
-      <ProjectItem {...featuredProject} featured />
-    )
+<section id="projects" class="projects">
+  <div class="wrap">
+    <h2 class="section-title" data-reveal><span>Other things I built</span></h2>
+  </div>
+
+  <article class="featured" data-reveal>
+    <div class="wrap featured-grid">
+      <div class="featured-copy">
+        <h3>Obsidian Smart Export</h3>
+        <p class="downloads">Close to <span class="num">3,000</span> downloads</p>
+        <p>
+          An open-source Obsidian plugin that follows the links between your notes and exports them
+          as one Markdown file, ready to paste into an LLM or print as a PDF.
+        </p>
+        <p class="links">
+          <a class="link" href="https://smart-export.vercel.app/">Website</a>
+          <a class="link" href="https://github.com/LittleHaku/obsidian-smart-export">Code</a>
+        </p>
+      </div>
+      <div class="featured-shot">
+        <img
+          src="/screenshots/obsidian-smart-export.webp"
+          alt="Smart Export's website: export context, not just notes."
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </article>
+
+  <div class="wrap">
+    <ul class="more">
+      {MORE.map((project) => (
+        <li data-reveal>
+          <div class="thumb">
+            <img src={project.image} alt={project.alt} loading="lazy" decoding="async" />
+          </div>
+          <div>
+            <h3>{project.title}</h3>
+            <p>{project.text}</p>
+            <p class="muted stack">{project.stack}</p>
+            {project.links.length > 0 && (
+              <p class="links">
+                {project.links.map((link) => (
+                  <a class="link" href={link.href}>{link.label}</a>
+                ))}
+              </p>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .projects {
+    margin-top: var(--section-gap);
   }
 
-  <div class="grid gap-8 md:grid-cols-2">
-    {secondaryProjects.map((project) => (
-      <ProjectItem {...project} />
-    ))}
-  </div>
-</div>
+  h3 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+
+  /* --- Smart Export, on a dark field that matches its own site --- */
+  .featured {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    background: #0b0b10;
+    color: #eeeef3;
+  }
+
+  .featured-grid {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .featured h3 {
+    font-size: clamp(2.25rem, 4.5vw, 4rem);
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+  }
+
+  .downloads {
+    margin-top: 1.25rem;
+    color: #b9b9c6;
+  }
+
+  .downloads .num {
+    color: #eeeef3;
+    font-weight: 600;
+  }
+
+  .featured-copy p:not(.downloads) {
+    margin-top: 1rem;
+    max-width: 40ch;
+  }
+
+  .featured-copy .links {
+    margin-top: 1.5rem;
+  }
+
+  .featured :focus-visible {
+    outline-color: #eeeef3;
+  }
+
+  .featured-shot img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* --- the rest, as a list --- */
+  .more {
+    list-style: none;
+    margin: clamp(3.5rem, 7vw, 6rem) 0 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .more li {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .thumb {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .more li p {
+    margin-top: 0.75rem;
+    max-width: 56ch;
+  }
+
+  .more .stack {
+    margin-top: 0.5rem;
+    font-size: var(--step-small);
+  }
+
+  @media (min-width: 52rem) {
+    .featured-grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: center;
+      gap: clamp(2rem, 5vw, 5rem);
+    }
+
+    .more li {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      align-items: center;
+      gap: clamp(2rem, 4vw, 4rem);
+    }
+  }
+</style>

@@ -1,35 +1,78 @@
 ---
-import GitHubIcon from "./icons/GitHubIcon.astro"
-
-const currentYear = new Date().getFullYear()
+const year = new Date().getFullYear();
 ---
 
-<footer
-  class="opacity-80 mt-16 mb-10 w-full flex justify-center"
->
-  <div
-    class="flex flex-col items-center text-center gap-2 px-4 py-4
-           rounded-lg max-w-3xl w-full"
-  >
-    <span class="text-sm text-zinc-800/90 dark:text-zinc-200/90">
-      &copy; {currentYear} · Made with <span class="text-rose-500">♥</span> by
-      <a
-        href="mailto:ivandelhorno@gmail.com"
-        class="font-medium hover:underline hover:text-zinc-900 dark:hover:text-white transition-colors"
-      >
-        Iván Sotillo
-      </a>
-    </span>
+<footer id="contact" class="contact">
+  <div class="wrap">
+    <div data-reveal>
+      <h2 class="section-title">Let's build something real</h2>
+      <p class="statement">
+        If you need AI that works outside the demo, in a bar, on a phone or in front of a customer,
+        I'd like to hear about it.
+      </p>
+      <a class="email" href="mailto:ivandelhorno@gmail.com">ivandelhorno@gmail.com</a>
+      <p class="elsewhere">
+        <a class="link" href="https://www.linkedin.com/in/ivansotillo/">LinkedIn</a>
+        <a class="link" href="https://github.com/LittleHaku">GitHub</a>
+        <a class="link" href="/documents/CV_Ivan_Sotillo.pdf" download>CV (PDF)</a>
+      </p>
+    </div>
 
-    <a
-      href="https://github.com/LittleHaku/portfolio"
-      target="_blank"
-      rel="noopener"
-      class="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors underline underline-offset-2"
-    >
-    <GitHubIcon aria-hidden="true" class="inline-block w-4 h-4 ml-1 mb-0.5" />
-      View source on GitHub →
-
-    </a>
+    <p class="legal">© {year} Iván Sotillo del Horno. Madrid.</p>
   </div>
 </footer>
+
+<style>
+  .contact {
+    margin-top: var(--section-gap);
+    padding-block: clamp(5rem, 10vw, 9rem) 2rem;
+    background: var(--field);
+    color: var(--on-field);
+  }
+
+  .contact :focus-visible {
+    outline-color: var(--signal);
+  }
+
+  .statement {
+    margin-top: 2rem;
+    max-width: 34ch;
+  }
+
+  .email {
+    display: inline-block;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 6.4vw, 6rem);
+    font-weight: 650;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--signal);
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 0.06em;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 0.08em;
+    transition: background-size 400ms var(--ease-out);
+  }
+
+  .email:hover {
+    background-size: 100% 0.06em;
+  }
+
+  .elsewhere {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 2rem;
+    font-size: 1.125rem;
+  }
+
+  .legal {
+    margin-top: clamp(5rem, 10vw, 8rem);
+    color: var(--on-field-2);
+    font-size: var(--step-small);
+  }
+</style>
